@@ -6,7 +6,7 @@ As part of the README file it will describe and explain the following sections:
 
 - Purpose
 - Core features
-- Technologies used
+- Application Dependencies used:
 - Getting started
 - Contributing
 - Project information
@@ -39,23 +39,48 @@ When a user is near a store they will be alerted via local application notificat
 
   - The project and Expo dev tools will then load. You have successfully setup the mobile development environment
 
-## Technologies used:
+## Application Dependencies used:
 
-- [Expo](https://docs.expo.dev/versions/v44.0.0)
-- [Expo-Location](https://docs.expo.io/versions/latest/sdk/location/)
-- [Expo-permissions](https://docs.expo.io/versions/latest/sdk/permissions/)
-- [Expo-secure-store](https://docs.expo.io/versions/latest/sdk/securestore/)
-- [MomentJS](https://github.com/moment/moment/)
-- [Proptypes](https://reactjs.org/docs/typechecking-with-proptypes.html)
-- [React](https://reactjs.org/)
-- [React-Native](https://facebook.github.io/react-native/)
-- [React-Native-Maps](https://github.com/react-native-community/react-native-maps)
-- [React-native-onboarding-swiper](react-native-onboarding-swiper)
-- [React-native-paper](https://github.com/callstack/react-native-paper)
-- [React Navigation](https://reactnavigation.org/)
-- [React-navigation-material-bottom-tabs](https://github.com/react-navigation/react-navigation-material-bottom-tabs)
-- [ShortID](https://github.com/dylang/shortid)
-- [Styled-components](https://github.com/styled-components/styled-components)
+### Core application dependencies
+
+- [@expo/vector-icons](https://github.com/oblador/react-native-vector-icons)
+- [react-navigation modules e.g. drawer, stack, native, materia-bottom-tabs etc](https://reactnavigation.org/)
+- [date-Fns](https://date-fns.org/)
+- [expo](https://docs.expo.dev/versions/v44.0.0)
+- [expo-constants](https://docs.expo.dev/versions/v44.0.0/sdk/constants/)
+- [expo-location](https://docs.expo.dev/versions/v44.0.0/sdk/location/)
+- [expo-notifications](https://docs.expo.dev/versions/v44.0.0/sdk/notifications/)
+- [expo-secure-store](https://docs.expo.dev/versions/v44.0.0/sdk/securestore/)
+- [lodash](https://lodash.com/docs/4.17.15)
+- [proptypes](https://reactjs.org/docs/typechecking-with-proptypes.html)
+- [react](https://reactjs.org/)
+- [react-dom](https://reactjs.org/docs/react-dom.html)
+- [react-native](https://facebook.github.io/react-native/)
+- [react-native-gesture-handler](https://github.com/software-mansion/react-native-gesture-handler)
+- [react-native-maps](https://github.com/react-native-maps/react-native-maps)
+- [react-native-onboarding-swiper](https://www.npmjs.com/package/react-native-onboarding-swiper)
+- [react-native-paper](https://callstack.github.io/react-native-paper/)
+- [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated)
+- [react-native-safe-area-context](https://github.com/th3rdwave/react-native-safe-area-context)
+- [react-native-screens](https://github.com/software-mansion/react-native-screens)
+- [react-native-vector-icons](react-native-vector-icons) - REQUIRED FOR "react-native-paper"
+- [shortid](https://github.com/dylang/shortid)
+- [styled-components](https://github.com/styled-components/styled-components)
+
+### Development dependencies
+
+- [@babel/core](https://www.npmjs.com/package/@babel/core)
+- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser)
+- [eslint](https://github.com/eslint/eslint)
+- [eslint-config-airbnb](https://github.com/airbnb/javascript)
+- [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
+- [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import)
+- [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) - REQUIRED FOR "eslint-config-airbnb"
+- [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)
+- [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react)
+- [eslint-plugin-react-hooks](https://github.com/facebook/react)
+- [eslint-plugin-react-native-a11y](https://github.com/FormidableLabs/eslint-plugin-react-native-a11y)
+- [prettier](https://github.com/prettier/prettier)
 
 ## Contributing
 
