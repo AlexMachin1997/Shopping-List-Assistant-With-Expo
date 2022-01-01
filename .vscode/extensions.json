@@ -1,0 +1,20 @@
+{
+	"recommendations": [
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"VisualStudioExptTeam.vscodeintellicode",
+		"christian-kohler.npm-intellisense",
+		"letrieu.expand-region",
+		"formulahendry.auto-rename-tag",
+		"christian-kohler.path-intellisense",
+		"2gua.rainbow-brackets",
+		"PKief.material-icon-theme",
+		"orta.vscode-jest",
+		"kumar-harsh.graphql-for-vscode",
+		"jpoissonnier.vscode-styled-components",
+		"ionutvmi.path-autocomplete",
+		"emmanuelbeziat.vscode-great-icons",
+		"vincaslt.highlight-matching-tag",
+		"eamodio.gitlens"
+	]
+}
