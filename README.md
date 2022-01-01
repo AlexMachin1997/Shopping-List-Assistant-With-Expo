@@ -1,12 +1,12 @@
 # Shopping-List-Assistant-With-Expo &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/AlexMachin1997/Shopping-List-Assistant-With-Expo/README.md) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://github.com/AlexMachin1997/Shopping-List-Assistant-With-Expo/pulls) [![style: styled-components](https://img.shields.io/badge/style-%F0%9F%92%85%20styled--components-orange.svg?colorB=daa357&colorA=db748e)](https://github.com/styled-components/styled-components)
 
-This repository consists of a modfied version of a mobile I made during my final year at University Centre Rotherham (UCR), it was created as part of a mobile application unit.
+This repository consists of a modified version of a mobile i made during my final year at University Centre Rotherham (UCR), it was created as part of a mobile application unit.
 
 As part of the README file it will describe and explain the following sections:
 
 - Purpose
 - Core features
-- Application Dependencies used:
+- Application dependencies used
 - Getting started
 - Contributing
 - Project information
@@ -39,12 +39,12 @@ When a user is near a store they will be alerted via local application notificat
 
   - The project and Expo dev tools will then load. You have successfully setup the mobile development environment
 
-## Application Dependencies used:
+## Application dependencies used:
 
 ### Core application dependencies
 
 - [@expo/vector-icons](https://github.com/oblador/react-native-vector-icons)
-- [react-navigation modules e.g. drawer, stack, native, materia-bottom-tabs etc](https://reactnavigation.org/)
+- [react-navigation modules e.g. drawer, stack, native, material-bottom-tabs etc](https://reactnavigation.org/)
 - [date-Fns](https://date-fns.org/)
 - [expo](https://docs.expo.dev/versions/v44.0.0)
 - [expo-constants](https://docs.expo.dev/versions/v44.0.0/sdk/constants/)
