@@ -13,11 +13,9 @@ As part of the README file it will describe and explain the following sections:
 
 ## Purpose
 
-The overall purpose of this React-native mobile application is to allow users to add a nd track items in relatime through GPS tracking.
+The overall purpose of this React-native mobile application is to allow users to maintain and shopping list and be alerted when they are near a foods store.
 
-To enable tracking items will need to be added to the shopping list, once items are present background tracking will be enabled. With an item being present in a shopping list it will now be tracked, once an item is present in a shopping list it will be tracked. Now when an item is found you will be alerted through the use of a push notification.
-
-For a full breakdown of the mobile application features checkout the core features breakdown below.
+When a user is near a store they will be alerted via local application notifications, this will prompt them to go to the shopping lists screen where they can then get there list and update whilst they are shopping.
 
 ## Getting started
 
@@ -29,20 +27,21 @@ For a full breakdown of the mobile application features checkout the core featur
 
 * Dependency installation
 
-  - Issue `npm install -g expo-cli` to install the expo-cli tools required to run the mobile app
+  - Issue `npm install -g expo-cli` or `yarn install -g expo-cli` to install the expo-cli tools required to run the mobile app
 
-  - Issue `npm install` to install all the core dependencies (See Technologies used section)
+  - Issue `yarn allDependencies` to install all the core dependencies (See Technologies used section)
 
-  - Issue 'yarn install' to install all dependencies with yarn (Requires yarn to be configured)
+* Running the development environment:
 
-* Running the development enviroment:
   - Go to the cloned repositories location in the terminal
-  - Run `expo start` (This will take a long time on the inital build, but the second time around it will take seconds)
-  - The project and Expo dev tolls will then load. You have successfully setup the mobile development enviroment
+
+  - Run `expo start` (This will take a long time on the initial build, but the second time around it will take seconds)
+
+  - The project and Expo dev tools will then load. You have successfully setup the mobile development environment
 
 ## Technologies used:
 
-- [Expo](https://docs.expo.io/versions/v32.0.0/)
+- [Expo](https://docs.expo.dev/versions/v44.0.0)
 - [Expo-Location](https://docs.expo.io/versions/latest/sdk/location/)
 - [Expo-permissions](https://docs.expo.io/versions/latest/sdk/permissions/)
 - [Expo-secure-store](https://docs.expo.io/versions/latest/sdk/securestore/)
@@ -62,41 +61,33 @@ For a full breakdown of the mobile application features checkout the core featur
 
 ### Reporting issues
 
-If you find any problems while using the API, report them [here](https://github.com/AlexMachin1997/Food-Allergy-Mobile-Application/issues), and I will address them as quick as I can.
+If you find any problems while using the API, report them [here](https://github.com/AlexMachin1997/Shopping-List-Assistant-With-Expo/issues), and I will address them as quick as I can.
 
 ### Feature requests
 
-If you would like to request features for future versions of the application again, please post them [here](https://github.com/AlexMachin1997/Food-Allergy-Mobile-Application/issues). When posting ideas ensure the functionality is explained to provide any developers contributing to the project know what to implement.
+If you would like to request features for future versions of the application again, please post them [here](https://github.com/AlexMachin1997/Shopping-List-Assistant-With-Expo/issues). When posting ideas ensure the functionality is explained to provide any developers contributing to the project know what to implement.
 
-## Todo list
+### Features list
 
-### Features Todo list
-
+- [x] Add basic routing via React-Navigation
 - [x] Create shopping lists
-- [x] Delete shopping lists
+- [x] Delete shopping lists (When viewing a single shopping list and via the settings screen)
 - [x] Edit shopping list names
 - [x] Add items to shopping list
-- [x] Add user-friendly modals to show error, success and loading state
+- [x] Add user-friendly modals to perform various operations like editing shopping list names or adding new items
 - [x] Show error, loading, success states
-- [x] Geo-location tracking via either RN or Expo modules
-- [x] Integrate React-Native-Maps
-- [x] Add basic routing via React-Navigation
-- [x] Add Push notification support
-- [ ] Integrate Geo-Clustering engine to allow more than 100 markers to spawn
-- [ ] Remove the hardcoded locations from the JSON and integrate google maps to extract all common food items
-
-### Code Maintenance
-
-- [x] Upgrade to React 16.8.3
-- [ ] Add hooks support
-- [x] Update the SDK from v32 to v33
-- [x] Update SDK from v33 to v35
-- [x] Refactor setState, remove the nasty await as it doesnt return a promise and use the callback approach
-- [ ] Update React-Navigation (PAIN IN THE ASS PART)
-- [x] Extract storage handling into reusable modules
-- [ ] Extract permissions into reusable modules
-- [ ] Extract time generation into it's own reusable module
-- [ ] Improve error handling for permissions, specifically the GPS and push notifications
+- [x] Geo-location tracking via expo-location module
+- [x] Integrate React-Native-Maps for now, a better solution will if more than a few hundred markers are spawned in.
+- [x] Add Push notification support via expo-notifications module
+- [ ] Integrate Geo-Clustering engine to handle the marker spawning and updating, currently not possible with react-native-maps as it can only handle a few hundred at a time.
+- [ ] Remove the hardcoded locations and leverage google map apis instead (FUTURE IMPROVEMENT as the StoreLocator screen would need a massive overhaul and external api's would be needed).
+- [ ] Improve error handling when users don't have permissions or certain pieces of functionality available e.g. gps is not enabled, permission is denied or no space on the internal storage of the device.
+- [x] Add basic UX and UI improvements e.g. notifications via SnackBar from react-native-paper
+- [x] Add a dark and light theme mode, this will be configured via the Settings screen
+- [x] Add data persistance e.g. storing user themes or shopping lists in the devices internal storage
+- [ ] Fix any issues related to the map component, sometimes it misbehaves e.g. [here](https://github.com/react-native-maps/react-native-maps/issues/3026#issuecomment-641192209)
+- [ ] Test more edge case scenarios e.g. users manually changing locations in the devices settings, how does this affect the amp functionality or if the device can't persist the data
+- [ ] Add background location tracking via the expo modules (THIS MAY OR MAY NOT HAPPEN, it seems overkill for now but would be nice.)
 
 # Project Information
 

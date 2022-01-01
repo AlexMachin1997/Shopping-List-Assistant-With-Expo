@@ -4,7 +4,10 @@ import { View, StyleSheet } from 'react-native';
 
 // Expo dependencies
 import * as Location from 'expo-location';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
+// react-navigation dependencies
+import { useFocusEffect } from '@react-navigation/native';
 
 // location assets
 import Locations from '../../assets/supermarkets.json';
@@ -47,6 +50,7 @@ const locationReducer = (state, action) => {
 };
 
 const StoreTracker = () => {
+	// Stores the users location related state
 	const [{ longitude, latitude, longitudeDelta, latitudeDelta }, dispatch] = React.useReducer(
 		locationReducer,
 		{
@@ -58,73 +62,83 @@ const StoreTracker = () => {
 	);
 
 	const [isLoading, setIsLoading] = React.useState(true);
+	const [isMapReady, setIsMapReady] = React.useState(false);
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
-	const { state } = useUserProfile();
+	const { state: userProfileState } = useUserProfile();
 
 	// Request location related permissions easily
 	const { foregroundPermissionStatus } = useLocationPermission({
 		enableForegroundPermission: true
 	});
 
+	// Handles the notification related functionality e.g. requesting access, checking the current status
 	const { localNotificationsStatus, generateLocalNotification } = useNotificationPermission();
 
-	// Handles the location watching
-	React.useEffect(() => {
-		const watchLocation = async () => {
-			await Location.watchPositionAsync(
-				{
-					accuracy: Location.Accuracy.BestForNavigation
-				},
-				({ coords: { latitude: newLatitude, longitude: newLongitude } }) => {
-					dispatch({
-						type: 'UPDATE_LOCATION',
-						payload: {
-							latitude: newLatitude,
-							longitude: newLongitude
-						}
-					});
-				}
-			);
-		};
+	// Watches the users location and updates
+	// NOTE: This will perform on initial load of the screen and when it re-focuses
+	useFocusEffect(
+		React.useCallback(() => {
+			const watchLocation = async () => {
+				await Location.watchPositionAsync(
+					{
+						accuracy: Location.Accuracy.BestForNavigation
+					},
+					({ coords: { latitude: newLatitude, longitude: newLongitude } }) => {
+						dispatch({
+							type: 'UPDATE_LOCATION',
+							payload: {
+								latitude: newLatitude,
+								longitude: newLongitude
+							}
+						});
+					}
+				);
+			};
 
-		// If the permission status is granted start watching the location
-		if (foregroundPermissionStatus === 'granted') {
-			// Start watching the position
-			watchLocation();
-		}
-	}, [foregroundPermissionStatus]);
+			// If the permission status is granted start watching the location
+			if (foregroundPermissionStatus === 'granted') {
+				// Start watching the position
+				watchLocation();
+			}
+		}, [foregroundPermissionStatus])
+	);
 
-	React.useEffect(() => {
-		const checkSupermarketLocations = () => {
-			// Filtered data based on the lat and lng from watchPosition()
-			// Prevents 5k markers being spawned on the map, which would actually crash it. The app stops responding :(
-			const filteredCopyOfSuperMarkets = Locations.filter(
-				(location) => latitude <= location.Lat && longitude <= location.Lng
-			);
+	// Whilst the users location is being watched check if they are near a shop
+	// NOTE: This will perform on initial load of the screen and when it re-focuses
+	useFocusEffect(
+		React.useCallback(() => {
+			const checkSupermarketLocations = () => {
+				// Filtered data based on the lat and lng from watchPosition()
+				// Prevents 5k markers being spawned on the map, which would actually crash it. The app stops responding :(
+				const filteredCopyOfSuperMarkets = Locations.filter(
+					(location) => latitude <= location.Lat && longitude <= location.Lng
+				);
 
-			// Check the supermarkets and users latitude and longitude
-			// FLAW: Whilst the code runs and provides the necessary outputs it won't render the map when there are more than 190 marks.
-			// SOLUTION: Add a clustering engine, allows the markers to gradually be spawned in. Unable to do it at the moment as Im short on time.
-			filteredCopyOfSuperMarkets.map((data) => {
-				if (latitude === data.Lat && longitude === data.Lng) {
-					generateLocalNotification(
-						{ vibrationEnabled: true, vibrationLength: 1000 },
-						{
-							title: 'Supermarket close by',
-							body: `You are close to ${data.Store}, please check your shopping lists `
-						}
-					);
-				}
+				// Check the supermarkets and users latitude and longitude
+				// FLAW: Whilst the code runs and provides the necessary outputs it won't render the map when there are more than 190 marks.
+				// SOLUTION: Add a clustering engine, allows the markers to gradually be spawned in. Unable to do it at the moment as Im short on time.
+				filteredCopyOfSuperMarkets.map((data) => {
+					if (latitude === data.Lat && longitude === data.Lng) {
+						generateLocalNotification(
+							{ vibrationEnabled: true, vibrationLength: 1000 },
+							{
+								title: 'Supermarket close by',
+								body: `You are close to ${data.Store}, please check your shopping lists `
+							}
+						);
+					}
 
-				return data;
-			});
-		};
+					return data;
+				});
+			};
 
-		if (localNotificationsStatus === 'granted') {
-			checkSupermarketLocations();
-		}
-	}, [latitude, longitude, localNotificationsStatus, generateLocalNotification]);
+			// Only check the user is near a store if they have granted notification access
+			if (localNotificationsStatus === 'granted') {
+				checkSupermarketLocations();
+			}
+		}, [localNotificationsStatus, latitude, longitude, generateLocalNotification])
+	);
 
 	React.useEffect(() => {
 		if (localNotificationsStatus !== '' && foregroundPermissionStatus !== '') {
@@ -134,7 +148,7 @@ const StoreTracker = () => {
 
 	// While the page is loading, setting the latitude is false (0) or the longitude is false (0)
 	if (isLoading === true) {
-		return <Loading isDark={state.theme === 'dark'} />;
+		return <Loading isDark={userProfileState.theme === 'dark'} />;
 	}
 
 	return (
@@ -154,7 +168,11 @@ const StoreTracker = () => {
 				pitchEnabled
 				followsUserLocation
 				showsCompass
-				customMapStyle={state.theme === 'dark' ? NightMode : []}
+				customMapStyle={isMapReady === true && userProfileState.theme === 'dark' ? NightMode : []}
+				provider={PROVIDER_GOOGLE}
+				onMapReady={() => {
+					setIsMapReady(true);
+				}}
 			/>
 		</View>
 	);

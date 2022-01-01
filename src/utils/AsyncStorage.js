@@ -6,7 +6,7 @@ export const setItem = async (key, value) => {
 
 		await AsyncStorage.setItemAsync(key, string);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 };
 
@@ -20,7 +20,7 @@ export const getItem = async (key) => {
 
 		return null;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return null;
 	}
 };
@@ -31,7 +31,7 @@ export const deleteItem = async (key) => {
 
 		return true;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		return false;
 	}
 };

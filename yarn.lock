@@ -3809,11 +3809,6 @@ expo-secure-store@~11.1.0:
   resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-11.1.0.tgz#2eb6e793a459e178feeb72bbeb40afc97e412bf6"
   integrity sha512-LyCLqsoibP90Td4mSWc+un+xGNYnIuGOrfbp2aG2KAn1ZGcDL6muxIaFj7a/4Kh+EiCIoU5EPb1YjOATbmaBnQ==
 
-expo-status-bar@~1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.2.0.tgz#16e73205da563f9536f562e439081e30e318a82e"
-  integrity sha512-pVZZ/kDCXFK79E4dCtRecs3XLC8aiwlciutSd/fFmUPJSQZ1Txia6hlKajPt0GAYft8/YnT0V3URXzWZOBniYQ==
-
 expo@^44.0.0:
   version "44.0.1"
   resolved "https://registry.yarnpkg.com/expo/-/expo-44.0.1.tgz#998a29c8e7eeab1c72d4e51d907494e16a49ed1c"

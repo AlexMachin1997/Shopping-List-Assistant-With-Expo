@@ -14,8 +14,6 @@ const DEFAULT_STATE = {
 const UserProfileReducer = (state, action) => {
 	switch (action.type) {
 		case 'RESTORE': {
-			console.log(action);
-
 			return {
 				...action.payload,
 				isRestoringProfile: false
@@ -84,8 +82,6 @@ export const UserProfileProvider = ({ children }) => {
 			// Attempt to retrieve the profile from storage
 			const response = await getItem('profile');
 
-			console.log('Saved values from storage', response);
-
 			// No profile found, perform initial setup otherwise use the value from storage
 			if (response === null) {
 				safeDispatch({ type: 'SETUP_PROFILE' });
@@ -102,8 +98,6 @@ export const UserProfileProvider = ({ children }) => {
 		const saveStateToAsyncStorage = async () => {
 			await setItem('profile', state);
 		};
-
-		console.log('State updated', state);
 
 		if (state.isRestoringProfile === false) {
 			saveStateToAsyncStorage();
