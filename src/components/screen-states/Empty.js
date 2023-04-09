@@ -20,8 +20,8 @@ const Empty = ({ isDark, image, label, heading, overview }) => {
 					accessible
 					accessibleLabel={label}
 					progressiveRenderingEnabled
-					width='150px'
-					height='150px'
+					width={150}
+					height={150}
 					accessibilityIgnoresInvertColors
 				/>
 			</Section>

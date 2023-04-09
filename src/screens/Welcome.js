@@ -42,8 +42,8 @@ const WelcomeScreen = () => {
 					image: (
 						<Image
 							source={ShoppingList}
-							width='200px'
-							height='200px'
+							width={200}
+							height={200}
 							accessibilityIgnoresInvertColors
 						/>
 					),
@@ -56,8 +56,8 @@ const WelcomeScreen = () => {
 					image: (
 						<Image
 							source={ShoppingListItemTracking}
-							width='200px'
-							height='200px'
+							width={200}
+							height={200}
 							accessibilityIgnoresInvertColors
 						/>
 					),
@@ -67,21 +67,14 @@ const WelcomeScreen = () => {
 				{
 					backgroundColor: lightBlue,
 					image: (
-						<Image
-							source={Customize}
-							width='200px'
-							height='200px'
-							accessibilityIgnoresInvertColors
-						/>
+						<Image source={Customize} width={200} height={200} accessibilityIgnoresInvertColors />
 					),
 					title: 'Day and night theme',
 					subtitle: 'Switch between a day and night theme in the settings'
 				},
 				{
 					backgroundColor: lightBlue,
-					image: (
-						<Image source={Done} width='200px' height='200px' accessibilityIgnoresInvertColors />
-					),
+					image: <Image source={Done} width={200} height={200} accessibilityIgnoresInvertColors />,
 					title: 'Are you ready ?',
 					subtitle:
 						'You have completed the tutorial, you can now start using the shopping list assistant'

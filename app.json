@@ -2,7 +2,6 @@
 	"expo": {
 		"name": "shopping-list-app-rewrite",
 		"slug": "shopping-list-app-rewrite",
-		"entryPoint": "./src/index.js",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
