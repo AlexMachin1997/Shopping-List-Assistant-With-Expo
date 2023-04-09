@@ -5,20 +5,20 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/native';
 
 const Image = styled.Image`
-	width: ${(props) => props.width};
-	height: ${(props) => props.height};
+	width: ${(props) => `${props.width}px`};
+	height: ${(props) => `${props.height}px`};
 	border-radius: ${(props) => props.radius};
 `;
 
 Image.defaultProps = {
-	width: '100px',
-	height: '100px',
+	width: 100,
+	height: 100,
 	radius: 0
 };
 
 Image.propTypes = {
-	width: PropTypes.string,
-	height: PropTypes.string,
+	width: PropTypes.number,
+	height: PropTypes.number,
 	radius: PropTypes.number
 };
 

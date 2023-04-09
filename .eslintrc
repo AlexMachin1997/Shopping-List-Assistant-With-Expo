@@ -30,11 +30,17 @@
 		"es6": true
 	},
 	"rules": {
-		"import/no-cycle": "off",
 		"import/no-extraneous-dependencies": [
 			"error",
 			{
 				"devDependencies": [".storybook/**", "./src/components/**/*.stories.js", "**/*.test.js"]
+			}
+		],
+		"react/function-component-definition": [
+			2,
+			{
+				"namedComponents": "arrow-function",
+				"unnamedComponents": "arrow-function"
 			}
 		],
 		"no-misleading-character-class": "off",

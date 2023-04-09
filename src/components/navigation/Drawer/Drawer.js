@@ -40,12 +40,7 @@ export const NavigationDrawer = () => {
 				alignItems='center'
 				isDark={state.theme === 'dark'}
 			>
-				<Image
-					source={ApplicationIcon}
-					height='120px'
-					width='120px'
-					accessibilityIgnoresInvertColors
-				/>
+				<Image source={ApplicationIcon} height={120} width={120} accessibilityIgnoresInvertColors />
 			</Section>
 
 			<Section
