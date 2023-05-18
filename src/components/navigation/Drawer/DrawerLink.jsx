@@ -1,7 +1,7 @@
 // Core react dependencies
-import * as React from 'react';
 import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+import { Link } from 'expo-router';
 
 // Expo dependencies
 import { MaterialIcons } from '@expo/vector-icons';
@@ -15,7 +15,7 @@ import { Text, Section } from '../../core';
 // custom hooks
 import { useUserProfile } from '../../../hooks';
 
-const DrawerLink = ({ action, icon, text }) => {
+const DrawerLink = ({ href, icon, text }) => {
 	const { lightBlue, darkBlue } = useTheme();
 
 	const { state } = useUserProfile();
@@ -34,26 +34,28 @@ const DrawerLink = ({ action, icon, text }) => {
 					color={state.theme === 'dark' ? lightBlue : darkBlue}
 				/>
 			</Section>
-			<TouchableOpacity onPress={action} accessibilityRole='menuitem'>
-				<Section
-					marginRight='10px'
-					backgroundColour={state.theme === 'dark' ? darkBlue : lightBlue}
-				>
-					<Text colour={state.theme === 'dark' ? lightBlue : darkBlue}>{text}</Text>
-				</Section>
-			</TouchableOpacity>
+
+			<Link asChild href={href}>
+				<TouchableOpacity accessibilityRole='menuitem'>
+					<Section
+						marginRight='10px'
+						backgroundColour={state.theme === 'dark' ? darkBlue : lightBlue}
+					>
+						<Text colour={state.theme === 'dark' ? lightBlue : darkBlue}>{text}</Text>
+					</Section>
+				</TouchableOpacity>
+			</Link>
 		</Section>
 	);
 };
 
 DrawerLink.defaultProps = {
-	action: null,
 	icon: 'help-outline',
 	text: 'Awesome link'
 };
 
 DrawerLink.propTypes = {
-	action: PropTypes.func,
+	href: PropTypes.string.isRequired,
 	icon: PropTypes.string,
 	text: PropTypes.string
 };

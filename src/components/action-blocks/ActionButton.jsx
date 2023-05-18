@@ -1,5 +1,4 @@
 // React dependencies
-import * as React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 

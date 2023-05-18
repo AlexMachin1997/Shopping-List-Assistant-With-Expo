@@ -9,10 +9,10 @@ import { Divider, Switch, Snackbar } from 'react-native-paper';
 import { useTheme } from 'styled-components';
 
 // application components
-import { Section, Text, Button, Modal } from '../components/core';
+import { Section, Text, Button, Modal } from '../../src/components/core';
 
 // custom hooks
-import { useUserProfile, useShoppingList, useSnackBar } from '../hooks';
+import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const Settings = () => {
 	const [isDeleteShoppingListsModalVisible, setIsDeleteShoppingListsModalVisible] =

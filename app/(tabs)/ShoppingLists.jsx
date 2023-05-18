@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
-// react-navigation dependencies
-import { useNavigation } from '@react-navigation/native';
+// expo-router dependencies
+import { useRouter } from 'expo-router';
 
 // react-native-paper dependencies
 import { TextInput, Snackbar } from 'react-native-paper';
@@ -15,13 +15,13 @@ import { useTheme } from 'styled-components';
 import EmptyIcon from '../../assets/Shocked.png';
 
 // application components
-import { Empty, Loading } from '../components/screen-states';
-import { ActionButton } from '../components/action-blocks';
-import { Modal, Text } from '../components/core';
-import { ShoppingListsCard } from '../components/cards';
+import { Empty, Loading } from '../../src/components/screen-states';
+import { ActionButton } from '../../src/components/action-blocks';
+import { Modal, Text } from '../../src/components/core';
+import { ShoppingListsCard } from '../../src/components/cards';
 
 // Custom hooks
-import { useUserProfile, useShoppingList, useSnackBar } from '../hooks';
+import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const ShoppingLists = () => {
 	// Controls the shopping list state
@@ -37,7 +37,7 @@ const ShoppingLists = () => {
 	const { darkBlue, lightBlue, white, green } = useTheme();
 
 	// Access the react-navigation internal Context
-	const navigation = useNavigation();
+	const router = useRouter();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { state: userProfileState } = useUserProfile();
@@ -132,8 +132,11 @@ const ShoppingLists = () => {
 											}
 										});
 
-										navigation.navigate('ShoppingList', {
-											title: shoppingList?.name ?? ''
+										router.push({
+											pathname: `/ShoppingList/${shoppingList?.id ?? ''}`,
+											params: {
+												title: shoppingList?.name ?? ''
+											}
 										});
 									}}
 								/>

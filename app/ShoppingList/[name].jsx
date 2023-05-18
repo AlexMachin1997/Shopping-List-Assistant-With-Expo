@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
-// react-navigation dependencies
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+// expo-router dependencies
+import { useLocalSearchParams, useFocusEffect, useRouter } from 'expo-router';
 
 // styled-components dependencies
 import { useTheme } from 'styled-components';
@@ -12,16 +12,16 @@ import { useTheme } from 'styled-components';
 import { TextInput, Snackbar } from 'react-native-paper';
 
 // application components
-import { Empty, Loading } from '../components/screen-states';
-import { ActionButtons } from '../components/action-blocks';
-import { ShoppingListCard } from '../components/cards';
-import { Text, Modal } from '../components/core';
+import { Empty, Loading } from '../../src/components/screen-states';
+import { ActionButtons } from '../../src/components/action-blocks';
+import { ShoppingListCard } from '../../src/components/cards';
+import { Text, Modal } from '../../src/components/core';
 
 // Screen assets
 import EmptyIcon from '../../assets/Shopping-Basket.png';
 
 // Custom hooks
-import { useUserProfile, useShoppingList, useSnackBar } from '../hooks';
+import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const ShoppingList = () => {
 	// Controls the add item modal visibility
@@ -44,9 +44,9 @@ const ShoppingList = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue, green, white } = useTheme();
 
-	// Access the react-navigation internal Context
-	const { navigate, setParams } = useNavigation();
-	const { params } = useRoute();
+	// Access the "expo-router" internals
+	const { title } = useLocalSearchParams();
+	const router = useRouter();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { state: userProfileState } = useUserProfile();
@@ -61,8 +61,8 @@ const ShoppingList = () => {
 	// NOTE: Once this page is created the useEffects don't run again as they are still mounted in the background so the useFocusEffect is used to ensure the newShoppingListName is the title of the page
 	useFocusEffect(
 		React.useCallback(() => {
-			setNewShoppingListName(params?.title ?? '');
-		}, [params.title])
+			setNewShoppingListName(title);
+		}, [title])
 	);
 
 	const addItem = () => {
@@ -121,10 +121,8 @@ const ShoppingList = () => {
 		// Hide the isRenameShoppingListModalVisible
 		setIsRenameShoppingListModalVisible(false);
 
-		// Update the react-navigation title param
-		setParams({
-			title: newShoppingListName
-		});
+		// Update the Expo Router title param
+		router.setParams({ title: newShoppingListName });
 
 		// Dispatch an action to set the snackbar state
 		updateSnackBarState({
@@ -166,7 +164,7 @@ const ShoppingList = () => {
 
 		// Navigate back to the Shopping Lists tab screen after 1 second
 		setTimeout(() => {
-			navigate('Tabs');
+			router.push('(tabs)');
 		}, 1000);
 	};
 
@@ -253,19 +251,19 @@ const ShoppingList = () => {
 					setIsRenameShoppingListModalVisible(false);
 
 					// Reset the shopping list name to the previously set shopping list name
-					setNewShoppingListName(params?.title ?? '');
+					setNewShoppingListName(title);
 				}}
 				onCancel={() => {
 					// Close the modal down
 					setIsRenameShoppingListModalVisible(false);
 
 					// Reset the shopping list name to the previously set shopping list name
-					setNewShoppingListName(params?.title ?? '');
+					setNewShoppingListName(title ?? '');
 				}}
 				onOk={updateShoppingListName}
 				submitDisabled={
 					newShoppingListName.length === 0 ||
-					newShoppingListName === (params?.title ?? '') ||
+					newShoppingListName === title ||
 					snackBarState.visible === true
 				}
 				isDark={userProfileState.theme === 'dark'}

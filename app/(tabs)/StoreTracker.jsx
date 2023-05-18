@@ -6,18 +6,18 @@ import { View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
-// react-navigation dependencies
-import { useFocusEffect } from '@react-navigation/native';
+// expo-router dependencies
+import { useFocusEffect } from 'expo-router';
 
 // location assets
 import Locations from '../../assets/supermarkets.json';
 import NightMode from '../../assets/GoogleMapsNight.json';
 
 // application components
-import { Loading } from '../components/screen-states';
+import { Loading } from '../../src/components/screen-states';
 
 // custom hooks
-import { useUserProfile, useLocationPermission, useNotificationPermission } from '../hooks';
+import { useUserProfile, useLocationPermission, useNotificationPermission } from '../../src/hooks';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({

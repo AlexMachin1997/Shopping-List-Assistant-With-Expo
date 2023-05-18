@@ -1,7 +1,9 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
+import { useRouter } from 'expo-router';
 
 import { getItem, setItem } from '../utils/AsyncStorage';
+import { Loading } from '../components/screen-states';
 
 export const UserProfileContext = React.createContext();
 
@@ -54,11 +56,15 @@ const UserProfileReducer = (state, action) => {
 };
 
 export const UserProfileProvider = ({ children }) => {
+	// Access the expo router
+	const router = useRouter();
+
 	// User profile reducer
 	const [state, dispatch] = React.useReducer(UserProfileReducer, DEFAULT_STATE);
 
 	// A ref to track if actions can be dispatched safely
 	const hasMounted = React.useRef(false);
+	const hasPerformedInitialRedirect = React.useRef(false);
 
 	// Used to safely dispatch actions
 	const safeDispatch = React.useCallback((...args) => {
@@ -93,6 +99,28 @@ export const UserProfileProvider = ({ children }) => {
 		getUserProfile();
 	}, [safeDispatch]);
 
+	React.useEffect(() => {
+		// When the user hasn't already been redirect and the profile isn't being fetched
+		if (hasPerformedInitialRedirect.current === false && state.isRestoringProfile === false) {
+			// When the user has completed the setup then redirect them to the starting page
+			if (state.hasCompletedSetup === true) {
+				// Set hasPerformedInitialRedirect to true to avoid re-running effect
+				hasPerformedInitialRedirect.current = true;
+
+				// Redirect the user to the shopping list tab
+				router.replace('/(tabs)/ShoppingLists');
+			}
+
+			if (state.hasCompletedSetup === false) {
+				// Set hasPerformedInitialRedirect to true to avoid re-running effect
+				hasPerformedInitialRedirect.current = true;
+
+				// Redirect the user to the on boarding page (Welcome page)
+				router.replace('/(auth)/Onboarding');
+			}
+		}
+	}, [router, state.hasCompletedSetup, state.isRestoringProfile]);
+
 	// Store the state in Async-Storage
 	React.useEffect(() => {
 		const saveStateToAsyncStorage = async () => {
@@ -112,7 +140,11 @@ export const UserProfileProvider = ({ children }) => {
 		[state, safeDispatch]
 	);
 
-	return <UserProfileContext.Provider value={value}>{children}</UserProfileContext.Provider>;
+	return (
+		<UserProfileContext.Provider value={value}>
+			{state.isRestoringProfile ? <Loading isDark={false} /> : children}
+		</UserProfileContext.Provider>
+	);
 };
 
 UserProfileProvider.propTypes = {

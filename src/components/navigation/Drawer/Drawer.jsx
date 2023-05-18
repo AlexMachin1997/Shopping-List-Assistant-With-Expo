@@ -1,9 +1,5 @@
 // Core react dependencies
-import * as React from 'react';
 import { ScrollView } from 'react-native';
-
-// React-Navigation dependencies
-import { useNavigation } from '@react-navigation/native';
 
 // Styled-Components dependencies
 import { useTheme } from 'styled-components';
@@ -13,17 +9,17 @@ import ApplicationIcon from '../../../../assets/App-Icon.png';
 // Components
 import { Image, Section } from '../../core';
 
-import DrawerLink from './DrawerLink';
+import DrawerLink from './DrawerLink.jsx';
 
 // Custom hooks
 import { useUserProfile } from '../../../hooks';
 
 export const NavigationDrawer = () => {
+	// Access the styled-components theme
 	const { darkBlue, lightBlue } = useTheme();
 
+	// Access the users profile e.g. theme to decide what colour the sections should be.
 	const { state } = useUserProfile();
-
-	const { navigate } = useNavigation();
 
 	return (
 		<ScrollView
@@ -51,11 +47,7 @@ export const NavigationDrawer = () => {
 				flexGrow={0}
 				isDark={state.theme === 'dark'}
 			>
-				<DrawerLink
-					action={() => navigate('Tabs')}
-					icon='format-list-bulleted'
-					text='Shopping lists'
-				/>
+				<DrawerLink href='(tabs)/ShoppingList' icon='format-list-bulleted' text='Shopping lists' />
 			</Section>
 
 			<Section
@@ -66,7 +58,7 @@ export const NavigationDrawer = () => {
 				flexGrow={0}
 				isDark={state.theme === 'dark'}
 			>
-				<DrawerLink action={() => navigate('Settings')} icon='settings' text='Settings' />
+				<DrawerLink href='/settings' icon='settings' text='Settings' />
 			</Section>
 		</ScrollView>
 	);

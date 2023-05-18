@@ -42,20 +42,27 @@ const useNotificationPermission = () => {
 	React.useEffect(() => {
 		const registerForPushNotificationsAsync = async () => {
 			try {
-				// Push notifications will only work on physical devices ie anything but a simulator
-				if (Device.isDevice === false) {
-					throw Error('To be able to use local push notifications you need a physical device');
-				}
-
 				// With the latest version of expo-notifications you need to call setNotificationChannelAsync to get a token
 				// https://docs.expo.dev/versions/latest/sdk/notifications/#android-1
 				if (Platform.OS === 'android') {
-					await Notifications.setNotificationChannelAsync('default', {
-						name: 'default',
-						importance: Notifications.AndroidImportance.MAX,
-						vibrationPattern: [0, 250, 250, 250],
-						lightColor: '#FF231F7C'
-					});
+					const androidChannelResponse = await Notifications.setNotificationChannelAsync(
+						'default',
+						{
+							name: 'default',
+							importance: Notifications.AndroidImportance.MAX,
+							vibrationPattern: [0, 250, 250, 250],
+							lightColor: '#FF231F7C'
+						}
+					);
+
+					if (androidChannelResponse === null) {
+						throw Error("This Android device doesn't support push notifications");
+					}
+				}
+
+				// Push notifications will only work on physical devices ie anything but a simulator
+				if (Device.isDevice === false) {
+					throw Error('To be able to use local push notifications you need a physical device');
 				}
 
 				// Get the current notification permissions
@@ -73,6 +80,7 @@ const useNotificationPermission = () => {
 				const requestedToken = await Notifications.getExpoPushTokenAsync({
 					projectId: Constants.manifest.projectId
 				}).data;
+
 				setExpoPushNotificationToken(requestedToken);
 			} catch (err) {
 				// Log the error to the console for better debugging
