@@ -17,7 +17,7 @@ import NightMode from '../../assets/GoogleMapsNight.json';
 import { Loading } from '../../src/components/screen-states';
 
 // custom hooks
-import { useUserProfile, useLocationPermission, useNotificationPermission } from '../../src/hooks';
+import { useUserProfile, useNotification } from '../../src/hooks';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({
@@ -50,6 +50,8 @@ const locationReducer = (state, action) => {
 };
 
 const StoreTracker = () => {
+	const watchPositionAsyncRef = React.useRef(null);
+
 	// Stores the users location related state
 	const [{ longitude, latitude, longitudeDelta, latitudeDelta }, dispatch] = React.useReducer(
 		locationReducer,
@@ -67,24 +69,28 @@ const StoreTracker = () => {
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { state: userProfileState } = useUserProfile();
 
-	// Request location related permissions easily
-	const { foregroundPermissionStatus } = useLocationPermission({
-		enableForegroundPermission: true
+	// Get's or requests the current permission/s related to the locations foreground functionality
+	const [foregroundPermissionStatus] = Location.useForegroundPermissions({
+		request: true,
+		get: true
 	});
 
 	// Handles the notification related functionality e.g. requesting access, checking the current status
-	const { localNotificationsStatus, generateLocalNotification } = useNotificationPermission();
+	const { localNotificationsStatus, generateLocalNotification } = useNotification();
 
 	// Watches the users location and updates
 	// NOTE: This will perform on initial load of the screen and when it re-focuses
 	useFocusEffect(
 		React.useCallback(() => {
 			const watchLocation = async () => {
-				await Location.watchPositionAsync(
+				// Start watching the users position whilst in the foreground (Store the ref for cleanup)
+				watchPositionAsyncRef.current = await Location.watchPositionAsync(
 					{
-						accuracy: Location.Accuracy.BestForNavigation
+						// Was Best for Navigation, but that seems rather unnecessary and aggressive.
+						accuracy: Location.Accuracy.Balanced
 					},
 					({ coords: { latitude: newLatitude, longitude: newLongitude } }) => {
+						// Every time the location updates update the users location state (Updates the map marker)
 						dispatch({
 							type: 'UPDATE_LOCATION',
 							payload: {
@@ -96,12 +102,14 @@ const StoreTracker = () => {
 				);
 			};
 
-			// If the permission status is granted start watching the location
-			if (foregroundPermissionStatus === 'granted') {
-				// Start watching the position
+			// Only start listening for the location when the user has granted foreground permission
+			if (foregroundPermissionStatus?.granted ?? false) {
 				watchLocation();
 			}
-		}, [foregroundPermissionStatus])
+
+			// Cleanup the watchPositionAsync when the screen unmounts (Stopped listening for the users location)
+			return () => watchPositionAsyncRef?.current?.remove() ?? null;
+		}, [foregroundPermissionStatus?.granted])
 	);
 
 	// Whilst the users location is being watched check if they are near a shop
@@ -141,7 +149,7 @@ const StoreTracker = () => {
 	);
 
 	React.useEffect(() => {
-		if (localNotificationsStatus !== '' && foregroundPermissionStatus !== '') {
+		if (localNotificationsStatus !== '' && foregroundPermissionStatus !== null) {
 			setIsLoading(false);
 		}
 	}, [localNotificationsStatus, foregroundPermissionStatus]);

@@ -175,40 +175,6 @@ const ShoppingList = () => {
 
 	return (
 		<>
-			{snackBarState.visible === false && (
-				<ActionButtons
-					actions={[
-						{
-							icon: 'rename-box',
-							label: 'Rename list',
-							onPress: () => {
-								setIsRenameShoppingListModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Rename modal'
-						},
-						{
-							icon: 'delete',
-							label: 'Delete list',
-							onPress: () => {
-								setIsDeleteShoppingListModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Delete the shopping list'
-						},
-						{
-							icon: 'plus-circle',
-							label: 'Add item',
-							onPress: () => {
-								setIsAddItemsModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Add an item to the shopping list'
-						}
-					]}
-				/>
-			)}
-
 			<Modal
 				visible={isAddItemsModalVisible}
 				title='Create an item'
@@ -336,6 +302,41 @@ const ShoppingList = () => {
 							) ?? null
 					)
 				)}
+
+				{snackBarState.visible === false && (
+					<ActionButtons
+						actions={[
+							{
+								icon: 'rename-box',
+								label: 'Rename list',
+								onPress: () => {
+									setIsRenameShoppingListModalVisible(true);
+								},
+								color: 'grey',
+								accessibilityLabel: 'Rename modal'
+							},
+							{
+								icon: 'delete',
+								label: 'Delete list',
+								onPress: () => {
+									setIsDeleteShoppingListModalVisible(true);
+								},
+								color: 'grey',
+								accessibilityLabel: 'Delete the shopping list'
+							},
+							{
+								icon: 'plus-circle',
+								label: 'Add item',
+								onPress: () => {
+									setIsAddItemsModalVisible(true);
+								},
+								color: 'grey',
+								accessibilityLabel: 'Add an item to the shopping list'
+							}
+						]}
+					/>
+				)}
+
 				<Snackbar
 					visible={snackBarState.visible}
 					onDismiss={() => {

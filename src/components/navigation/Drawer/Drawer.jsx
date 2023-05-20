@@ -47,7 +47,7 @@ export const NavigationDrawer = () => {
 				flexGrow={0}
 				isDark={state.theme === 'dark'}
 			>
-				<DrawerLink href='(tabs)/ShoppingList' icon='format-list-bulleted' text='Shopping lists' />
+				<DrawerLink href='(tabs)/ShoppingLists' icon='format-list-bulleted' text='Shopping lists' />
 			</Section>
 
 			<Section

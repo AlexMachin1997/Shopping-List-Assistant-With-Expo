@@ -21,7 +21,7 @@ const Button = ({
 	<ReactNativePaperButton
 		mode={mode}
 		compact={isCompact}
-		color={colour}
+		buttonColor={colour}
 		contentStyle={contentStyle}
 		onPress={() => {
 			if (onClick) {

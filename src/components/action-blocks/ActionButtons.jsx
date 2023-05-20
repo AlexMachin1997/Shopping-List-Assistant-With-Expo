@@ -1,10 +1,9 @@
 // React dependencies
 import * as React from 'react';
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
 // react-native-paper dependencies
-import { FAB, Portal } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 
 // styled-components dependencies
 import { useTheme } from 'styled-components';
@@ -16,26 +15,15 @@ const ActionButtons = ({ actions }) => {
 	const { brightPink } = useTheme();
 
 	return (
-		<View
-			style={{
-				position: 'absolute',
-				bottom: 0,
-				right: 0,
-				margin: 10
+		<FAB.Group
+			open={isOpen}
+			fabStyle={{ backgroundColor: brightPink }}
+			icon={isOpen ? 'close' : 'plus'}
+			actions={actions}
+			onStateChange={() => {
+				setIsOpen((prevState) => !prevState);
 			}}
-		>
-			<Portal>
-				<FAB.Group
-					open={isOpen}
-					fabStyle={{ backgroundColor: brightPink }}
-					icon={isOpen ? 'close' : 'plus'}
-					actions={actions}
-					onStateChange={() => {
-						setIsOpen((prevState) => !prevState);
-					}}
-				/>
-			</Portal>
-		</View>
+		/>
 	);
 };
 

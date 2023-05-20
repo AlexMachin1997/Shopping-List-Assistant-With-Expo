@@ -1,6 +1,7 @@
 import truncate from 'lodash/truncate';
 
 import { useTheme } from 'styled-components';
+import { useRouter } from 'expo-router';
 import { HeaderIcon } from '../../src/components/navigation/Header';
 
 import { Stack } from '../../src/layouts';
@@ -12,6 +13,8 @@ const ShoppingListLayout = () => {
 	const { dispatch: updateShoppingListState } = useShoppingList();
 
 	const { darkBlue, lightBlue } = useTheme();
+
+	const router = useRouter();
 
 	return (
 		<Stack initialRouteName='[name]'>
@@ -42,11 +45,10 @@ const ShoppingListLayout = () => {
 								});
 
 								// Go back to the previous screen
-								navigation.goBack();
+								router.push('/(tabs)/ShoppingLists');
 							}}
 							icon='arrow-back'
 							marginRight={10}
-							{...props}
 						/>
 					)
 				})}

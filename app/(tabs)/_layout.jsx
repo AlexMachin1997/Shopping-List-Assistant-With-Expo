@@ -1,15 +1,17 @@
 import { useTheme } from 'styled-components';
-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Tabs, useRouter } from 'expo-router';
 
-import { MaterialBottomTabs } from '../../src/layouts';
+import { HeaderIcon } from '../../src/components/navigation/Header';
 
 const TabsLayout = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
 
+	const router = useRouter();
+
 	return (
-		<MaterialBottomTabs
+		<Tabs
 			barStyle={{
 				backgroundColor: darkBlue,
 				borderTopColor: lightBlue,
@@ -18,8 +20,45 @@ const TabsLayout = () => {
 			}}
 			initialRouteName='ShoppingLists'
 			safeAreaInsets={{ bottom: 0 }}
+			screenOptions={({ navigation }) => ({
+				headerTitleStyle: {
+					color: 'white'
+				},
+				headerStyle: {
+					backgroundColor: darkBlue,
+					borderBottomColor: lightBlue,
+					borderTopColor: darkBlue,
+					borderWidth: 1,
+					borderStyle: 'solid'
+				},
+				tabBarStyle: {
+					backgroundColor: darkBlue,
+					paddingBottom: 3,
+					paddingTop: 3
+				},
+				tabBarInactiveTintColor: 'white',
+				tabBarActiveTintColor: 'white',
+				headerRight: () => (
+					<HeaderIcon
+						icon='settings'
+						marginRight={10}
+						action={() => {
+							router.push('/settings');
+						}}
+					/>
+				),
+				headerLeft: () => (
+					<HeaderIcon
+						icon='menu'
+						marginLeft={10}
+						action={() => {
+							navigation.toggleDrawer();
+						}}
+					/>
+				)
+			})}
 		>
-			<MaterialBottomTabs.Screen
+			<Tabs.Screen
 				name='ShoppingLists'
 				options={{
 					title: 'Shopping lists',
@@ -29,7 +68,7 @@ const TabsLayout = () => {
 				}}
 			/>
 
-			<MaterialBottomTabs.Screen
+			<Tabs.Screen
 				name='StoreTracker'
 				options={{
 					title: 'Tracking items',
@@ -39,7 +78,7 @@ const TabsLayout = () => {
 					)
 				}}
 			/>
-		</MaterialBottomTabs>
+		</Tabs>
 	);
 };
 

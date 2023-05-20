@@ -13,7 +13,7 @@ Notifications.setNotificationHandler({
 	})
 });
 
-const useNotificationPermission = () => {
+const useNotification = () => {
 	const [localNotificationsStatus, setLocalNotificationsStatus] = React.useState('');
 	const [, setExpoPushNotificationToken] = React.useState('');
 
@@ -84,7 +84,7 @@ const useNotificationPermission = () => {
 				setExpoPushNotificationToken(requestedToken);
 			} catch (err) {
 				// Log the error to the console for better debugging
-				console.error('useNotificationPermission error', err?.message ?? '');
+				console.error('useNotification error', err?.message ?? '');
 
 				// Whenever we fail to get the users permission just set it to denied internally to stop any loaders or trigger any events
 				setLocalNotificationsStatus('denied');
@@ -115,4 +115,4 @@ const useNotificationPermission = () => {
 	};
 };
 
-export default useNotificationPermission;
+export default useNotification;

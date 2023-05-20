@@ -85,7 +85,7 @@ const Settings = () => {
 			>
 				<Section isDark={userProfileState.theme === 'dark'}>
 					<Text colour={userProfileState.theme === 'dark' ? lightBlue : darkBlue}>
-						Enable dark mode
+						Enable dark mode theme
 					</Text>
 					<Switch
 						value={userProfileState.theme === 'dark'}
@@ -99,6 +99,11 @@ const Settings = () => {
 								payload: { theme: isDarkMode === true ? 'light' : 'dark' }
 							});
 						}}
+						style={{
+							paddingTop: 5,
+							paddingBottom: 5
+						}}
+						color='white'
 					/>
 				</Section>
 			</Section>
@@ -122,7 +127,7 @@ const Settings = () => {
 				marginRight='0'
 			>
 				<Text colour={userProfileState.theme === 'dark' ? lightBlue : darkBlue}>
-					Clear shopping lists
+					Delete all shopping lists
 				</Text>
 				<Section flexGrow={1} alignItems='flex-end' backgroundColour='transparent'>
 					<Button

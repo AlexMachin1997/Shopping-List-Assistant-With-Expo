@@ -22,7 +22,7 @@ const ShoppingListCard = ({
 	deleteAction
 }) => {
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue } = useTheme();
+	const { darkBlue, lightBlue, green } = useTheme();
 
 	return (
 		<TouchableRipple onPress={toggle} rippleColor={shoppingListTheme}>
@@ -51,7 +51,7 @@ const ShoppingListCard = ({
 				>
 					<ToggleButton
 						icon={isComplete ? 'radiobox-marked' : 'radiobox-blank'}
-						color={isComplete ? 'green' : darkBlue}
+						iconColor={isComplete ? green : darkBlue}
 						style={{ backgroundColor: 'transparent' }}
 						value={isComplete}
 						status={isComplete ? 'checked' : 'unchecked'}
@@ -74,7 +74,7 @@ const ShoppingListCard = ({
 				>
 					<IconButton
 						icon='delete-forever'
-						color='red'
+						iconColor='red'
 						size={40}
 						onPress={() => {
 							if (deleteAction) {

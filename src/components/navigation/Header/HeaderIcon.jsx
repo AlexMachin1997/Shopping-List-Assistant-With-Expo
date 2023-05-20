@@ -1,4 +1,3 @@
-import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { useTheme } from 'styled-components';
@@ -11,23 +10,20 @@ export const HeaderIcon = ({ marginRight, marginLeft, action, icon }) => {
 	const { brightPink } = useTheme();
 
 	return (
-		<View
+		<TouchableRipple
+			onPress={() => {
+				if (action) {
+					action();
+				}
+			}}
+			rippleColor={brightPink}
 			style={{
 				marginRight,
 				marginLeft
 			}}
 		>
-			<TouchableRipple
-				onPress={() => {
-					if (action) {
-						action();
-					}
-				}}
-				rippleColor={brightPink}
-			>
-				<MaterialIcons name={icon} size={30} color='#CCDBDC' />
-			</TouchableRipple>
-		</View>
+			<MaterialIcons name={icon} size={30} color='#CCDBDC' />
+		</TouchableRipple>
 	);
 };
 

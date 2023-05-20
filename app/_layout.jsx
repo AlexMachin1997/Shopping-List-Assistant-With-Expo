@@ -4,12 +4,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProvider } from 'styled-components/native';
 
-import { useRouter } from 'expo-router';
 import { NavigationDrawer } from '../src/components/navigation/Drawer';
 
 import { ShoppingListProvider, UserProfileProvider } from '../src/context';
+
 import { Drawer } from '../src/layouts';
-import { HeaderIcon } from '../src/components/navigation/Header';
 
 const IndexLayout = () => {
 	const StyledComponentsTheme = React.useMemo(
@@ -23,8 +22,6 @@ const IndexLayout = () => {
 		[]
 	);
 
-	const router = useRouter();
-
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<ThemeProvider theme={StyledComponentsTheme}>
@@ -33,39 +30,12 @@ const IndexLayout = () => {
 						<ShoppingListProvider>
 							<Drawer
 								drawerContent={(props) => <NavigationDrawer {...props} />}
-								screenOptions={({ navigation }) => ({
-									headerStyle: {
-										backgroundColor: StyledComponentsTheme.darkBlue,
-										borderBottomColor: StyledComponentsTheme.lightBlue,
-										borderTopColor: StyledComponentsTheme.darkBlue,
-										borderWidth: 1,
-										borderStyle: 'solid'
-									},
-									headerTitleStyle: {
-										color: 'white'
-									},
-									headerLeft: (props) => (
-										<HeaderIcon
-											action={() => navigation.toggleDrawer()}
-											icon='menu'
-											marginLeft={10}
-											{...props}
-										/>
-									),
-									headerRight: (props) => (
-										<HeaderIcon
-											icon='settings'
-											marginRight={10}
-											action={() => {
-												router.push('/settings');
-											}}
-											{...props}
-										/>
-									)
-								})}
+								screenOptions={{
+									headerShown: false
+								}}
 							>
 								{/* Register the tabs stack, includes the shopping lists and store tracker pages */}
-								<Drawer.Screen name='(tabs)' options={{ title: 'Shopping Lists' }} />
+								<Drawer.Screen name='(tabs)' />
 
 								<Drawer.Screen name='(auth)' options={{ headerShown: false }} />
 
