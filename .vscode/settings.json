@@ -1,4 +1,6 @@
 {
+	"scss.lint.unknownAtRules": "ignore",
+	"files.eol": "\n",
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
 	"editor.formatOnPaste": true,
@@ -15,12 +17,11 @@
 	"editor.fontSize": 20,
 	"editor.minimap.enabled": false,
 	"editor.tabSize": 2,
-	"terminal.integrated.fontSize": 20,
 
 	"files.trimTrailingWhitespace": true,
 	"files.trimFinalNewlines": true,
 
-	"workbench.sideBar.location": "left",
+	"workbench.sideBar.location": "right",
 
 	"javascript.updateImportsOnFileMove.enabled": "always",
 
@@ -61,7 +62,9 @@
 
 	"files.associations": {
 		"*.react.js": "javascriptreact",
-		"*.jsx": "javascriptreact",
-		"*.js": "javascriptreact"
-	}
+		"*.jsx": "javascriptreact"
+	},
+	"terminal.integrated.fontSize": 20,
+	"screencastMode.fontSize": 59,
+	"scm.inputFontSize": 20
 }

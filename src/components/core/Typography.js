@@ -1,7 +1,7 @@
 // Core react dependencies
 import PropTypes from 'prop-types';
 
-// styled-components dependencies
+// Styled-components dependencies
 import styled from 'styled-components/native';
 
 const Text = styled.Text`

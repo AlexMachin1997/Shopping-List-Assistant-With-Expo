@@ -46,7 +46,6 @@
 		"no-misleading-character-class": "off",
 		"no-irregular-whitespace": "off",
 		"no-plusplus": "off",
-		"react/jsx-props-no-spreading": "off",
 		"no-debugger": 0,
 		"no-alert": 0,
 		"no-await-in-loop": 0,
@@ -83,17 +82,11 @@
 		"consistent-return": 0,
 		"react/display-name": 0,
 		"react/no-array-index-key": 0,
-		"react/react-in-jsx-scope": 2,
 		"react/prefer-stateless-function": 0,
 		"react/forbid-prop-types": 0,
 		"react/no-unescaped-entities": 0,
 		"react/require-default-props": 2,
-		"react/jsx-filename-extension": [
-			1,
-			{
-				"extensions": [".js", ".jsx"]
-			}
-		],
+
 		"radix": 0,
 		"no-shadow": [
 			2,
@@ -120,6 +113,20 @@
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "error",
 		"jsx-quotes": ["error", "prefer-single"],
-		"react/destructuring-assignment": 0
+		"react/destructuring-assignment": 0,
+		/*
+		  ************************************************************************************************
+		  Description of why these are turned off for the project:
+		  ************************************************************************************************
+		  - In React 17 a new runtime JSX transform was created, this will allow us to safely ignore the React import when it's not required.
+		  - When not using useEffect, useCallback, useState etc we no longer need "React" to be scope if React is required then the runtime transform
+		    will automatically add it (Smart right!)
+		  - For more information visit https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports
+		  */
+		"react/jsx-uses-react": "off",
+		"react/react-in-jsx-scope": "off",
+		"@typescript-eslint/no-var-requires": 0,
+		"react/jsx-props-no-spreading": 0,
+		"react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }]
 	}
 }

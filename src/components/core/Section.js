@@ -1,7 +1,7 @@
-// Styled-Components dependencies
+// Styled-components dependencies
 import styled from 'styled-components/native';
 
-// React dependencies
+// Core react dependencies
 import PropTypes from 'prop-types';
 
 const Section = styled.View`
