@@ -1,5 +1,8 @@
+// Core react dependencies
 import * as React from 'react';
 import PropTypes from 'prop-types';
+
+// Routing dependencies
 import { useRouter } from 'expo-router';
 
 import { getItem, setItem } from '../utils/AsyncStorage';
@@ -56,7 +59,7 @@ const UserProfileReducer = (state, action) => {
 };
 
 export const UserProfileProvider = ({ children }) => {
-	// Access the expo router
+	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
 
 	// User profile reducer
@@ -142,7 +145,7 @@ export const UserProfileProvider = ({ children }) => {
 
 	return (
 		<UserProfileContext.Provider value={value}>
-			{state.isRestoringProfile ? <Loading isDark={false} /> : children}
+			{state.isRestoringProfile ? <Loading isDark={state.theme === 'dark'} /> : children}
 		</UserProfileContext.Provider>
 	);
 };

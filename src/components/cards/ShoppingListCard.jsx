@@ -7,10 +7,10 @@ import { truncate } from 'lodash';
 // react-native-paper dependencies
 import { IconButton, ToggleButton, TouchableRipple } from 'react-native-paper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Application components
 import { Section, Text } from '../core';
 
 const ShoppingListCard = ({

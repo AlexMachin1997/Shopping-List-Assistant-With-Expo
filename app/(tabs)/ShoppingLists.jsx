@@ -2,25 +2,25 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
-// expo-router dependencies
+// Routing dependencies
 import { useRouter } from 'expo-router';
 
 // react-native-paper dependencies
 import { TextInput, Snackbar } from 'react-native-paper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application assets
+// Application assets
 import EmptyIcon from '../../assets/Shocked.png';
 
-// application components
+// Application components
 import { Empty, Loading } from '../../src/components/screen-states';
 import { ActionButton } from '../../src/components/action-blocks';
 import { Modal, Text } from '../../src/components/core';
 import { ShoppingListsCard } from '../../src/components/cards';
 
-// Custom hooks
+// Application hooks
 import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const ShoppingLists = () => {

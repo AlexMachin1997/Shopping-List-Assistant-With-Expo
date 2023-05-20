@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 // react-native-paper dependencies
 import { Dialog, Portal } from 'react-native-paper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Application components
 import Button from './Button';
 
 const Modal = ({

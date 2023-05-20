@@ -1,4 +1,5 @@
-import { Stack } from 'expo-router';
+// Routing dependencies
+import { Stack } from '../../src/layouts';
 
 const AuthLayout = () => (
 	<Stack initialRouteName='Onboarding'>

@@ -2,16 +2,16 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
-// expo-router dependencies
+// Routing dependencies
 import { useLocalSearchParams, useFocusEffect, useRouter } from 'expo-router';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
 // react-native-paper dependencies
 import { TextInput, Snackbar } from 'react-native-paper';
 
-// application components
+// Application components
 import { Empty, Loading } from '../../src/components/screen-states';
 import { ActionButtons } from '../../src/components/action-blocks';
 import { ShoppingListCard } from '../../src/components/cards';
@@ -20,7 +20,7 @@ import { Text, Modal } from '../../src/components/core';
 // Screen assets
 import EmptyIcon from '../../assets/Shopping-Basket.png';
 
-// Custom hooks
+// Application hooks
 import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const ShoppingList = () => {
@@ -44,8 +44,10 @@ const ShoppingList = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue, green, white } = useTheme();
 
-	// Access the "expo-router" internals
+	// Access the current routes url search parameters e.g. title (Used as the page title)
 	const { title } = useLocalSearchParams();
+
+	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)

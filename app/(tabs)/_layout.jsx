@@ -1,14 +1,22 @@
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Tabs, useRouter } from 'expo-router';
 
+// Expo dependencies
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+// Routing dependencies
+import { useRouter } from 'expo-router';
+import { Tabs } from '../../src/layouts';
+
+// Application components
 import { HeaderIcon } from '../../src/components/navigation/Header';
 
 const TabsLayout = () => {
+	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
+	const router = useRouter();
+
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
-
-	const router = useRouter();
 
 	return (
 		<Tabs

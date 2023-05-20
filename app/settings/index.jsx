@@ -1,17 +1,17 @@
-// react dependencies
+// Core react dependencies
 import * as React from 'react';
 import { ScrollView } from 'react-native';
 
 // react-native-paper dependencies
 import { Divider, Switch, Snackbar } from 'react-native-paper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Application components
 import { Section, Text, Button, Modal } from '../../src/components/core';
 
-// custom hooks
+// Application hooks
 import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
 
 const Settings = () => {

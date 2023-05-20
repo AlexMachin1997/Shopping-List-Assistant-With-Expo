@@ -1,12 +1,12 @@
 // Core react dependencies
 import PropTypes from 'prop-types';
 
-import { truncate } from 'lodash';
+import truncate from 'lodash/truncate';
 
 // react-native-paper dependencies
 import { TouchableRipple } from 'react-native-paper';
 
-// application components
+// Application components
 import { Section, Text } from '../core';
 
 const ShoppingListsCard = ({ action, background, title }) => (

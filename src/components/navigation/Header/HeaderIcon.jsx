@@ -7,6 +7,7 @@ import { TouchableRipple } from 'react-native-paper';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export const HeaderIcon = ({ marginRight, marginLeft, action, icon }) => {
+	// Access the styled-components theme via their internal ThemeContext
 	const { brightPink } = useTheme();
 
 	return (

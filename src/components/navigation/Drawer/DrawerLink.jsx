@@ -1,21 +1,24 @@
 // Core react dependencies
 import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
+
+//
 import { Link } from 'expo-router';
 
 // Expo dependencies
 import { MaterialIcons } from '@expo/vector-icons';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// core application components
+// Core application components
 import { Text, Section } from '../../core';
 
-// custom hooks
+// Application hooks
 import { useUserProfile } from '../../../hooks';
 
 const DrawerLink = ({ href, icon, text }) => {
+	// Access the styled-components theme via their internal ThemeContext
 	const { lightBlue, darkBlue } = useTheme();
 
 	const { state } = useUserProfile();

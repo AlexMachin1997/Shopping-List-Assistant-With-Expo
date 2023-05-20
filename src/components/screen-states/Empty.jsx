@@ -1,10 +1,10 @@
 // Core react dependencies
 import PropTypes from 'prop-types';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Application components
 import { Section, Text, Image } from '../core';
 
 const Empty = ({ isDark, image, label, heading, overview }) => {

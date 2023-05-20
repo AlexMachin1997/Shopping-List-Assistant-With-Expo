@@ -1,7 +1,7 @@
 // Core react dependencies
 import { ScrollView } from 'react-native';
 
-// Styled-Components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
 import ApplicationIcon from '../../../../assets/App-Icon.png';
@@ -11,11 +11,11 @@ import { Image, Section } from '../../core';
 
 import DrawerLink from './DrawerLink.jsx';
 
-// Custom hooks
+// Application hooks
 import { useUserProfile } from '../../../hooks';
 
 export const NavigationDrawer = () => {
-	// Access the styled-components theme
+	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
 
 	// Access the users profile e.g. theme to decide what colour the sections should be.

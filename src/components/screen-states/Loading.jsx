@@ -5,7 +5,7 @@ import { ActivityIndicator } from 'react-native';
 // styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Application components
 import { Section } from '../core';
 
 const Loading = ({ isDark }) => {

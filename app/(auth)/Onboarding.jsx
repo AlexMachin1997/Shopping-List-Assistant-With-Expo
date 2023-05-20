@@ -1,22 +1,25 @@
 import Onboarding from 'react-native-onboarding-swiper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// application components
+// Routing dependencies
 import { useRouter } from 'expo-router';
+
+// Application components
 import { Image } from '../../src/components/core';
 
-// application assets
+// Application assets
 import ShoppingList from '../../assets/ShoppingList.png';
 import ShoppingListItemTracking from '../../assets/ItemTracking.png';
 import Customize from '../../assets/Customise.png';
 import Done from '../../assets/Done.png';
 
-// Custom hooks
+// Application hooks
 import { useUserProfile } from '../../src/hooks';
 
 const WelcomeScreen = () => {
+	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
 
 	// Access the styled-components theme via their internal ThemeContext

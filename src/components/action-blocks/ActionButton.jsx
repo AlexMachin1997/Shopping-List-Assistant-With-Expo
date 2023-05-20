@@ -1,11 +1,11 @@
-// React dependencies
+// Core react dependencies
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
 // react-native-paper dependencies
 import { FAB } from 'react-native-paper';
 
-// styled-components dependencies
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
 const ActionButton = ({ icon, action, colour }) => {

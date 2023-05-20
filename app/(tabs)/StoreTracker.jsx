@@ -6,17 +6,17 @@ import { View, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
-// expo-router dependencies
+// Routing dependencies
 import { useFocusEffect } from 'expo-router';
 
-// location assets
+// Map component data
 import Locations from '../../assets/supermarkets.json';
 import NightMode from '../../assets/GoogleMapsNight.json';
 
-// application components
+// Application components
 import { Loading } from '../../src/components/screen-states';
 
-// custom hooks
+// Application hooks
 import { useUserProfile, useNotification } from '../../src/hooks';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
@@ -50,6 +50,7 @@ const locationReducer = (state, action) => {
 };
 
 const StoreTracker = () => {
+	// Used to keep track of the Expo location watching function
 	const watchPositionAsyncRef = React.useRef(null);
 
 	// Stores the users location related state
@@ -63,6 +64,7 @@ const StoreTracker = () => {
 		}
 	);
 
+	// Loading states for various UI elements
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [isMapReady, setIsMapReady] = React.useState(false);
 
