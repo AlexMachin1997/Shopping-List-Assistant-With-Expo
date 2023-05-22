@@ -23,7 +23,7 @@ const Modal = ({
 	accessabilityCancelHint
 }) => {
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue } = useTheme();
+	const { darkBlue } = useTheme();
 
 	return (
 		<Portal>
@@ -35,13 +35,15 @@ const Modal = ({
 					}
 				}}
 				style={{
-					backgroundColor: isDark ? darkBlue : lightBlue
+					backgroundColor: darkBlue,
+					borderWidth: 1,
+					borderColor: 'white'
 				}}
 			>
 				<Dialog.Title
 					style={{
-						backgroundColor: isDark ? darkBlue : lightBlue,
-						color: isDark ? lightBlue : darkBlue
+						backgroundColor: darkBlue,
+						color: isDark ? 'white' : 'white'
 					}}
 				>
 					{title}
@@ -58,6 +60,9 @@ const Modal = ({
 						contentStyle={{
 							borderRadius: 5
 						}}
+						labelStyle={{
+							color: 'white'
+						}}
 						label='Cancel action'
 						onClick={() => {
 							if (onCancel) {
@@ -71,10 +76,13 @@ const Modal = ({
 					<Button
 						isCompact
 						mode='text'
-						text='Ok'
+						text='Confirm'
 						colour='#e91e63'
 						contentStyle={{
 							borderRadius: 5
+						}}
+						labelStyle={{
+							color: 'white'
 						}}
 						label='Confirm button'
 						onClick={() => {

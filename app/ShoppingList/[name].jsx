@@ -21,7 +21,7 @@ import { Text, Modal } from '../../src/components/core';
 import EmptyIcon from '../../assets/Shopping-Basket.png';
 
 // Application hooks
-import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
+import { useShoppingList, useSnackBar, useProfile } from '../../src/hooks';
 
 const ShoppingList = () => {
 	// Controls the add item modal visibility
@@ -51,7 +51,7 @@ const ShoppingList = () => {
 	const router = useRouter();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
-	const { state: userProfileState } = useUserProfile();
+	const { profile } = useProfile();
 
 	// Access the global shopping list related state
 	const { state: shoppingListState, dispatch: updateShoppingListState } = useShoppingList();
@@ -172,7 +172,7 @@ const ShoppingList = () => {
 
 	// Render the loading screen whilst the shopping lists are being fetched
 	if (shoppingListState.isRestoringShoppingLists === true) {
-		return <Loading isDark={userProfileState.theme === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
 	}
 
 	return (
@@ -196,7 +196,7 @@ const ShoppingList = () => {
 				}}
 				onOk={addItem}
 				submitDisabled={(itemName?.length ?? 0) < 1 || snackBarState.visible === true}
-				isDark={userProfileState.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 				accessabilityCancelHint='Stop creating a new shopping list item'
 				accessabilityOkHint='Create a new shopping list item'
 			>
@@ -234,7 +234,7 @@ const ShoppingList = () => {
 					newShoppingListName === title ||
 					snackBarState.visible === true
 				}
-				isDark={userProfileState.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 				accessabilityCancelHint='Stop renaming your current shopping list'
 				accessabilityOkHint='Rename the current shopping list'
 			>
@@ -262,7 +262,7 @@ const ShoppingList = () => {
 				}}
 				onOk={deleteShoppingList}
 				submitDisabled={snackBarState.visible === true}
-				isDark={userProfileState.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 				accessabilityCancelHint='Cancel the delete shopping list action'
 				accessabilityOkHint='Delete the current shopping list, you will be redirected back to the homepage after.'
 			>
@@ -276,7 +276,7 @@ const ShoppingList = () => {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{
 					flexGrow: 1,
-					backgroundColor: userProfileState.theme === 'dark' ? darkBlue : lightBlue,
+					backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue,
 					position: 'relative'
 				}}
 			>
@@ -286,7 +286,7 @@ const ShoppingList = () => {
 						label='No shopping list items exist'
 						heading='No shopping list items exist'
 						overview='Why not try adding one ?'
-						isDark={userProfileState.theme === 'dark'}
+						isDark={(profile?.theme ?? 'light') === 'dark'}
 					/>
 				) : (
 					shoppingListState?.shoppingList?.items?.map(
@@ -298,7 +298,7 @@ const ShoppingList = () => {
 									isComplete={item?.completed ?? false}
 									name={item?.name ?? 'N/A'}
 									deleteAction={() => deleteItem(item?.id ?? null)}
-									isDark={userProfileState.theme === 'dark'}
+									isDark={(profile?.theme ?? 'light') === 'dark'}
 									shoppingListTheme={shoppingListState?.shoppingListTheme ?? 'blue'}
 								/>
 							) ?? null

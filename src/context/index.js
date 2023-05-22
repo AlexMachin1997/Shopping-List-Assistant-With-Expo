@@ -1,2 +1,2 @@
-export { UserProfileProvider, UserProfileContext } from './UserProfileContext';
+export { UserProfileProvider } from './UserProfileContext';
 export { ShoppingListProvider, ShoppingListContext } from './ShoppingListContext';

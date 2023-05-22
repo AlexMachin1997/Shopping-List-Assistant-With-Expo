@@ -21,7 +21,7 @@ import { Modal, Text } from '../../src/components/core';
 import { ShoppingListsCard } from '../../src/components/cards';
 
 // Application hooks
-import { useUserProfile, useShoppingList, useSnackBar } from '../../src/hooks';
+import { useShoppingList, useSnackBar, useProfile } from '../../src/hooks';
 
 const ShoppingLists = () => {
 	// Controls the shopping list state
@@ -40,20 +40,20 @@ const ShoppingLists = () => {
 	const router = useRouter();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
-	const { state: userProfileState } = useUserProfile();
+	const { profile } = useProfile();
 
 	// Access the global shopping list related state
 	const { state: shoppingListState, dispatch: updateShoppingListState } = useShoppingList();
 
 	// Whilst the shopping list is being restored show the loader state
 	if (shoppingListState.isRestoringShoppingLists === true) {
-		return <Loading isDark={userProfileState.theme === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
 	}
 
 	return (
 		<>
 			<Modal
-				isDark={userProfileState.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 				visible={isCreateShoppingModalVisible}
 				title='Create a shopping list'
 				onDismiss={() => setIsCreateShoppingModalVisible(false)}
@@ -105,7 +105,7 @@ const ShoppingLists = () => {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{
 					flexGrow: 1,
-					backgroundColor: userProfileState.theme === 'dark' ? darkBlue : lightBlue
+					backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue
 				}}
 			>
 				{(shoppingListState?.shoppingLists?.length ?? 0) < 1 ? (
@@ -114,7 +114,7 @@ const ShoppingLists = () => {
 						label='No shipping lists exist'
 						heading='No shopping lists exist'
 						overview='Why not try adding one ?'
-						isDark={userProfileState.theme === 'dark'}
+						isDark={(profile?.theme ?? 'light') === 'dark'}
 					/>
 				) : (
 					shoppingListState?.shoppingLists?.map(

@@ -14,37 +14,25 @@ import { useTheme } from 'styled-components';
 // Core application components
 import { Text, Section } from '../../core';
 
-// Application hooks
-import { useUserProfile } from '../../../hooks';
-
-const DrawerLink = ({ href, icon, text }) => {
+const DrawerLink = ({ href, icon, text, isDark }) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { lightBlue, darkBlue } = useTheme();
-
-	const { state } = useUserProfile();
 
 	return (
 		<Section
 			row
 			marginRight='10px'
 			alignItems='center'
-			backgroundColour={state.theme === 'dark' ? darkBlue : lightBlue}
+			backgroundColour={isDark ? darkBlue : lightBlue}
 		>
-			<Section marginRight='10px' backgroundColour={state.theme === 'dark' ? darkBlue : lightBlue}>
-				<MaterialIcons
-					name={icon}
-					size={50}
-					color={state.theme === 'dark' ? lightBlue : darkBlue}
-				/>
+			<Section marginRight='10px' backgroundColour={isDark ? darkBlue : lightBlue}>
+				<MaterialIcons name={icon} size={50} color={isDark ? lightBlue : darkBlue} />
 			</Section>
 
 			<Link asChild href={href}>
 				<TouchableOpacity accessibilityRole='menuitem'>
-					<Section
-						marginRight='10px'
-						backgroundColour={state.theme === 'dark' ? darkBlue : lightBlue}
-					>
-						<Text colour={state.theme === 'dark' ? lightBlue : darkBlue}>{text}</Text>
+					<Section marginRight='10px' backgroundColour={isDark ? darkBlue : lightBlue}>
+						<Text colour={isDark ? lightBlue : darkBlue}>{text}</Text>
 					</Section>
 				</TouchableOpacity>
 			</Link>
@@ -54,13 +42,15 @@ const DrawerLink = ({ href, icon, text }) => {
 
 DrawerLink.defaultProps = {
 	icon: 'help-outline',
-	text: 'Awesome link'
+	text: 'Awesome link',
+	isDark: false
 };
 
 DrawerLink.propTypes = {
 	href: PropTypes.string.isRequired,
 	icon: PropTypes.string,
-	text: PropTypes.string
+	text: PropTypes.string,
+	isDark: PropTypes.bool
 };
 
 export default DrawerLink;
