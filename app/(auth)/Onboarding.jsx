@@ -18,6 +18,9 @@ import Done from '../../assets/Done.png';
 // Application hooks
 import { useProfile } from '../../src/hooks';
 
+// Application services
+import ProfileService from '../../src/components/services/ProfileService';
+
 const WelcomeScreen = () => {
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
@@ -26,7 +29,7 @@ const WelcomeScreen = () => {
 	const { lightBlue } = useTheme();
 
 	// Access the user profile user information stored in the UserContext Provider
-	const { mutate } = useProfile({
+	const { mutate, profile } = useProfile({
 		onSuccess: () => {
 			// On successful update redirect the user to the Shopping Lists tab
 			router.push('(tabs)/ShoppingLists');
@@ -37,7 +40,13 @@ const WelcomeScreen = () => {
 		<>
 			<Onboarding
 				onDone={() => {
-					mutate({ type: 'COMPLETE_ONBOARDING' });
+					// Complete the onboarding process for the current user
+					mutate({
+						type: 'COMPLETE_ONBOARDING',
+						payload: {
+							profile: ProfileService.CompleteSetup({ profile })
+						}
+					});
 				}}
 				skipToPage={3}
 				transitionAnimationDuration={100}

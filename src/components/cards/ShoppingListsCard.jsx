@@ -1,4 +1,5 @@
 // Core react dependencies
+import * as React from 'react';
 import PropTypes from 'prop-types';
 
 import truncate from 'lodash/truncate';
@@ -9,15 +10,8 @@ import { TouchableRipple } from 'react-native-paper';
 // Application components
 import { Section, Text } from '../core';
 
-const ShoppingListsCard = ({ action, background, title }) => (
-	<TouchableRipple
-		onPress={() => {
-			if (action) {
-				action();
-			}
-		}}
-		rippleColor={background}
-	>
+const ShoppingListsCard = React.forwardRef(({ background, title, ...props }, ref) => (
+	<TouchableRipple rippleColor={background} {...props}>
 		<Section
 			row
 			justifyContent='space-between'
@@ -42,16 +36,14 @@ const ShoppingListsCard = ({ action, background, title }) => (
 			</Section>
 		</Section>
 	</TouchableRipple>
-);
+));
 
 ShoppingListsCard.defaultProps = {
 	background: 'blue',
-	title: 'Please provide a title',
-	action: null
+	title: 'Please provide a title'
 };
 
 ShoppingListsCard.propTypes = {
-	action: PropTypes.func,
 	background: PropTypes.string,
 	title: PropTypes.string
 };

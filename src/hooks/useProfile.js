@@ -1,9 +1,13 @@
+// Core react dependencies
 import * as React from 'react';
 
+// TanStack query dependencies
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+// Expo modules
 import * as AsyncStorage from 'expo-secure-store';
 
-const useProfile = ({ onSuccess = null, onError = null } = {}) => {
+const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
@@ -52,80 +56,38 @@ const useProfile = ({ onSuccess = null, onError = null } = {}) => {
 	const mutation = useMutation({
 		mutationFn: async (variables) => {
 			try {
-				if (variables === null) {
-					throw Error('There must be variables present in the mutation payload');
-				}
+				// Store a reference to the old set of data
+				const previousProfile = queryClient.getQueryData(queryKey, { type: 'active' });
 
-				// Get the current query data via the queryClient
-				const profile = queryClient.getQueryData(queryKey, { type: 'active' });
-
-				const newProfile = { ...profile, ...(variables?.payload ?? {}) };
+				// Store a reference to the "expected" cache data (The shape must match exactly)
+				const incomingProfile = { ...previousProfile, ...(variables?.payload ?? {}) };
 
 				// Attempt to override the current profile data (combines the current active query and )
-				await AsyncStorage.setItemAsync(queryKey[0].key, JSON.stringify(newProfile));
+				await AsyncStorage.setItemAsync(queryKey[0].key, JSON.stringify(incomingProfile));
 
-				return newProfile;
+				// Return the new profile so it can be accessed in some of the callbacks e.g. onSuccess
+				return incomingProfile;
 			} catch (error) {
 				return Promise.reject(new Error(error.message));
 			}
 		},
 		onMutate: async (variables) => {
 			// Cancel any queries for the profile
-			await queryClient.cancelQueries({ queryKey });
+			await queryClient.cancelQueries({ queryKey, type: 'all' });
 
-			// Store references to the current profile and old profile object (Used for rolling forward or backwards)
-			let profile = queryClient.getQueryData(queryKey, { type: 'active' });
-			const previousProfile = queryClient.getQueryData(queryKey, { type: 'active' });
+			// Store a reference to the "expected" cache data (The shape must match exactly)
+			const incomingProfile = variables?.payload?.profile ?? {};
 
-			// Map the data based on the type of event being performed
-			switch (variables?.type ?? '') {
-				case 'THEME_CHANGE': {
-					profile = {
-						...profile,
-						theme: variables?.payload?.theme ?? 'light'
-					};
-
-					break;
-				}
-
-				case 'COMPLETE_ONBOARDING': {
-					profile = {
-						...profile,
-						hasCompletedSetup: true
-					};
-
-					break;
-				}
-
-				case 'RESET_PROFILE': {
-					profile = {
-						theme: 'light',
-						hasCompletedSetup: false
-					};
-
-					break;
-				}
-
-				default: {
-					profile = {
-						...profile
-					};
-				}
-			}
+			// Store a reference to the old set of data
+			const previousProfile = queryClient.getQueryData(queryKey);
 
 			// Update the query key data with the new profile object (Certain properties are updated above)
-			queryClient.setQueryData(queryKey, () => ({ ...(profile ?? {}) }));
+			queryClient.setQueryData(queryKey, incomingProfile);
 
 			// After the mutation function has been complete pass some data to the context
-			return { newProfile: profile, oldProfile: previousProfile };
+			return { newProfile: incomingProfile, oldProfile: previousProfile };
 		},
 		onSuccess: (data, variables, context) => {
-			// Update the current active queries data with the old data
-			// NOTE: A delay is added to prevent the transition being too quick
-			setTimeout(() => {
-				queryClient.setQueryData(queryKey, () => ({ ...data }));
-			}, 1000);
-
 			// If there is an onSuccess callback provided pass back any necessary data ie everything the mutation exposes
 			if (onSuccess !== null) {
 				onSuccess({ data, variables, context });
@@ -135,20 +97,29 @@ const useProfile = ({ onSuccess = null, onError = null } = {}) => {
 			// Update the current active queries data with the old data
 			// NOTE: A delay is added to prevent the transition being too quick
 			setTimeout(() => {
-				queryClient.setQueryData(queryKey, () => ({ ...JSON.parse(context.oldProfile) }));
+				queryClient.setQueryData(queryKey, context.oldProfile);
 			}, 1000);
 
 			// If there is an onError callback provided pass back any necessary data ie everything the mutation exposes
 			if (onError !== null) {
 				onError({ data: error, variables, context });
 			}
+		},
+		onSettled: async (data, error, variables, context) => {
+			// Invalidate the "shopping list" cache
+			await queryClient.invalidateQueries({ queryKey });
+
+			if (onSettled) {
+				onSettled({ error, data, variables, context });
+			}
 		}
 	});
 
 	return {
-		// Query related status
+		// Query related state and actions
 		profile: query?.data ?? null,
 		fetchProfileStatus: query.status,
+		refetch: query.refetch,
 
 		// Mutation related state
 		mutate: mutation.mutate,

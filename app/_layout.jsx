@@ -1,5 +1,6 @@
 // Core react dependencies
 import * as React from 'react';
+import { AppState, Platform } from 'react-native';
 
 // react-native-paper dependencies
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
@@ -8,7 +9,7 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { ThemeProvider } from 'styled-components/native';
 
 // TanStack query dependencies
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query';
 
 // Routing dependencies
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -16,7 +17,13 @@ import { NavigationDrawer } from '../src/components/navigation/Drawer';
 import { Drawer } from '../src/layouts';
 
 // Application contexts
-import { ShoppingListProvider, UserProfileProvider } from '../src/context';
+import { UserProfileProvider } from '../src/context';
+
+function onAppStateChange(status) {
+	if (Platform.OS !== 'web') {
+		focusManager.setFocused(status === 'active');
+	}
+}
 
 const IndexLayout = () => {
 	// Stores the styled-components theme colours
@@ -36,8 +43,7 @@ const IndexLayout = () => {
 			new QueryClient({
 				defaultOptions: {
 					queries: {
-						keepPreviousData: true,
-						refetchOnMount: true
+						keepPreviousData: true
 					},
 					mutations: {
 						retry: 3
@@ -47,38 +53,43 @@ const IndexLayout = () => {
 		[]
 	);
 
+	// When the app refocuses refetch the data
+	React.useEffect(() => {
+		const subscription = AppState.addEventListener('change', onAppStateChange);
+
+		return () => subscription.remove();
+	}, []);
+
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<QueryClientProvider client={queryClient}>
 				<ThemeProvider theme={StyledComponentsTheme}>
 					<PaperProvider theme={DefaultTheme}>
 						<UserProfileProvider>
-							<ShoppingListProvider>
-								{/* Wrap the application in a global drawer */}
-								<Drawer
-									drawerContent={(props) => <NavigationDrawer {...props} />}
-									screenOptions={{
-										headerShown: false
-									}}
-								>
-									{/* Register the tabs stack, includes the shopping lists and store tracker pages */}
-									<Drawer.Screen name='(tabs)' />
+							{/* Wrap the application in a global drawer */}
+							<Drawer
+								drawerContent={(props) => <NavigationDrawer {...props} />}
+								screenOptions={{
+									headerShown: false
+								}}
+							>
+								{/* Register the tabs stack, includes the shopping lists and store tracker pages */}
+								<Drawer.Screen name='(tabs)' />
 
-									{/* Registers the auth stack, includes the applications tutorial */}
-									<Drawer.Screen name='(auth)' options={{ headerShown: false }} />
+								{/* Registers the auth stack, includes the applications tutorial */}
+								<Drawer.Screen name='(auth)' options={{ headerShown: false }} />
 
-									{/* Registers the settings stack, includes a single screen which allows you to delete data or change the theme of the app */}
-									<Drawer.Screen name='settings' options={{ title: 'Settings' }} />
+								{/* Registers the settings stack, includes a single screen which allows you to delete data or change the theme of the app */}
+								<Drawer.Screen name='settings' options={{ title: 'Settings' }} />
 
-									{/* Registers the shopping list page, includes a single screen to view a single shopping list (Navigated via the tabs stack */}
-									<Drawer.Screen
-										name='ShoppingList'
-										options={() => ({
-											headerShown: false // Don't show the header for this, it's generated in this stacks _layout file
-										})}
-									/>
-								</Drawer>
-							</ShoppingListProvider>
+								{/* Registers the shopping list page, includes a single screen to view a single shopping list (Navigated via the tabs stack */}
+								<Drawer.Screen
+									name='ShoppingList'
+									options={() => ({
+										headerShown: false // Don't show the header for this, it's generated in this stacks _layout file
+									})}
+								/>
+							</Drawer>
 						</UserProfileProvider>
 					</PaperProvider>
 				</ThemeProvider>

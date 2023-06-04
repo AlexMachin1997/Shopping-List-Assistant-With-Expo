@@ -45,7 +45,6 @@ When a user is near a store they will be alerted via local application notificat
 
 - [@expo/vector-icons](https://github.com/oblador/react-native-vector-icons)
 - [react-navigation modules e.g. drawer, stack, native, material-bottom-tabs etc](https://reactnavigation.org/)
-- [date-Fns](https://date-fns.org/)
 - [expo](https://docs.expo.dev/versions/v44.0.0)
 - [expo-constants](https://docs.expo.dev/versions/v44.0.0/sdk/constants/)
 - [expo-location](https://docs.expo.dev/versions/v44.0.0/sdk/location/)

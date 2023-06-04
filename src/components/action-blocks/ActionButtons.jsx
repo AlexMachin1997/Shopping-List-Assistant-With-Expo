@@ -3,7 +3,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 
 // react-native-paper dependencies
-import { FAB } from 'react-native-paper';
+import { FAB, Portal } from 'react-native-paper';
 
 // Styled-components dependencies
 import { useTheme } from 'styled-components';
@@ -15,15 +15,23 @@ const ActionButtons = ({ actions }) => {
 	const { brightPink } = useTheme();
 
 	return (
-		<FAB.Group
-			open={isOpen}
-			fabStyle={{ backgroundColor: brightPink }}
-			icon={isOpen ? 'close' : 'plus'}
-			actions={actions}
-			onStateChange={() => {
-				setIsOpen((prevState) => !prevState);
-			}}
-		/>
+		<Portal>
+			<FAB.Group
+				open={isOpen}
+				fabStyle={{ backgroundColor: brightPink }}
+				style={{
+					position: 'absolute',
+					bottom: 0,
+					right: 0
+				}}
+				icon={isOpen ? 'close' : 'plus'}
+				actions={actions}
+				onStateChange={() => {
+					setIsOpen((prevState) => !prevState);
+				}}
+				color='white'
+			/>
+		</Portal>
 	);
 };
 

@@ -12,7 +12,10 @@ import { useTheme } from 'styled-components';
 import { Section, Text, Button, Modal } from '../../src/components/core';
 
 // Application hooks
-import { useProfile, useShoppingList, useSnackBar } from '../../src/hooks';
+import { useProfile, useShoppingLists, useSnackBar } from '../../src/hooks';
+
+// Application services
+import ProfileService from '../../src/components/services/ProfileService';
 
 const Settings = () => {
 	const [isDeleteShoppingListsModalVisible, setIsDeleteShoppingListsModalVisible] =
@@ -25,10 +28,84 @@ const Settings = () => {
 	const { darkBlue, lightBlue, brightPink, green, white } = useTheme();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
-	const { profile, mutate } = useProfile();
+	const {
+		profile,
+		mutate: updateProfile,
+		updateProfileStatus
+	} = useProfile({
+		onSuccess: ({ variables }) => {
+			// Get the type of action being performed
+			const actionType = variables?.type ?? '';
+
+			if (actionType === 'THEME_CHANGE') {
+				// Dispatch an action to set the snackbar state
+				updateSnackBarState({
+					type: 'SET_SNACKBAR_STATE',
+					payload: {
+						visible: true,
+						content: `Your theme has successfully been updated to ${variables.payload.profile.theme}`,
+						backgroundColour: green
+					}
+				});
+			}
+		},
+		onError: ({ variables }) => {
+			const actionType = variables?.type ?? '';
+
+			if (actionType === 'THEME_CHANGE') {
+				// Dispatch an action to set the snackbar state
+				updateSnackBarState({
+					type: 'SET_SNACKBAR_STATE',
+					payload: {
+						visible: true,
+						content: 'Your theme was not successfully updated, please try again.',
+						backgroundColour: 'red'
+					}
+				});
+			}
+		}
+	});
 
 	// Access the global shopping list related state
-	const { dispatch: updateShoppingListState } = useShoppingList();
+	const { mutate: updateShoppingList, shoppingListsMutationStatus } = useShoppingLists({
+		onSuccess: ({ variables }) => {
+			const actionType = variables?.type ?? '';
+
+			if (actionType === 'RESET_SHOPPING_LISTS') {
+				// Close down the shopping lists deletion confirmation modal
+				setIsDeleteShoppingListsModalVisible(false);
+
+				// Dispatch an action to set the snackbar state
+				updateSnackBarState({
+					type: 'SET_SNACKBAR_STATE',
+					payload: {
+						visible: true,
+						content: `You have successfully cleared your shopping lists.`,
+						backgroh: green
+					}
+				});
+			}
+		},
+		onError: ({ variables }) => {
+			// Get the type of action being performed
+			const actionType = variables?.type ?? '';
+
+			if (actionType === 'RESET_SHOPPING_LISTS') {
+				// Close down the shopping lists deletion confirmation modal
+				setIsDeleteShoppingListsModalVisible(false);
+
+				// Dispatch an action to set the snackbar state
+				updateSnackBarState({
+					type: 'SET_SNACKBAR_STATE',
+					payload: {
+						visible: true,
+						content: `Your shopping lists were not successfully cleared, please try again.`,
+						backgroundColor: 'red'
+					}
+				});
+			}
+		}
+	});
 
 	return (
 		<ScrollView
@@ -46,17 +123,11 @@ const Settings = () => {
 				onDismiss={() => setIsDeleteShoppingListsModalVisible(false)}
 				onCancel={() => setIsDeleteShoppingListsModalVisible(false)}
 				onOk={() => {
-					// Dispatch the action to create the shopping list
-					updateShoppingListState({
-						type: 'RESET_SHOPPING_LISTS'
-					});
-
-					// Dispatch an action to set the snackbar state
-					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+					// Trigger the delete shopping lists action
+					updateShoppingList({
+						type: 'DELETE_SHOPPING_LISTS',
 						payload: {
-							visible: true,
-							content: `You have successfully cleared your shopping lists.`
+							shoppingLists: []
 						}
 					});
 
@@ -90,11 +161,11 @@ const Settings = () => {
 					<Switch
 						value={(profile?.theme ?? 'light') === 'dark'}
 						onValueChange={() => {
-							// Update the users theme, this will redraw the parts of the app where the theme is referenced.
-							mutate({
+							// Trigger the theme update action
+							updateProfile({
 								type: 'THEME_CHANGE',
 								payload: {
-									theme: (profile?.theme ?? 'light') === 'dark' ? 'light' : 'dark'
+									profile: ProfileService.ChangeTheme({ profile })
 								}
 							});
 						}}
@@ -102,6 +173,7 @@ const Settings = () => {
 							paddingTop: 5,
 							paddingBottom: 5
 						}}
+						disabled={updateProfileStatus === 'loading'}
 						color='white'
 					/>
 				</Section>
@@ -121,7 +193,7 @@ const Settings = () => {
 				paddingLeft='0'
 				paddingRight='0'
 				marginTop='16px'
-				marginBottom='0'
+				marginBottom='16px'
 				marginLeft='16px'
 				marginRight='0'
 			>
@@ -138,7 +210,7 @@ const Settings = () => {
 					accessabilityHint='Deletes all the shopping lists you the user has created'
 					onClick={() => setIsDeleteShoppingListsModalVisible(true)}
 					isDark={(profile?.theme ?? 'light') === 'dark'}
-					isDisabled={false}
+					isDisabled={shoppingListsMutationStatus === 'loading'}
 					labelStyle={{
 						color: 'white'
 					}}
@@ -155,40 +227,6 @@ const Settings = () => {
 				}}
 			/>
 
-			<Section
-				isDark={(profile?.theme ?? 'light') === 'dark'}
-				paddingTop='0'
-				paddingBottom='0'
-				paddingLeft='0'
-				paddingRight='0'
-				marginTop='16px'
-				marginBottom='0'
-				marginLeft='16px'
-				marginRight='0'
-			>
-				<Text colour={(profile?.theme ?? 'light') === 'dark' ? lightBlue : darkBlue}>
-					Delete all shopping lists
-				</Text>
-
-				<Button
-					isCompact
-					mode='contained'
-					text='Delete'
-					colour={brightPink}
-					label='Delete shopping lists'
-					accessabilityHint='Deletes all the shopping lists you the user has created'
-					onClick={() => setIsDeleteShoppingListsModalVisible(true)}
-					isDark={(profile?.theme ?? 'light') === 'dark'}
-					isDisabled={false}
-					labelStyle={{
-						color: 'white'
-					}}
-					contentStyle={{
-						borderRadius: 5
-					}}
-				/>
-			</Section>
-
 			<Snackbar
 				visible={snackBarState.visible}
 				onDismiss={() => {
@@ -199,7 +237,7 @@ const Settings = () => {
 				}}
 				duration={2000}
 				style={{
-					backgroundColor: green
+					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
 				<Text colour={white} size='16px'>
