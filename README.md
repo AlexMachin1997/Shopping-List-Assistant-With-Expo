@@ -72,6 +72,8 @@ If you would like to request features for future versions of the application aga
 - [ ] Add background location tracking via the expo modules (THIS MAY OR MAY NOT HAPPEN, it seems overkill for now but would be nice.)
 - [x] Integrate TanStack/react-query for handling some of the asynchronous actions e.f. fetching profiles, updating shopping lists etc
 - [x] Integrate with expo-router v1 to get all the lovely benefits of file based routing and later type safe routing.
+- [ ] Integrate Typescript for a better development experience
+- [ ] Prepare the project for Expo EAS, setup permissions add any additional configuration etc
 
 # Project Information
 
