@@ -39,48 +39,6 @@ When a user is near a store they will be alerted via local application notificat
 
   - The project and Expo dev tools will then load. You have successfully setup the mobile development environment
 
-## Application dependencies used:
-
-### Core application dependencies
-
-- [@expo/vector-icons](https://github.com/oblador/react-native-vector-icons)
-- [react-navigation modules e.g. drawer, stack, native, material-bottom-tabs etc](https://reactnavigation.org/)
-- [expo](https://docs.expo.dev/versions/v44.0.0)
-- [expo-constants](https://docs.expo.dev/versions/v44.0.0/sdk/constants/)
-- [expo-location](https://docs.expo.dev/versions/v44.0.0/sdk/location/)
-- [expo-notifications](https://docs.expo.dev/versions/v44.0.0/sdk/notifications/)
-- [expo-secure-store](https://docs.expo.dev/versions/v44.0.0/sdk/securestore/)
-- [lodash](https://lodash.com/docs/4.17.15)
-- [proptypes](https://reactjs.org/docs/typechecking-with-proptypes.html)
-- [react](https://reactjs.org/)
-- [react-dom](https://reactjs.org/docs/react-dom.html)
-- [react-native](https://facebook.github.io/react-native/)
-- [react-native-gesture-handler](https://github.com/software-mansion/react-native-gesture-handler)
-- [react-native-maps](https://github.com/react-native-maps/react-native-maps)
-- [react-native-onboarding-swiper](https://www.npmjs.com/package/react-native-onboarding-swiper)
-- [react-native-paper](https://callstack.github.io/react-native-paper/)
-- [react-native-reanimated](https://github.com/software-mansion/react-native-reanimated)
-- [react-native-safe-area-context](https://github.com/th3rdwave/react-native-safe-area-context)
-- [react-native-screens](https://github.com/software-mansion/react-native-screens)
-- [react-native-vector-icons](react-native-vector-icons) - REQUIRED FOR "react-native-paper"
-- [shortid](https://github.com/dylang/shortid)
-- [styled-components](https://github.com/styled-components/styled-components)
-
-### Development dependencies
-
-- [@babel/core](https://www.npmjs.com/package/@babel/core)
-- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser)
-- [eslint](https://github.com/eslint/eslint)
-- [eslint-config-airbnb](https://github.com/airbnb/javascript)
-- [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier)
-- [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import)
-- [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) - REQUIRED FOR "eslint-config-airbnb"
-- [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier)
-- [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react)
-- [eslint-plugin-react-hooks](https://github.com/facebook/react)
-- [eslint-plugin-react-native-a11y](https://github.com/FormidableLabs/eslint-plugin-react-native-a11y)
-- [prettier](https://github.com/prettier/prettier)
-
 ## Contributing
 
 ### Reporting issues
@@ -91,7 +49,7 @@ If you find any problems while using the API, report them [here](https://github.
 
 If you would like to request features for future versions of the application again, please post them [here](https://github.com/AlexMachin1997/Shopping-List-Assistant-With-Expo/issues). When posting ideas ensure the functionality is explained to provide any developers contributing to the project know what to implement.
 
-### Features list
+### Task list
 
 - [x] Add basic routing via React-Navigation
 - [x] Create shopping lists
@@ -112,6 +70,8 @@ If you would like to request features for future versions of the application aga
 - [ ] Fix any issues related to the map component, sometimes it misbehaves e.g. [here](https://github.com/react-native-maps/react-native-maps/issues/3026#issuecomment-641192209)
 - [ ] Test more edge case scenarios e.g. users manually changing locations in the devices settings, how does this affect the amp functionality or if the device can't persist the data
 - [ ] Add background location tracking via the expo modules (THIS MAY OR MAY NOT HAPPEN, it seems overkill for now but would be nice.)
+- [x] Integrate TanStack/react-query for handling some of the asynchronous actions e.f. fetching profiles, updating shopping lists etc
+- [x] Integrate with expo-router v1 to get all the lovely benefits of file based routing and later type safe routing.
 
 # Project Information
 
@@ -126,7 +86,7 @@ If you want to connect with me on my professional social network platforms feel 
 
 ### Mobile app version
 
-The application is currently at version 1.1, with each feature added it will increment based on these [guidelines](https://docs.npmjs.com/about-semantic-versioning)
+The application is currently at version 2.0, with each feature added it will increment based on these [guidelines](https://docs.npmjs.com/about-semantic-versioning)
 
 ### Project Licence information
 
