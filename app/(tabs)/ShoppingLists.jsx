@@ -3,7 +3,7 @@ import * as React from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 
 // Routing dependencies
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 // react-native-paper dependencies
 import { TextInput, Snackbar, Portal } from 'react-native-paper';
@@ -47,6 +47,8 @@ const ShoppingLists = () => {
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { profile } = useProfile();
+
+	const router = useRouter();
 
 	// Access the global shopping list related state
 	const {
@@ -180,35 +182,27 @@ const ShoppingLists = () => {
 				{(shoppingLists?.length ?? 0) < 1 ? (
 					<Empty
 						image={EmptyIcon}
-						label='No shipping lists exist'
+						label='No shopping lists exist'
 						heading='No shopping lists exist'
 						overview='Why not try adding one ?'
 						isDark={(profile?.theme ?? 'light') === 'dark'}
 					/>
 				) : (
-					shoppingLists?.map(
-						(shoppingList) =>
-							(
-								<Link
-									href={{
-										// The screen url we want to go go, the pathnames id is accessed via the useLocalSearchParams() hook (Only gets the current routes parameters)
-										pathname: `/ShoppingList/${shoppingList.id}`,
-
-										// Additional parameters for the route e.g. title is used to set the pages title immediately even though it's a dynamic page.
-										params: {
-											title: shoppingList.name
-										}
-									}}
-									key={shoppingList?.id ?? ''}
-									asChild
-								>
-									<ShoppingListsCard
-										title={shoppingList?.name ?? ''}
-										background={shoppingList?.shoppingListTheme ?? ''}
-									/>
-								</Link>
-							) ?? null
-					)
+					shoppingLists?.map((shoppingList) => (
+						<ShoppingListsCard
+							key={shoppingList?.id ?? ''}
+							title={shoppingList?.name ?? ''}
+							background={shoppingList?.shoppingListTheme ?? ''}
+							action={() => {
+								router.push({
+									pathname: `/ShoppingList/${shoppingList?.id ?? ''}`,
+									params: {
+										title: shoppingList?.name ?? ''
+									}
+								});
+							}}
+						/>
+					)) ?? null
 				)}
 			</ScrollView>
 
