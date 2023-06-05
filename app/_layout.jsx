@@ -1,5 +1,6 @@
 // Core react dependencies
 import * as React from 'react';
+import { AppState, Platform } from 'react-native';
 
 // react-native-paper dependencies
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
@@ -7,13 +8,22 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 // Styled-components dependencies
 import { ThemeProvider } from 'styled-components/native';
 
+// TanStack query dependencies
+import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query';
+
 // Routing dependencies
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationDrawer } from '../src/components/navigation/Drawer';
 import { Drawer } from '../src/layouts';
 
 // Application contexts
-import { ShoppingListProvider, UserProfileProvider } from '../src/context';
+import { UserProfileProvider } from '../src/context';
+
+function onAppStateChange(status) {
+	if (Platform.OS !== 'web') {
+		focusManager.setFocused(status === 'active');
+	}
+}
 
 const IndexLayout = () => {
 	// Stores the styled-components theme colours
@@ -28,12 +38,34 @@ const IndexLayout = () => {
 		[]
 	);
 
+	const queryClient = React.useMemo(
+		() =>
+			new QueryClient({
+				defaultOptions: {
+					queries: {
+						keepPreviousData: true
+					},
+					mutations: {
+						retry: 3
+					}
+				}
+			}),
+		[]
+	);
+
+	// When the app refocuses refetch the data
+	React.useEffect(() => {
+		const subscription = AppState.addEventListener('change', onAppStateChange);
+
+		return () => subscription.remove();
+	}, []);
+
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<ThemeProvider theme={StyledComponentsTheme}>
-				<PaperProvider theme={DefaultTheme}>
-					<UserProfileProvider>
-						<ShoppingListProvider>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider theme={StyledComponentsTheme}>
+					<PaperProvider theme={DefaultTheme}>
+						<UserProfileProvider>
 							{/* Wrap the application in a global drawer */}
 							<Drawer
 								drawerContent={(props) => <NavigationDrawer {...props} />}
@@ -58,10 +90,10 @@ const IndexLayout = () => {
 									})}
 								/>
 							</Drawer>
-						</ShoppingListProvider>
-					</UserProfileProvider>
-				</PaperProvider>
-			</ThemeProvider>
+						</UserProfileProvider>
+					</PaperProvider>
+				</ThemeProvider>
+			</QueryClientProvider>
 		</GestureHandlerRootView>
 	);
 };

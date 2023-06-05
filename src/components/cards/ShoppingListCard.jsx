@@ -19,7 +19,8 @@ const ShoppingListCard = ({
 	isComplete,
 	name,
 	isDark,
-	deleteAction
+	deleteAction,
+	disabled
 }) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue, green } = useTheme();
@@ -77,7 +78,7 @@ const ShoppingListCard = ({
 						iconColor='red'
 						size={40}
 						onPress={() => {
-							if (deleteAction) {
+							if (deleteAction && disabled === false) {
 								deleteAction();
 							}
 						}}
@@ -98,7 +99,8 @@ ShoppingListCard.defaultProps = {
 	isComplete: false,
 	name: '',
 	isDark: false,
-	deleteAction: null
+	deleteAction: null,
+	disabled: false
 };
 
 ShoppingListCard.propTypes = {
@@ -107,7 +109,8 @@ ShoppingListCard.propTypes = {
 	isComplete: PropTypes.bool,
 	name: PropTypes.string,
 	isDark: PropTypes.bool,
-	deleteAction: PropTypes.func
+	deleteAction: PropTypes.func,
+	disabled: PropTypes.bool
 };
 
 export default ShoppingListCard;

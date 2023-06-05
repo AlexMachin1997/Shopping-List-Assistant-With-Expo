@@ -6,26 +6,25 @@ import { useTheme } from 'styled-components';
 
 import ApplicationIcon from '../../../../assets/App-Icon.png';
 
-// Components
+// Application Components
 import { Image, Section } from '../../core';
-
-import DrawerLink from './DrawerLink.jsx';
+import DrawerLink from './DrawerLink';
 
 // Application hooks
-import { useUserProfile } from '../../../hooks';
+import { useProfile } from '../../../hooks';
 
 export const NavigationDrawer = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
 
 	// Access the users profile e.g. theme to decide what colour the sections should be.
-	const { state } = useUserProfile();
+	const { profile } = useProfile();
 
 	return (
 		<ScrollView
 			accessibilityRole='menubar'
 			contentContainerStyle={{
-				backgroundColor: state.theme === 'dark' ? darkBlue : lightBlue,
+				backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue,
 				flex: 1
 			}}
 		>
@@ -34,7 +33,7 @@ export const NavigationDrawer = () => {
 				paddingBottom='50px'
 				justifyContent='center'
 				alignItems='center'
-				isDark={state.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 			>
 				<Image source={ApplicationIcon} height={120} width={120} accessibilityIgnoresInvertColors />
 			</Section>
@@ -45,9 +44,14 @@ export const NavigationDrawer = () => {
 				alignItems='flex-start'
 				flexWrap='wrap'
 				flexGrow={0}
-				isDark={state.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 			>
-				<DrawerLink href='(tabs)/ShoppingLists' icon='format-list-bulleted' text='Shopping lists' />
+				<DrawerLink
+					href='(tabs)/ShoppingLists'
+					icon='format-list-bulleted'
+					text='Shopping lists'
+					isDark={(profile?.theme ?? 'light') === 'dark'}
+				/>
 			</Section>
 
 			<Section
@@ -56,9 +60,14 @@ export const NavigationDrawer = () => {
 				alignItems='flex-start'
 				flexWrap='wrap'
 				flexGrow={0}
-				isDark={state.theme === 'dark'}
+				isDark={(profile?.theme ?? 'light') === 'dark'}
 			>
-				<DrawerLink href='/settings' icon='settings' text='Settings' />
+				<DrawerLink
+					href='/settings'
+					icon='settings'
+					text='Settings'
+					isDark={(profile?.theme ?? 'light') === 'dark'}
+				/>
 			</Section>
 		</ScrollView>
 	);

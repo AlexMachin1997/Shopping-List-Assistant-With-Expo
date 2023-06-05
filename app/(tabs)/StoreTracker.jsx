@@ -17,7 +17,7 @@ import NightMode from '../../assets/GoogleMapsNight.json';
 import { Loading } from '../../src/components/screen-states';
 
 // Application hooks
-import { useUserProfile, useNotification } from '../../src/hooks';
+import { useNotification, useProfile } from '../../src/hooks';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({
@@ -69,7 +69,7 @@ const StoreTracker = () => {
 	const [isMapReady, setIsMapReady] = React.useState(false);
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
-	const { state: userProfileState } = useUserProfile();
+	const { profile } = useProfile();
 
 	// Get's or requests the current permission/s related to the locations foreground functionality
 	const [foregroundPermissionStatus] = Location.useForegroundPermissions({
@@ -158,7 +158,7 @@ const StoreTracker = () => {
 
 	// While the page is loading, setting the latitude is false (0) or the longitude is false (0)
 	if (isLoading === true) {
-		return <Loading isDark={userProfileState.theme === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
 	}
 
 	return (
@@ -178,7 +178,9 @@ const StoreTracker = () => {
 				pitchEnabled
 				followsUserLocation
 				showsCompass
-				customMapStyle={isMapReady === true && userProfileState.theme === 'dark' ? NightMode : []}
+				customMapStyle={
+					isMapReady === true && (profile?.theme ?? 'light') === 'dark' ? NightMode : []
+				}
 				provider={PROVIDER_GOOGLE}
 				onMapReady={() => {
 					setIsMapReady(true);

@@ -6,7 +6,8 @@ const snackBarReducer = (state, action) => {
 			return {
 				...state,
 				visible: action?.payload?.visible ?? false,
-				content: action?.payload?.content ?? ''
+				content: action?.payload?.content ?? '',
+				backgroundColour: action?.payload?.backgroundColour ?? ''
 			};
 		}
 
@@ -14,7 +15,8 @@ const snackBarReducer = (state, action) => {
 			return {
 				...state,
 				visible: false,
-				content: ''
+				content: '',
+				backgroundColour: ''
 			};
 		}
 
@@ -29,7 +31,8 @@ const snackBarReducer = (state, action) => {
 const useSnackBar = () => {
 	const [state, dispatch] = React.useReducer(snackBarReducer, {
 		visible: false,
-		content: ''
+		content: '',
+		backgroundColour: ''
 	});
 
 	return {
