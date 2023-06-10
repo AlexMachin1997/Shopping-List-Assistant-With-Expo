@@ -20,12 +20,6 @@ const TabsLayout = () => {
 
 	return (
 		<Tabs
-			barStyle={{
-				backgroundColor: darkBlue,
-				borderTopColor: lightBlue,
-				borderWidth: 2,
-				borderStyle: 'solid'
-			}}
 			initialRouteName='ShoppingLists'
 			safeAreaInsets={{ bottom: 0 }}
 			screenOptions={({ navigation }) => ({

@@ -23,8 +23,8 @@ import { useNotification, useProfile } from '../../src/hooks';
 const styles = StyleSheet.create({
 	container: {
 		...StyleSheet.absoluteFillObject,
-		justifyContent: 'flex-end',
-		alignItems: 'center'
+		alignItems: 'center',
+		justifyContent: 'flex-end'
 	},
 	map: {
 		...StyleSheet.absoluteFillObject

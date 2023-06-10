@@ -3,7 +3,10 @@ import * as React from 'react';
 import { AppState, Platform } from 'react-native';
 
 // react-native-paper dependencies
-import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import {
+	DefaultTheme as ReactNativePaperTheme,
+	Provider as PaperProvider
+} from 'react-native-paper';
 
 // Styled-components dependencies
 import { ThemeProvider } from 'styled-components/native';
@@ -18,6 +21,7 @@ import { Drawer } from '../src/layouts';
 
 // Application contexts
 import { UserProfileProvider } from '../src/context';
+import { StyledComponentsTheme } from '../src/constants/Themes';
 
 function onAppStateChange(status) {
 	if (Platform.OS !== 'web') {
@@ -26,18 +30,6 @@ function onAppStateChange(status) {
 }
 
 const IndexLayout = () => {
-	// Stores the styled-components theme colours
-	const StyledComponentsTheme = React.useMemo(
-		() => ({
-			darkBlue: '#003249', // Dark blue
-			lightBlue: '#CCDBDC', // Light blue/grey
-			brightPink: '#e91e63', // Pink,
-			green: '#4BB543', // Green,
-			white: 'white' // White...
-		}),
-		[]
-	);
-
 	const queryClient = React.useMemo(
 		() =>
 			new QueryClient({
@@ -64,11 +56,11 @@ const IndexLayout = () => {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<QueryClientProvider client={queryClient}>
 				<ThemeProvider theme={StyledComponentsTheme}>
-					<PaperProvider theme={DefaultTheme}>
+					<PaperProvider theme={ReactNativePaperTheme}>
 						<UserProfileProvider>
 							{/* Wrap the application in a global drawer */}
 							<Drawer
-								drawerContent={(props) => <NavigationDrawer {...props} />}
+								drawerContent={() => <NavigationDrawer />}
 								screenOptions={{
 									headerShown: false
 								}}

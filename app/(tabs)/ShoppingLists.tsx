@@ -155,7 +155,7 @@ const ShoppingLists = () => {
 						}
 					});
 				}}
-				submitDisabled={shoppingListName < 1}
+				submitDisabled={shoppingListName.length < 1}
 				accessabilityCancelHint='Cancel creating the new shopping list'
 				accessabilityOkHint='Create the new shopping list'
 			>

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Core react dependencies
 import * as React from 'react';
 
@@ -7,7 +8,27 @@ import * as AsyncStorage from 'expo-secure-store';
 // TanStack query dependencies
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
-const useShoppingLists = ({ onSuccess = null, onError = null, onSettled = null } = {}) => {
+type ShoppingListsMutationVariables = {
+	type: 'CREATE_SHOPPING_LIST';
+	payload: { shoppingLists: ShoppingLists };
+};
+
+type UseShoppingListsCallbacks = {
+	data?: ShoppingLists;
+	variables: ShoppingListsMutationVariables;
+	context: { oldShoppingLists: ShoppingLists };
+	error?: unknown;
+};
+
+const useShoppingLists = ({
+	onSuccess = null,
+	onError = null,
+	onSettled = null
+}: {
+	onSuccess?: null | ((data: UseShoppingListsCallbacks) => void);
+	onError?: null | ((data: UseShoppingListsCallbacks) => void);
+	onSettled?: null | ((data: UseShoppingListsCallbacks) => void);
+} = {}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
@@ -24,11 +45,11 @@ const useShoppingLists = ({ onSuccess = null, onError = null, onSettled = null }
 				const shoppingListsFromAsyncStorage = await AsyncStorage.getItemAsync(queryKey[0].key);
 
 				// Defaults to empty array (It'll be this when there is an error or if there)
-				let shoppingLists = [];
+				let shoppingLists: ShoppingLists = [];
 
 				// If there is a shopping list in storage
 				if (shoppingListsFromAsyncStorage !== null) {
-					shoppingLists = JSON.parse(shoppingListsFromAsyncStorage);
+					shoppingLists = JSON.parse(shoppingListsFromAsyncStorage) as ShoppingLists;
 				}
 
 				// Return the data to access it in the queries data
@@ -41,7 +62,7 @@ const useShoppingLists = ({ onSuccess = null, onError = null, onSettled = null }
 
 	// Handles the update the of shopping lists
 	const mutation = useMutation({
-		mutationFn: async (variables) => {
+		mutationFn: async (variables: ShoppingListsMutationVariables) => {
 			try {
 				// Attempt to override the current shopping list (combines the current active query and )
 				await AsyncStorage.setItemAsync(
@@ -60,7 +81,7 @@ const useShoppingLists = ({ onSuccess = null, onError = null, onSettled = null }
 			await queryClient.cancelQueries({ queryKey });
 
 			// Store a reference to the old set of "Shopping Lists" query entry
-			const previousShoppingLists = queryClient.getQueryData(queryKey);
+			const previousShoppingLists = queryClient.getQueryData<ShoppingLists>(queryKey);
 
 			// Update the current "Shopping Lists" query entry with the new incoming "Shopping Lists" data
 			queryClient.setQueryData(queryKey, () => variables?.payload?.shoppingLists ?? []);

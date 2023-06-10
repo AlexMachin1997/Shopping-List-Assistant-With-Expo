@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Core react dependencies
 import * as React from 'react';
 
@@ -7,7 +8,31 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 // Expo modules
 import * as AsyncStorage from 'expo-secure-store';
 
-const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {}) => {
+type Profile = {
+	theme: string;
+	hasCompletedSetup: boolean;
+};
+
+type ProfileMutationVariables =
+	| { type: 'COMPLETE_ONBOARDING'; payload: { profile: Profile } }
+	| { type: 'THEME_CHANGE'; payload: { profile: Profile } };
+
+type UseProfileCallbacks = {
+	data?: Profile;
+	variables: ProfileMutationVariables;
+	context: { newProfile: Profile; oldProfile: Profile };
+	error?: unknown;
+};
+
+const useProfile = ({
+	onSuccess = null,
+	onError = null,
+	onSettled = null
+}: {
+	onSuccess?: null | ((data: UseProfileCallbacks) => void);
+	onError?: null | ((data: UseProfileCallbacks) => void);
+	onSettled?: null | ((data: UseProfileCallbacks) => void);
+} = {}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
@@ -19,7 +44,7 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 		queryKey,
 		queryFn: async () => {
 			// The profile object (Contains the default values e.g. theme 'light')
-			let profileObject = {
+			let profileObject: Profile = {
 				theme: 'light',
 				hasCompletedSetup: false
 			};
@@ -32,12 +57,12 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 				// Either override the project object with the retrieved values or save the default values
 				if (profileFromAsyncStorage !== null) {
 					// Parse the string returned from the expo Secure Store to access the objects properties
-					const parsedProfileFromAsyncStorage = JSON.parse(profileFromAsyncStorage);
+					const parsedProfileFromAsyncStorage = JSON.parse(profileFromAsyncStorage) as Profile;
 
 					// Override the default values with the new values as the user has successfully retrieved the profile
 					profileObject = {
 						...profileObject,
-						theme: parsedProfileFromAsyncStorage.theme ?? profileObject.theme,
+						theme: parsedProfileFromAsyncStorage?.theme ?? profileObject.theme,
 						hasCompletedSetup: true
 					};
 				}
@@ -54,13 +79,13 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 
 	// Handles the update of the user profile
 	const mutation = useMutation({
-		mutationFn: async (variables) => {
+		mutationFn: async (variables: ProfileMutationVariables) => {
 			try {
 				// Store a reference to the old set of data
-				const previousProfile = queryClient.getQueryData(queryKey, { type: 'active' });
+				const previousProfile = queryClient.getQueryData<Profile>(queryKey, { type: 'active' });
 
 				// Store a reference to the "expected" cache data (The shape must match exactly)
-				const incomingProfile = { ...previousProfile, ...(variables?.payload ?? {}) };
+				const incomingProfile = { ...previousProfile, ...(variables?.payload?.profile ?? {}) };
 
 				// Attempt to override the current profile data (combines the current active query and )
 				await AsyncStorage.setItemAsync(queryKey[0].key, JSON.stringify(incomingProfile));
@@ -71,15 +96,15 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 				return Promise.reject(new Error(error.message));
 			}
 		},
-		onMutate: async (variables) => {
+		onMutate: async (variables: ProfileMutationVariables) => {
 			// Cancel any queries for the profile
 			await queryClient.cancelQueries({ queryKey, type: 'all' });
 
 			// Store a reference to the "expected" cache data (The shape must match exactly)
-			const incomingProfile = variables?.payload?.profile ?? {};
+			const incomingProfile = variables.payload.profile;
 
 			// Store a reference to the old set of data
-			const previousProfile = queryClient.getQueryData(queryKey);
+			const previousProfile = queryClient.getQueryData<Profile>(queryKey);
 
 			// Update the query key data with the new profile object (Certain properties are updated above)
 			queryClient.setQueryData(queryKey, incomingProfile);
@@ -87,9 +112,9 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 			// After the mutation function has been complete pass some data to the context
 			return { newProfile: incomingProfile, oldProfile: previousProfile };
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (data, variables: ProfileMutationVariables, context) => {
 			// If there is an onSuccess callback provided pass back any necessary data ie everything the mutation exposes
-			if (onSuccess !== null) {
+			if (typeof onSuccess === 'function') {
 				onSuccess({ data, variables, context });
 			}
 		},
@@ -102,13 +127,14 @@ const useProfile = ({ onSuccess = null, onError = null, onSettled = null } = {})
 
 			// If there is an onError callback provided pass back any necessary data ie everything the mutation exposes
 			if (onError !== null) {
-				onError({ data: error, variables, context });
+				onError({ error, data: null, variables, context });
 			}
 		},
-		onSettled: async (data, error, variables, context) => {
+		onSettled: async (data, error, variables: ProfileMutationVariables, context) => {
 			// Invalidate the "shopping list" cache
 			await queryClient.invalidateQueries({ queryKey });
 
+			// When the onSettled callback is provided pass back all the variables
 			if (onSettled) {
 				onSettled({ error, data, variables, context });
 			}

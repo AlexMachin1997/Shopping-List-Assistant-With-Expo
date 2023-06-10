@@ -1,7 +1,17 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import shortid from 'shortid';
 
 class ShoppingListService {
-	static CreateShoppingList({ shoppingLists = null, shoppingListName = '' }) {
+	static CreateShoppingList({
+		shoppingLists = null,
+		shoppingListName = ''
+	}: {
+		shoppingLists: ShoppingLists;
+		shoppingListName: string;
+	}): {
+		shoppingList: ShoppingList;
+		shoppingLists: ShoppingLists;
+	} {
 		const red = '#e53935'; // Red with a shade of 500
 		const green = '#43a047'; // Green with a shade of 500
 		const blue = '#2196f3'; // Blue with a shade of 500
@@ -9,7 +19,7 @@ class ShoppingListService {
 
 		const shoppingListThemes = [red, blue, green, purple];
 
-		const newShoppingList = {
+		const newShoppingList: ShoppingList = {
 			id: shortid.generate(),
 			name: shoppingListName,
 			createdOn: new Date(),
@@ -23,7 +33,15 @@ class ShoppingListService {
 		};
 	}
 
-	static RenameShoppingList({ shoppingLists = null, shoppingList = null, shoppingListName = '' }) {
+	static RenameShoppingList({
+		shoppingLists = null,
+		shoppingList = null,
+		shoppingListName = ''
+	}: {
+		shoppingLists: ShoppingLists;
+		shoppingList: ShoppingList;
+		shoppingListName: string;
+	}) {
 		// Create the new shopping list object (Copy existing properties and add the name )
 		const newShoppingList = {
 			...shoppingList,
@@ -47,8 +65,33 @@ class ShoppingListService {
 		};
 	}
 
-	static HandleShoppingListUpdate({ action = null }) {
-		const newShoppingList = action?.payload?.shoppingList ?? {};
+	static HandleShoppingListUpdate({
+		action = null
+	}: {
+		action:
+			| {
+					type: 'TOGGLE_SHOPPING_LIST_ITEM';
+					payload: {
+						shoppingList: ShoppingList;
+						id: string;
+					};
+			  }
+			| {
+					type: 'DELETE_SHOPPING_LIST_ITEM';
+					payload: {
+						shoppingList: ShoppingList;
+						id: string;
+					};
+			  }
+			| {
+					type: 'CREATE_SHOPPING_LIST_ITEM';
+					payload: {
+						name: string;
+						shoppingList: ShoppingList;
+					};
+			  };
+	}) {
+		const newShoppingList = action.payload.shoppingList;
 
 		switch (action.type) {
 			case 'TOGGLE_SHOPPING_LIST_ITEM': {
@@ -57,12 +100,12 @@ class ShoppingListService {
 					(item) => item.id === action?.payload?.id
 				);
 
-				let shoppingListItem = null;
+				let shoppingListItem: ShoppingListItem = null;
 
 				// If the item index isn't -1 as in something was found delete the item
 				if (shoppingListItemIndex !== -1) {
 					// Get thew shopping list item
-					shoppingListItem = newShoppingList?.items[shoppingListItemIndex] ?? {};
+					shoppingListItem = newShoppingList?.items[shoppingListItemIndex] ?? null;
 
 					// Flip the completed property e.g. true -> false
 					shoppingListItem.completed = !shoppingListItem.completed;
@@ -113,6 +156,10 @@ class ShoppingListService {
 		shoppingList = null,
 		shoppingLists = null,
 		shoppingListItemId = null
+	}: {
+		shoppingList: ShoppingList;
+		shoppingLists: ShoppingLists;
+		shoppingListItemId: string;
 	}) {
 		const newShoppingLists = [...shoppingLists];
 
@@ -144,6 +191,10 @@ class ShoppingListService {
 		shoppingList = null,
 		shoppingLists = null,
 		shoppingListItemId = null
+	}: {
+		shoppingList: ShoppingList;
+		shoppingLists: ShoppingLists;
+		shoppingListItemId: string;
 	}) {
 		const newShoppingLists = [...shoppingLists];
 
@@ -171,7 +222,15 @@ class ShoppingListService {
 		};
 	}
 
-	static CreateShoppingListItem({ shoppingLists = null, shoppingList = null, name = null }) {
+	static CreateShoppingListItem({
+		shoppingLists = null,
+		shoppingList = null,
+		name = null
+	}: {
+		shoppingLists: ShoppingLists;
+		shoppingList: ShoppingList;
+		name: string;
+	}) {
 		const newShoppingLists = [...shoppingLists];
 
 		const newShoppingList = this.HandleShoppingListUpdate({
@@ -198,7 +257,16 @@ class ShoppingListService {
 		};
 	}
 
-	static DeleteShoppingList({ shoppingLists = null, shoppingList = null }) {
+	static DeleteShoppingList({
+		shoppingLists = null,
+		shoppingList = null
+	}: {
+		shoppingLists: ShoppingLists;
+		shoppingList: ShoppingList;
+	}): {
+		shoppingList: null;
+		shoppingLists: ShoppingLists;
+	} {
 		const newShoppingLists = [...shoppingLists];
 
 		// Find the index of the shopping list you want to update
