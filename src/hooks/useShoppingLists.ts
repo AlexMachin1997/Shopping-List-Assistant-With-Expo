@@ -9,7 +9,7 @@ import * as AsyncStorage from 'expo-secure-store';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 type ShoppingListsMutationVariables = {
-	type: 'CREATE_SHOPPING_LIST';
+	type: 'CREATE_SHOPPING_LIST' | 'CLEAR_SHOPPING_LISTS';
 	payload: { shoppingLists: ShoppingLists };
 };
 
@@ -24,11 +24,11 @@ const useShoppingLists = ({
 	onSuccess = null,
 	onError = null,
 	onSettled = null
-}: {
+}: Partial<{
 	onSuccess?: null | ((data: UseShoppingListsCallbacks) => void);
 	onError?: null | ((data: UseShoppingListsCallbacks) => void);
 	onSettled?: null | ((data: UseShoppingListsCallbacks) => void);
-} = {}) => {
+}> = {}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
@@ -36,7 +36,7 @@ const useShoppingLists = ({
 	const queryKey = React.useMemo(() => [{ key: 'shopping-lists', dependencies: null }], []);
 
 	// Handles fetching of the shopping lists
-	const query = useQuery({
+	const query = useQuery<ShoppingLists>({
 		queryKey,
 		queryFn: async () => {
 			// Attempt to decrypt the users persisted shopping lists (Can throw an error or return the value in string format)

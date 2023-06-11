@@ -7,11 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Expo modules
 import * as AsyncStorage from 'expo-secure-store';
-
-type Profile = {
-	theme: string;
-	hasCompletedSetup: boolean;
-};
+import { Profile, ProfileTheme } from '../../types/profile';
 
 type ProfileMutationVariables =
 	| { type: 'COMPLETE_ONBOARDING'; payload: { profile: Profile } }
@@ -28,11 +24,11 @@ const useProfile = ({
 	onSuccess = null,
 	onError = null,
 	onSettled = null
-}: {
+}: Partial<{
 	onSuccess?: null | ((data: UseProfileCallbacks) => void);
 	onError?: null | ((data: UseProfileCallbacks) => void);
 	onSettled?: null | ((data: UseProfileCallbacks) => void);
-} = {}) => {
+}> = {}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
@@ -40,12 +36,12 @@ const useProfile = ({
 	const queryKey = React.useMemo(() => [{ key: 'user-profile', dependencies: null }], []);
 
 	// Handles the fetching of the user profile
-	const query = useQuery({
+	const query = useQuery<Profile>({
 		queryKey,
 		queryFn: async () => {
 			// The profile object (Contains the default values e.g. theme 'light')
 			let profileObject: Profile = {
-				theme: 'light',
+				theme: ProfileTheme.LIGHT,
 				hasCompletedSetup: false
 			};
 

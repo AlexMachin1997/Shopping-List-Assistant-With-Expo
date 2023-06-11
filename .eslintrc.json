@@ -133,7 +133,8 @@
 		"react/require-default-props": "off",
 		"react-native/no-inline-styles": "off",
 		"react-native/no-color-literals": "off",
-		"no-unused-vars": ["error", { "argsIgnorePattern": "params" }]
+		"no-unused-vars": ["error", { "argsIgnorePattern": "params" }],
+		"no-mixed-spaces-and-tabs": 0 // disable rule
 	},
 	"settings": {
 		"import/resolver": {

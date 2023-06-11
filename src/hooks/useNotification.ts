@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Platform, Vibration } from 'react-native';
+
+// Expo modules
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
@@ -17,26 +19,39 @@ const useNotification = () => {
 	const [localNotificationsStatus, setLocalNotificationsStatus] = React.useState('');
 	const [, setExpoPushNotificationToken] = React.useState('');
 
-	const notificationListener = React.useRef();
-	const responseListener = React.useRef();
+	const notificationListener = React.useRef<Notifications.Subscription | null>(null);
+	const responseListener = React.useRef<Notifications.Subscription | null>(null);
 
 	// https://www.coursera.org/lecture/react-native/exercise-video-local-notifications-Aoo3t
-	const generateLocalNotification = React.useCallback(async (config, payload) => {
-		// Provide config to customize the location notification e.g. vibration, message etc
-		const { vibrationEnabled = true, vibrationLength = 1000 } = config;
-
-		// If the vibration is enabled use React-Natives Vibration api
-		if (vibrationEnabled === true) {
-			Vibration.vibrate(vibrationLength);
-		}
-
-		// Create the notification
-		await Notifications.scheduleNotificationAsync({
-			content: {
-				...payload
+	const generateLocalNotification = React.useCallback(
+		async (
+			config: { vibrationEnabled: boolean; vibrationLength: number },
+			payload: {
+				title: string;
+				body: string;
 			}
-		});
-	}, []);
+		) => {
+			// Provide config to customize the location notification e.g. vibration, message etc
+			const { vibrationEnabled = true, vibrationLength = 1000 } = config;
+
+			// If the vibration is enabled use React-Natives Vibration api
+			if (vibrationEnabled === true) {
+				Vibration.vibrate(vibrationLength);
+			}
+
+			// Create the notification
+			await Notifications.scheduleNotificationAsync({
+				content: {
+					title: payload.title,
+					body: payload.body
+				},
+				trigger: {
+					channelId: 'default'
+				}
+			});
+		},
+		[]
+	);
 
 	// Handles the notification functionality
 	React.useEffect(() => {
@@ -79,9 +94,9 @@ const useNotification = () => {
 				// Not sure why this is needed.....
 				const requestedToken = await Notifications.getExpoPushTokenAsync({
 					projectId: Constants.manifest.projectId
-				}).data;
+				});
 
-				setExpoPushNotificationToken(requestedToken);
+				setExpoPushNotificationToken(requestedToken.data);
 			} catch (err) {
 				// Log the error to the console for better debugging
 				console.error('useNotification error', err?.message ?? '');

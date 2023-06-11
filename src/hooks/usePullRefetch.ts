@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const usePullRefetch = (refetch) => {
+const usePullRefetch = <T>(refetch: () => Promise<T>) => {
 	const [isRefreshing, setIsRefreshing] = React.useState(false);
 
 	async function handleRefetch() {

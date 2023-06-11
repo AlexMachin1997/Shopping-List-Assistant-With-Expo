@@ -13,7 +13,7 @@ const SettingsLayout = () => {
 	const router = useRouter();
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue } = useTheme();
+	const { darkBlue } = useTheme();
 
 	return (
 		<Stack
@@ -23,11 +23,7 @@ const SettingsLayout = () => {
 					color: 'white'
 				},
 				headerStyle: {
-					backgroundColor: darkBlue,
-					borderBottomColor: lightBlue,
-					borderTopColor: darkBlue,
-					borderWidth: 1,
-					borderStyle: 'solid'
+					backgroundColor: darkBlue
 				},
 				headerRight: () => null,
 				headerLeft: () => (

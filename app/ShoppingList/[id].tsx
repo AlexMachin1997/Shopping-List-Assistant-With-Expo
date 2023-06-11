@@ -29,7 +29,10 @@ import {
 	usePullRefetch,
 	useFocusRefetch
 } from '../../src/hooks';
+
+// Application Services
 import ShoppingListService from '../../src/components/services/ShoppingListService';
+import { ProfileTheme } from '../../types/profile';
 
 const ShoppingList = () => {
 	// Controls the add item modal visibility
@@ -50,10 +53,10 @@ const ShoppingList = () => {
 	const [newShoppingListName, setNewShoppingListName] = React.useState('');
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue, green, white } = useTheme();
+	const { darkBlue, lightBlue, white } = useTheme();
 
 	// Access the current routes url search parameters e.g. title (Used as the page title)
-	const { title, id } = useLocalSearchParams();
+	const { title, id } = useLocalSearchParams<{ title: string; id: string }>();
 
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
@@ -67,7 +70,7 @@ const ShoppingList = () => {
 	// Access the current shopping lists data, used to perform additional operations outside of TanStack query e.g. generating a new shopping list or shoppings lists via the ShoppingListService
 	const {
 		shoppingLists,
-		fetchShoppingListStatus,
+		shoppingListsFetchStatus,
 		queryKey: shoppingListsQueryKey
 	} = useShoppingLists();
 
@@ -87,11 +90,9 @@ const ShoppingList = () => {
 				case 'CREATE_SHOPPING_LIST_ITEM': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `You have successfully renamed the shopping list to ${itemName}`,
-							backgroundColour: green
+							message: `You have successfully renamed the shopping list to ${itemName}`
 						}
 					});
 
@@ -107,11 +108,9 @@ const ShoppingList = () => {
 				case 'DELETE_SHOPPING_LIST_ITEM': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: 'You have successfully deleted the shopping list item.',
-							backgroundColour: green
+							message: 'You have successfully deleted the shopping list item.'
 						}
 					});
 
@@ -127,11 +126,9 @@ const ShoppingList = () => {
 
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `You have successfully renamed the shopping list to ${newShoppingListName}`,
-							backgroundColour: green
+							message: `You have successfully renamed the shopping list to ${newShoppingListName}`
 						}
 					});
 
@@ -141,11 +138,9 @@ const ShoppingList = () => {
 				case 'DELETE_SHOPPING_LIST': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `You have successfully deleted the shopping list, you will be redirected shortly`,
-							backgroundColour: green
+							message: `You have successfully deleted the shopping list, you will be redirected shortly`
 						}
 					});
 
@@ -173,11 +168,9 @@ const ShoppingList = () => {
 				case 'CREATE_SHOPPING_LIST_ITEM': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `Failed to rename the shopping list to ${itemName}`,
-							backgroundColour: 'red'
+							message: `Failed to rename the shopping list to ${itemName}`
 						}
 					});
 
@@ -193,11 +186,9 @@ const ShoppingList = () => {
 				case 'DELETE_SHOPPING_LIST_ITEM': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: 'Failed to delete the shopping list item you selected',
-							backgroundColour: green
+							message: 'Failed to delete the shopping list item you selected'
 						}
 					});
 
@@ -210,11 +201,9 @@ const ShoppingList = () => {
 
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `Failed to rename the shopping list to ${newShoppingListName}`,
-							backgroundColour: green
+							message: `Failed to rename the shopping list to ${newShoppingListName}`
 						}
 					});
 
@@ -224,11 +213,9 @@ const ShoppingList = () => {
 				case 'DELETE_SHOPPING_LIST': {
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: `Failed to delete the shopping list`,
-							backgroundColour: green
+							message: `Failed to delete the shopping list`
 						}
 					});
 
@@ -243,8 +230,8 @@ const ShoppingList = () => {
 				}
 			}
 		},
-		shoppingListId: id,
-		isQueryEnabled: fetchShoppingListStatus !== 'loading',
+		shoppingListId: typeof id === 'string' ? id : null,
+		isQueryEnabled: shoppingListsFetchStatus !== 'loading',
 		shoppingListsQueryKey
 	});
 
@@ -276,7 +263,6 @@ const ShoppingList = () => {
 			type: 'CREATE_SHOPPING_LIST_ITEM',
 			payload: {
 				shoppingLists: newShoppingLists,
-				shoppingListsQueryKey,
 				shoppingList: newShoppingList
 			}
 		});
@@ -296,7 +282,6 @@ const ShoppingList = () => {
 			type: 'DELETE_SHOPPING_LIST_ITEM',
 			payload: {
 				shoppingLists: newShoppingLists,
-				shoppingListsQueryKey,
 				shoppingList: newShoppingList
 			}
 		});
@@ -316,7 +301,6 @@ const ShoppingList = () => {
 			type: 'RENAME_SHOPPING_LIST',
 			payload: {
 				shoppingLists: newShoppingLists,
-				shoppingListsQueryKey,
 				shoppingList: newShoppingList
 			}
 		});
@@ -336,7 +320,6 @@ const ShoppingList = () => {
 			type: 'TOGGLE_SHOPPING_LIST_ITEM',
 			payload: {
 				shoppingLists: newShoppingLists,
-				shoppingListsQueryKey,
 				shoppingList: newShoppingList
 			}
 		});
@@ -355,7 +338,6 @@ const ShoppingList = () => {
 			type: 'DELETE_SHOPPING_LIST',
 			payload: {
 				shoppingLists: newShoppingLists,
-				shoppingListsQueryKey,
 				shoppingList: newShoppingList
 			}
 		});
@@ -363,7 +345,7 @@ const ShoppingList = () => {
 
 	// Render the loading screen whilst the shopping lists are being fetched
 	if (shoppingListFetchStatus === 'loading') {
-		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
 	}
 
 	return (
@@ -387,7 +369,7 @@ const ShoppingList = () => {
 				}}
 				onOk={addItem}
 				submitDisabled={(itemName?.length ?? 0) < 1 || snackBarState.visible === true}
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				accessabilityCancelHint='Stop creating a new shopping list item'
 				accessabilityOkHint='Create a new shopping list item'
 			>
@@ -417,7 +399,7 @@ const ShoppingList = () => {
 					setIsRenameShoppingListModalVisible(false);
 
 					// Reset the shopping list name to the previously set shopping list name
-					setNewShoppingListName(title ?? '');
+					setNewShoppingListName(title);
 				}}
 				onOk={updateShoppingListName}
 				submitDisabled={
@@ -425,7 +407,7 @@ const ShoppingList = () => {
 					newShoppingListName === title ||
 					snackBarState.visible === true
 				}
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				accessabilityCancelHint='Stop renaming your current shopping list'
 				accessabilityOkHint='Rename the current shopping list'
 			>
@@ -453,7 +435,7 @@ const ShoppingList = () => {
 				}}
 				onOk={deleteShoppingList}
 				submitDisabled={snackBarState.visible === true}
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				accessabilityCancelHint='Cancel the delete shopping list action'
 				accessabilityOkHint='Delete the current shopping list, you will be redirected back to the homepage after.'
 			>
@@ -467,7 +449,8 @@ const ShoppingList = () => {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{
 					flexGrow: 1,
-					backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue,
+					backgroundColor:
+						(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? darkBlue : lightBlue,
 					position: 'relative'
 				}}
 				refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefetch} />}
@@ -478,7 +461,7 @@ const ShoppingList = () => {
 						label='No shopping list items exist'
 						heading='No shopping list items exist'
 						overview='Why not try adding one ?'
-						isDark={(profile?.theme ?? 'light') === 'dark'}
+						isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 					/>
 				) : (
 					shoppingList?.items?.map(
@@ -490,7 +473,7 @@ const ShoppingList = () => {
 									isComplete={item?.completed ?? false}
 									name={item?.name ?? 'N/A'}
 									deleteAction={() => deleteItem(item?.id ?? null)}
-									isDark={(profile?.theme ?? 'light') === 'dark'}
+									isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 									shoppingListTheme={shoppingList?.shoppingListTheme ?? 'blue'}
 									disabled={shoppingListMutateStatus === 'loading'}
 								/>
@@ -504,7 +487,7 @@ const ShoppingList = () => {
 				onDismiss={() => {
 					// Dispatch an action to reset the snackbar state
 					updateSnackBarState({
-						type: 'RESET_SNACKBAR_STATE'
+						type: 'RESET_TOAST_NOTIFICATION'
 					});
 				}}
 				duration={2000}

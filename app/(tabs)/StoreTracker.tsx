@@ -18,6 +18,7 @@ import { Loading } from '../../src/components/screen-states';
 
 // Application hooks
 import { useNotification, useProfile } from '../../src/hooks';
+import { ProfileTheme } from '../../types/profile';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({
@@ -31,38 +32,17 @@ const styles = StyleSheet.create({
 	}
 });
 
-const locationReducer = (state, action) => {
-	switch (action.type) {
-		case 'UPDATE_LOCATION': {
-			return {
-				...state,
-				longitude: action.payload.longitude,
-				latitude: action.payload.latitude
-			};
-		}
-
-		default: {
-			console.warn('locationReducer: unknown action fired');
-
-			return { ...state };
-		}
-	}
-};
-
 const StoreTracker = () => {
 	// Used to keep track of the Expo location watching function
 	const watchPositionAsyncRef = React.useRef(null);
 
 	// Stores the users location related state
-	const [{ longitude, latitude, longitudeDelta, latitudeDelta }, dispatch] = React.useReducer(
-		locationReducer,
-		{
-			longitude: 0,
-			latitude: 0,
-			longitudeDelta: 0.009,
-			latitudeDelta: 0.009
-		}
-	);
+	const [locationState, setLocationState] = React.useState({
+		longitude: 0,
+		latitude: 0,
+		longitudeDelta: 0.009,
+		latitudeDelta: 0.009
+	});
 
 	// Loading states for various UI elements
 	const [isLoading, setIsLoading] = React.useState(true);
@@ -91,15 +71,12 @@ const StoreTracker = () => {
 						// Was Best for Navigation, but that seems rather unnecessary and aggressive.
 						accuracy: Location.Accuracy.Balanced
 					},
-					({ coords: { latitude: newLatitude, longitude: newLongitude } }) => {
-						// Every time the location updates update the users location state (Updates the map marker)
-						dispatch({
-							type: 'UPDATE_LOCATION',
-							payload: {
-								latitude: newLatitude,
-								longitude: newLongitude
-							}
-						});
+					({ coords: { latitude, longitude } }) => {
+						setLocationState((prevState) => ({
+							...prevState,
+							longitude,
+							latitude
+						}));
 					}
 				);
 			};
@@ -122,14 +99,15 @@ const StoreTracker = () => {
 				// Filtered data based on the lat and lng from watchPosition()
 				// Prevents 5k markers being spawned on the map, which would actually crash it. The app stops responding :(
 				const filteredCopyOfSuperMarkets = Locations.filter(
-					(location) => latitude <= location.Lat && longitude <= location.Lng
+					(location) =>
+						locationState.latitude <= location.Lat && locationState.longitude <= location.Lng
 				);
 
 				// Check the supermarkets and users latitude and longitude
 				// FLAW: Whilst the code runs and provides the necessary outputs it won't render the map when there are more than 190 marks.
 				// SOLUTION: Add a clustering engine, allows the markers to gradually be spawned in. Unable to do it at the moment as Im short on time.
 				filteredCopyOfSuperMarkets.map((data) => {
-					if (latitude === data.Lat && longitude === data.Lng) {
+					if (locationState.latitude === data.Lat && locationState.longitude === data.Lng) {
 						generateLocalNotification(
 							{ vibrationEnabled: true, vibrationLength: 1000 },
 							{
@@ -147,7 +125,12 @@ const StoreTracker = () => {
 			if (localNotificationsStatus === 'granted') {
 				checkSupermarketLocations();
 			}
-		}, [localNotificationsStatus, latitude, longitude, generateLocalNotification])
+		}, [
+			localNotificationsStatus,
+			locationState.latitude,
+			locationState.longitude,
+			generateLocalNotification
+		])
 	);
 
 	React.useEffect(() => {
@@ -158,19 +141,14 @@ const StoreTracker = () => {
 
 	// While the page is loading, setting the latitude is false (0) or the longitude is false (0)
 	if (isLoading === true) {
-		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
 	}
 
 	return (
 		<View style={styles.container}>
 			<MapView
 				style={styles.map}
-				region={{
-					longitude,
-					latitude,
-					longitudeDelta,
-					latitudeDelta
-				}}
+				region={locationState}
 				showsUserLocation
 				zoomEnabled
 				zoomTapEnabled
@@ -179,7 +157,9 @@ const StoreTracker = () => {
 				followsUserLocation
 				showsCompass
 				customMapStyle={
-					isMapReady === true && (profile?.theme ?? 'light') === 'dark' ? NightMode : []
+					isMapReady === true && (profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK
+						? NightMode
+						: []
 				}
 				provider={PROVIDER_GOOGLE}
 				onMapReady={() => {

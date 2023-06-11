@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import { useTheme } from 'styled-components';
 
 // Routing dependencies
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Stack } from '../../src/layouts';
 
 // Application components
@@ -15,25 +15,27 @@ const ShoppingListLayout = () => {
 	const router = useRouter();
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue } = useTheme();
+	const { darkBlue } = useTheme();
+
+	const { title } = useLocalSearchParams<{ title: string }>();
 
 	return (
-		<Stack initialRouteName='[id]'>
+		<Stack
+			initialRouteName='[id]'
+			screenOptions={{
+				headerStyle: {
+					backgroundColor: darkBlue
+				},
+				headerTitleStyle: {
+					color: 'white'
+				}
+			}}
+		>
 			<Stack.Screen
 				name='[id]'
-				options={({ route }) => ({
-					headerStyle: {
-						backgroundColor: darkBlue,
-						borderBottomColor: lightBlue,
-						borderTopColor: darkBlue,
-						borderWidth: 1,
-						borderStyle: 'solid'
-					},
-					headerTitleStyle: {
-						color: 'white'
-					},
-					title: truncate(route.params.title),
-					headerRight: null,
+				options={{
+					title: truncate(title),
+					headerRight: () => null,
 					headerLeft: () => (
 						<HeaderIcon
 							action={() => {
@@ -46,7 +48,7 @@ const ShoppingListLayout = () => {
 							marginRight={10}
 						/>
 					)
-				})}
+				}}
 			/>
 		</Stack>
 	);

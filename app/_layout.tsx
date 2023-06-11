@@ -1,6 +1,6 @@
 // Core react dependencies
 import * as React from 'react';
-import { AppState, Platform } from 'react-native';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 
 // react-native-paper dependencies
 import {
@@ -9,7 +9,7 @@ import {
 } from 'react-native-paper';
 
 // Styled-components dependencies
-import { ThemeProvider } from 'styled-components/native';
+import { ThemeProvider } from 'styled-components';
 
 // TanStack query dependencies
 import { QueryClient, QueryClientProvider, focusManager } from '@tanstack/react-query';
@@ -23,7 +23,8 @@ import { Drawer } from '../src/layouts';
 import { UserProfileProvider } from '../src/context';
 import { StyledComponentsTheme } from '../src/constants/Themes';
 
-function onAppStateChange(status) {
+// When the app focusses refetch all the queries
+function onAppStateChange(status: AppStateStatus) {
 	if (Platform.OS !== 'web') {
 		focusManager.setFocused(status === 'active');
 	}

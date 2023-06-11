@@ -12,6 +12,7 @@ import DrawerLink from './DrawerLink';
 
 // Application hooks
 import { useProfile } from '../../../hooks';
+import { ProfileTheme } from '../../../../types/profile';
 
 export const NavigationDrawer = () => {
 	// Access the styled-components theme via their internal ThemeContext
@@ -24,7 +25,8 @@ export const NavigationDrawer = () => {
 		<ScrollView
 			accessibilityRole='menubar'
 			contentContainerStyle={{
-				backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue,
+				backgroundColor:
+					(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? darkBlue : lightBlue,
 				flex: 1
 			}}
 		>
@@ -33,7 +35,7 @@ export const NavigationDrawer = () => {
 				paddingBottom='50px'
 				justifyContent='center'
 				alignItems='center'
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<Image source={ApplicationIcon} height={120} width={120} accessibilityIgnoresInvertColors />
 			</Section>
@@ -44,13 +46,13 @@ export const NavigationDrawer = () => {
 				alignItems='flex-start'
 				flexWrap='wrap'
 				flexGrow={0}
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
 					href='(tabs)/ShoppingLists'
 					icon='format-list-bulleted'
 					text='Shopping lists'
-					isDark={(profile?.theme ?? 'light') === 'dark'}
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				/>
 			</Section>
 
@@ -60,13 +62,13 @@ export const NavigationDrawer = () => {
 				alignItems='flex-start'
 				flexWrap='wrap'
 				flexGrow={0}
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
 					href='/settings'
 					icon='settings'
 					text='Settings'
-					isDark={(profile?.theme ?? 'light') === 'dark'}
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				/>
 			</Section>
 		</ScrollView>

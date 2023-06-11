@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // Core react dependencies
 import * as React from 'react';
 
@@ -5,7 +6,27 @@ import * as React from 'react';
 import * as AsyncStorage from 'expo-secure-store';
 
 // TanStack query modules
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+type UseShoppingListMutationVariables = {
+	type:
+		| 'CREATE_SHOPPING_LIST_ITEM'
+		| 'DELETE_SHOPPING_LIST_ITEM'
+		| 'RENAME_SHOPPING_LIST'
+		| 'TOGGLE_SHOPPING_LIST_ITEM'
+		| 'DELETE_SHOPPING_LIST';
+	payload: {
+		shoppingLists: ShoppingList[];
+		shoppingList: ShoppingList;
+	};
+};
+
+type UseShoppingListCallbacks = {
+	data?: ShoppingLists;
+	variables: UseShoppingListMutationVariables;
+	context: { oldShoppingLists: ShoppingLists };
+	error?: unknown;
+};
 
 const useShoppingList = ({
 	// Callback to handle various mutation events, can be leveraged to perform additional events
@@ -21,12 +42,19 @@ const useShoppingList = ({
 
 	// Gives us access to the shopping lists query key e.g. for invalidating the list when we update the shopping list
 	shoppingListsQueryKey = []
-} = {}) => {
+}: {
+	onSuccess?: null | ((data: UseShoppingListCallbacks) => void);
+	onError?: null | ((data: UseShoppingListCallbacks) => void);
+	onSettled?: null | ((data: UseShoppingListCallbacks) => void);
+	shoppingListId?: null | string;
+	isQueryEnabled?: boolean;
+	shoppingListsQueryKey?: null | { key: string }[];
+}) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
 
 	// Store the queryKey for the query
-	const queryKey = React.useMemo(
+	const queryKey = React.useMemo<QueryKey>(
 		() => [{ key: 'shopping-lists', dependencies: { id: shoppingListId } }],
 		[shoppingListId]
 	);
@@ -35,8 +63,16 @@ const useShoppingList = ({
 		queryKey,
 		queryFn: async () => {
 			try {
+				if (shoppingListId === null) {
+					throw Error('The shopping list id is missing from the useShoppingList hook options');
+				}
+
+				if (shoppingListsQueryKey.length === 0) {
+					throw Error('The shopping lists query key is missing from the hook');
+				}
+
 				// Perform a fresh lookup of the "shopping lists" query data (Fetched via the client hook)
-				const shoppingLists = queryClient.getQueryData(shoppingListsQueryKey);
+				const shoppingLists = queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey);
 
 				// Attempt to find the current shopping list from the current shopping lists query data
 				const shoppingListItem = shoppingLists.find((el) => el.id === shoppingListId);
@@ -57,11 +93,11 @@ const useShoppingList = ({
 	});
 
 	const mutation = useMutation({
-		mutationFn: async (variables) => {
+		mutationFn: async (variables: UseShoppingListMutationVariables) => {
 			try {
 				// Attempt to update the Shopping Lists data in expo-secure-store
 				await AsyncStorage.setItemAsync(
-					variables?.payload?.shoppingListsQueryKey[0].key ?? '',
+					shoppingListsQueryKey[0].key,
 					JSON.stringify(variables?.payload?.shoppingLists ?? [])
 				);
 
@@ -71,31 +107,26 @@ const useShoppingList = ({
 				return Promise.reject(new Error(error.message));
 			}
 		},
-		onMutate: async (variables) => {
+		onMutate: async (variables: UseShoppingListMutationVariables) => {
 			// Cancel any queries for the "Shopping List" query
 			await queryClient.cancelQueries({ queryKey });
 
 			// Cancel any queries for the "Shopping Lists" query
 			await queryClient.cancelQueries({
-				queryKey: variables?.payload?.shoppingListsQueryKey ?? []
+				queryKey: shoppingListsQueryKey
 			});
 
 			// Store a reference to the old set of "Shopping Lists" query entry
-			const previousShoppingLists = queryClient.getQueryData(
-				variables?.payload?.shoppingListsQueryKey ?? []
-			);
+			const previousShoppingLists = queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey);
 
 			// Store a reference to the old set of "Shopping List" query entry
 			const previousShoppingList = queryClient.getQueryData(queryKey);
 
 			// Update the current "Shopping Lists" query entry with the new incoming "Shopping Lists" data
-			queryClient.setQueryData(
-				variables?.payload?.shoppingListsQueryKey ?? [],
-				variables?.payload?.shoppingLists ?? []
-			);
+			queryClient.setQueryData(shoppingListsQueryKey, variables?.payload?.shoppingLists ?? []);
 
 			// Update the current "Shopping List" with the new incoming "Shopping List" data
-			queryClient.setQueryData(queryKey, variables?.payload?.shoppingList ?? []);
+			queryClient.setQueryData<ShoppingList>(queryKey, variables?.payload?.shoppingList);
 
 			// Provide any necessary context values so callbacks that have access to the context can access the data needed to perform various actions
 			return {
@@ -106,7 +137,7 @@ const useShoppingList = ({
 				newShoppingList: variables?.payload?.shoppingList ?? []
 			};
 		},
-		onSuccess: (data, variables, context) => {
+		onSuccess: (data, variables: UseShoppingListMutationVariables, context) => {
 			// When the onSuccess callback is provided pass back all the variables
 			if (onSuccess) {
 				onSuccess({ data, variables, context });
@@ -114,10 +145,7 @@ const useShoppingList = ({
 		},
 		onError: (error, variables, context) => {
 			// Rollback the current "shopping lists" cache to the old "shopping lists"
-			queryClient.setQueryData(
-				variables?.payload?.shoppingListsQueryKey ?? [],
-				context?.oldShoppingLists ?? []
-			);
+			queryClient.setQueryData(shoppingListsQueryKey, context?.oldShoppingLists ?? []);
 
 			// Rollback the current "shopping list" cache to the old "shopping list"
 			queryClient.setQueryData(queryKey, context?.oldShoppingList ?? []);
@@ -127,10 +155,10 @@ const useShoppingList = ({
 				onError({ error, variables, context });
 			}
 		},
-		onSettled: async (data, error, variables, context) => {
+		onSettled: async (data, error, variables: UseShoppingListMutationVariables, context) => {
 			// Invalidate the "shopping lists" cache
 			await queryClient.invalidateQueries({
-				queryKey: variables?.payload?.shoppingListsQueryKey ?? [],
+				queryKey: shoppingListsQueryKey,
 				exact: true
 			});
 

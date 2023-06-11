@@ -31,6 +31,7 @@ import {
 
 // Application services
 import ShoppingListService from '../../src/components/services/ShoppingListService';
+import { ProfileTheme } from '../../types/profile';
 
 const ShoppingLists = () => {
 	// Controls the shopping list state
@@ -43,7 +44,7 @@ const ShoppingLists = () => {
 	const { state: snackBarState, dispatch: updateSnackBarState } = useSnackBar();
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue, white, green } = useTheme();
+	const { darkBlue, lightBlue, white } = useTheme();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { profile } = useProfile();
@@ -71,11 +72,9 @@ const ShoppingLists = () => {
 
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: 'You have successfully created a new shopping list',
-							backgroundColour: green
+							message: 'You have successfully created a new shopping list'
 						}
 					});
 
@@ -100,11 +99,9 @@ const ShoppingLists = () => {
 
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
-						type: 'SET_SNACKBAR_STATE',
+						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
-							visible: true,
-							content: 'You have successfully created a new shopping list',
-							backgroundColour: 'red'
+							message: 'You have successfully created a new shopping list'
 						}
 					});
 
@@ -126,13 +123,13 @@ const ShoppingLists = () => {
 
 	// Whilst the shopping list is being restored show the loader state
 	if (shoppingListsFetchStatus === 'loading') {
-		return <Loading isDark={(profile?.theme ?? 'light') === 'dark'} />;
+		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
 	}
 
 	return (
 		<Portal.Host>
 			<Modal
-				isDark={(profile?.theme ?? 'light') === 'dark'}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				visible={isCreateShoppingModalVisible}
 				title='Create a shopping list'
 				onDismiss={() => setIsCreateShoppingModalVisible(false)}
@@ -142,7 +139,7 @@ const ShoppingLists = () => {
 				}}
 				onOk={() => {
 					// Create a blank shopping list
-					const ShoppingList = new ShoppingListService.CreateShoppingList({
+					const ShoppingList = ShoppingListService.CreateShoppingList({
 						shoppingListName,
 						shoppingLists
 					});
@@ -175,7 +172,8 @@ const ShoppingLists = () => {
 				showsVerticalScrollIndicator={false}
 				contentContainerStyle={{
 					flexGrow: 1,
-					backgroundColor: (profile?.theme ?? 'light') === 'dark' ? darkBlue : lightBlue
+					backgroundColor:
+						(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? darkBlue : lightBlue
 				}}
 				refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefetch} />}
 			>
@@ -185,7 +183,7 @@ const ShoppingLists = () => {
 						label='No shopping lists exist'
 						heading='No shopping lists exist'
 						overview='Why not try adding one ?'
-						isDark={(profile?.theme ?? 'light') === 'dark'}
+						isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 					/>
 				) : (
 					shoppingLists?.map((shoppingList) => (
@@ -217,7 +215,7 @@ const ShoppingLists = () => {
 				onDismiss={() => {
 					// Dispatch an action to reset the snackbar state
 					updateSnackBarState({
-						type: 'RESET_SNACKBAR_STATE'
+						type: 'RESET_TOAST_NOTIFICATION'
 					});
 				}}
 				duration={2000}
