@@ -9,10 +9,16 @@ import { TouchableRipple } from 'react-native-paper';
 // Application components
 import { Section, Text } from '../core';
 
-const ShoppingListsCard = ({ action, background, title }) => (
+type Props = {
+	action: null | (() => void);
+	background: string;
+	title: string;
+};
+
+const ShoppingListsCard = ({ action, background, title }: Props) => (
 	<TouchableRipple
 		onPress={() => {
-			if (action) {
+			if (typeof action === 'function') {
 				action();
 			}
 		}}
@@ -22,23 +28,21 @@ const ShoppingListsCard = ({ action, background, title }) => (
 			row
 			justifyContent='space-between'
 			backgroundColour={background}
-			borderWidth='1px'
+			borderWidth={1}
 			borderStyle='solid'
 			borderColour={background}
-			paddingTop='20px'
-			paddingBottom='20px'
-			paddingLeft='10px'
-			paddingRight='10px'
-			marginTop='10px'
-			marginBottom='10px'
-			marginLeft='10px'
-			marginRight='10px'
+			paddingTop={20}
+			paddingBottom={20}
+			paddingLeft={10}
+			paddingRight={10}
+			marginTop={10}
+			marginBottom={10}
+			marginLeft={10}
+			marginRight={10}
 			flexGrow={1}
 		>
 			<Section alignItems='center' backgroundColour={background} flexWrap='nowrap'>
-				<Text size='20px' colour='white'>
-					{truncate(title)}
-				</Text>
+				<Text size={20} colour='white' text={truncate(title)} />
 			</Section>
 		</Section>
 	</TouchableRipple>

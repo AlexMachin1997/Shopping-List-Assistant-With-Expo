@@ -25,16 +25,12 @@ const Empty = ({ isDark, image, label, heading, overview }) => {
 				/>
 			</Section>
 
-			<Section marginTop='20px' isDark={isDark}>
-				<Text type='h1' align='center' colour={isDark ? lightBlue : darkBlue}>
-					{heading}
-				</Text>
+			<Section marginTop={20} isDark={isDark}>
+				<Text type='h1' align='center' colour={isDark ? lightBlue : darkBlue} text={heading} />
 			</Section>
 
-			<Section marginTop='5px' isDark={isDark}>
-				<Text align='center' colour={isDark ? lightBlue : darkBlue}>
-					{overview}
-				</Text>
+			<Section marginTop={5} isDark={isDark}>
+				<Text align='center' colour={isDark ? lightBlue : darkBlue} text={overview} />
 			</Section>
 		</Section>
 	);

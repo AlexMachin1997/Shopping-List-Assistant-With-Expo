@@ -10,6 +10,19 @@ import { useTheme } from 'styled-components';
 // Application components
 import Button from './Button';
 
+type Props = {
+	visible: boolean;
+	onDismiss: null | (() => void);
+	isDark: boolean;
+	submitDisabled: boolean;
+	onOk: null | (() => void);
+	onCancel: null | (() => void);
+	children: React.ReactNode;
+	title: string;
+	accessabilityOkHint: string;
+	accessabilityCancelHint: string;
+};
+
 const Modal = ({
 	visible,
 	onDismiss,
@@ -21,7 +34,7 @@ const Modal = ({
 	title,
 	accessabilityOkHint,
 	accessabilityCancelHint
-}) => {
+}: Props) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue } = useTheme();
 
@@ -30,7 +43,7 @@ const Modal = ({
 			<Dialog
 				visible={visible}
 				onDismiss={() => {
-					if (onDismiss) {
+					if (typeof onDismiss === 'function') {
 						onDismiss();
 					}
 				}}
@@ -55,7 +68,6 @@ const Modal = ({
 					<Button
 						isCompact
 						mode='text'
-						text='Cancel'
 						colour='#e91e63'
 						contentStyle={{
 							borderRadius: 5
@@ -65,18 +77,19 @@ const Modal = ({
 						}}
 						label='Cancel action'
 						onClick={() => {
-							if (onCancel) {
+							if (typeof onCancel === 'function') {
 								onCancel();
 							}
 						}}
 						isDark={isDark}
 						isDisabled={false}
 						accessabilityHint={accessabilityCancelHint}
-					/>
+					>
+						Cancel
+					</Button>
 					<Button
 						isCompact
 						mode='text'
-						text='Confirm'
 						colour='#e91e63'
 						contentStyle={{
 							borderRadius: 5
@@ -86,14 +99,16 @@ const Modal = ({
 						}}
 						label='Confirm button'
 						onClick={() => {
-							if (onOk) {
+							if (typeof onOk === 'function') {
 								onOk();
 							}
 						}}
 						isDark={isDark}
 						isDisabled={submitDisabled}
 						accessabilityHint={accessabilityOkHint}
-					/>
+					>
+						Confirm
+					</Button>
 				</Dialog.Actions>
 			</Dialog>
 		</Portal>

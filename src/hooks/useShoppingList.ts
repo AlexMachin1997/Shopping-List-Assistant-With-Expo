@@ -21,10 +21,19 @@ type UseShoppingListMutationVariables = {
 	};
 };
 
+// oldShoppingLists: previousShoppingLists ?? [],
+// oldShoppingList: previousShoppingList ?? null,
+
+// newShoppingLists: variables?.payload?.shoppingLists ?? [],
+// newShoppingList: variables?.payload?.shoppingList ?? []
+
 type UseShoppingListCallbacks = {
 	data?: ShoppingLists;
 	variables: UseShoppingListMutationVariables;
-	context: { oldShoppingLists: ShoppingLists };
+	context?: {
+		oldShoppingLists?: ShoppingLists | null;
+		oldShoppingList?: ShoppingList | null;
+	} | null;
 	error?: unknown;
 };
 
@@ -48,7 +57,7 @@ const useShoppingList = ({
 	onSettled?: null | ((data: UseShoppingListCallbacks) => void);
 	shoppingListId?: null | string;
 	isQueryEnabled?: boolean;
-	shoppingListsQueryKey?: null | { key: string }[];
+	shoppingListsQueryKey: { key: string }[];
 }) => {
 	// Access the queryClient from the QueryClientProvider component, useful for invalidating and update the cache
 	const queryClient = useQueryClient();
@@ -72,10 +81,11 @@ const useShoppingList = ({
 				}
 
 				// Perform a fresh lookup of the "shopping lists" query data (Fetched via the client hook)
-				const shoppingLists = queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey);
+				const shoppingLists = queryClient?.getQueryData<ShoppingLists>(shoppingListsQueryKey) ?? [];
 
 				// Attempt to find the current shopping list from the current shopping lists query data
-				const shoppingListItem = shoppingLists.find((el) => el.id === shoppingListId);
+				const shoppingListItem =
+					shoppingLists?.find((el) => (el?.id ?? '') === shoppingListId) ?? null;
 
 				// If the item can't be found then throw an error
 				if (shoppingListItem === undefined) {
@@ -117,10 +127,11 @@ const useShoppingList = ({
 			});
 
 			// Store a reference to the old set of "Shopping Lists" query entry
-			const previousShoppingLists = queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey);
+			const previousShoppingLists =
+				queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey) ?? null;
 
 			// Store a reference to the old set of "Shopping List" query entry
-			const previousShoppingList = queryClient.getQueryData(queryKey);
+			const previousShoppingList = queryClient?.getQueryData<ShoppingList>(queryKey) ?? null;
 
 			// Update the current "Shopping Lists" query entry with the new incoming "Shopping Lists" data
 			queryClient.setQueryData(shoppingListsQueryKey, variables?.payload?.shoppingLists ?? []);
@@ -130,14 +141,11 @@ const useShoppingList = ({
 
 			// Provide any necessary context values so callbacks that have access to the context can access the data needed to perform various actions
 			return {
-				oldShoppingLists: previousShoppingLists ?? [],
-				oldShoppingList: previousShoppingList ?? null,
-
-				newShoppingLists: variables?.payload?.shoppingLists ?? [],
-				newShoppingList: variables?.payload?.shoppingList ?? []
+				oldShoppingLists: previousShoppingLists ?? null,
+				oldShoppingList: previousShoppingList ?? null
 			};
 		},
-		onSuccess: (data, variables: UseShoppingListMutationVariables, context) => {
+		onSuccess: (data, variables, context) => {
 			// When the onSuccess callback is provided pass back all the variables
 			if (onSuccess) {
 				onSuccess({ data, variables, context });
@@ -155,7 +163,7 @@ const useShoppingList = ({
 				onError({ error, variables, context });
 			}
 		},
-		onSettled: async (data, error, variables: UseShoppingListMutationVariables, context) => {
+		onSettled: async (data, error, variables, context) => {
 			// Invalidate the "shopping lists" cache
 			await queryClient.invalidateQueries({
 				queryKey: shoppingListsQueryKey,

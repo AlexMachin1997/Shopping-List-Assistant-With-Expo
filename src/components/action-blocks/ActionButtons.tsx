@@ -1,14 +1,19 @@
 // Core react dependencies
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 // react-native-paper dependencies
-import { FAB, Portal } from 'react-native-paper';
+import { FAB, Portal, FABGroupProps } from 'react-native-paper';
 
 // Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-const ActionButtons = ({ actions }) => {
+const ActionButtons = ({
+	actions,
+	visible = true
+}: {
+	actions: FABGroupProps['actions'];
+	visible?: boolean;
+}) => {
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	// Access the styled-components theme via their internal ThemeContext
@@ -17,8 +22,10 @@ const ActionButtons = ({ actions }) => {
 	return (
 		<Portal>
 			<FAB.Group
+				visible={visible}
 				open={isOpen}
 				fabStyle={{ backgroundColor: brightPink }}
+				backdropColor='transparent'
 				style={{
 					position: 'absolute',
 					bottom: 0,
@@ -33,22 +40,6 @@ const ActionButtons = ({ actions }) => {
 			/>
 		</Portal>
 	);
-};
-
-ActionButtons.defaultProps = {
-	actions: []
-};
-
-ActionButtons.propTypes = {
-	actions: PropTypes.arrayOf(
-		PropTypes.shape({
-			icon: PropTypes.string,
-			label: PropTypes.string,
-			onPress: PropTypes.func,
-			color: PropTypes.string,
-			accessibilityLabel: PropTypes.string
-		})
-	)
 };
 
 export default ActionButtons;

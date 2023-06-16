@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 
 const StoreTracker = () => {
 	// Used to keep track of the Expo location watching function
-	const watchPositionAsyncRef = React.useRef(null);
+	const watchPositionAsyncRef = React.useRef<Location.LocationSubscription>();
 
 	// Stores the users location related state
 	const [locationState, setLocationState] = React.useState({

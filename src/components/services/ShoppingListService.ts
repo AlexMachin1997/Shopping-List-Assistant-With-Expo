@@ -3,14 +3,21 @@ import shortid from 'shortid';
 class ShoppingListService {
 	static CreateShoppingList({
 		shoppingLists = null,
-		shoppingListName = ''
+		shoppingListName = null
 	}: {
-		shoppingLists: ShoppingLists;
-		shoppingListName: string;
+		shoppingLists: ShoppingLists | null;
+		shoppingListName: string | null;
 	}): {
-		shoppingList: ShoppingList;
-		shoppingLists: ShoppingLists;
+		shoppingList?: ShoppingList;
+		shoppingLists?: ShoppingLists;
 	} {
+		if (shoppingLists === null || shoppingListName === null) {
+			return {
+				shoppingList: null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		const red = '#e53935'; // Red with a shade of 500
 		const green = '#43a047'; // Green with a shade of 500
 		const blue = '#2196f3'; // Blue with a shade of 500
@@ -28,19 +35,26 @@ class ShoppingListService {
 
 		return {
 			shoppingList: newShoppingList,
-			shoppingLists: [...shoppingLists, newShoppingList]
+			shoppingLists: [...(shoppingLists ?? []), newShoppingList]
 		};
 	}
 
 	static RenameShoppingList({
 		shoppingLists = null,
 		shoppingList = null,
-		shoppingListName = ''
+		shoppingListName = null
 	}: {
-		shoppingLists: ShoppingLists;
-		shoppingList: ShoppingList;
-		shoppingListName: string;
+		shoppingLists?: null | ShoppingLists;
+		shoppingList?: ShoppingList | null;
+		shoppingListName?: null | string;
 	}) {
+		if (shoppingLists === null || shoppingList === null || shoppingListName === null) {
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		// Create the new shopping list object (Copy existing properties and add the name )
 		const newShoppingList = {
 			...shoppingList,
@@ -48,10 +62,11 @@ class ShoppingListService {
 		};
 
 		// Copy the current shopping lists
-		const newShoppingLists = [...shoppingLists];
+		const newShoppingLists = [...(shoppingLists ?? [])];
 
 		// Find the index of the shopping list you want to update
-		const indexOfTheShoppingList = newShoppingLists.findIndex((el) => el.id === newShoppingList.id);
+		const indexOfTheShoppingList =
+			newShoppingLists.findIndex((el) => (el?.id ?? '') === newShoppingList?.id ?? '') ?? -1;
 
 		// If the shopping index isn't -1 as in something was found update the shopping lists
 		if (indexOfTheShoppingList !== -1) {
@@ -65,7 +80,10 @@ class ShoppingListService {
 	}
 
 	static HandleShoppingListUpdate({
-		action = null
+		action = {
+			type: null,
+			payload: null
+		}
 	}: {
 		action:
 			| {
@@ -88,15 +106,21 @@ class ShoppingListService {
 						name: string;
 						shoppingList: ShoppingList;
 					};
+			  }
+			| {
+					type: null;
+					payload: null;
 			  };
-	}) {
-		const newShoppingList = action.payload.shoppingList;
+	}): ShoppingList {
+		const newShoppingList = action?.payload?.shoppingList ?? null;
+
+		if (newShoppingList === null) return null;
 
 		switch (action.type) {
 			case 'TOGGLE_SHOPPING_LIST_ITEM': {
 				// Find the index of the item you want to delete
-				const shoppingListItemIndex = newShoppingList?.items.findIndex(
-					(item) => item.id === action?.payload?.id
+				const shoppingListItemIndex = newShoppingList.items.findIndex(
+					(item) => (item?.id ?? '') === action?.payload?.id ?? ''
 				);
 
 				let shoppingListItem: ShoppingListItem = null;
@@ -106,11 +130,13 @@ class ShoppingListService {
 					// Get thew shopping list item
 					shoppingListItem = newShoppingList?.items[shoppingListItemIndex] ?? null;
 
-					// Flip the completed property e.g. true -> false
-					shoppingListItem.completed = !shoppingListItem.completed;
+					if (shoppingListItem !== null && newShoppingList !== null) {
+						// Flip the completed property e.g. true -> false
+						shoppingListItem.completed = !shoppingListItem.completed;
 
-					// Update the shopping list items array with the newly updated shopping list item
-					newShoppingList.items.splice(shoppingListItemIndex, 1, shoppingListItem);
+						// Update the shopping list items array with the newly updated shopping list item
+						newShoppingList.items.splice(shoppingListItemIndex, 1, shoppingListItem);
+					}
 				}
 
 				return newShoppingList;
@@ -118,12 +144,12 @@ class ShoppingListService {
 
 			case 'DELETE_SHOPPING_LIST_ITEM': {
 				// Find the index of the item you want to delete
-				const shoppingListItemIndex = newShoppingList?.items?.findIndex(
-					(item) => item.id === action?.payload?.id
+				const shoppingListItemIndex = newShoppingList.items.findIndex(
+					(item) => (item?.id ?? '') === action?.payload?.id
 				);
 
 				// If the item index isn't -1 as in something was found delete the item
-				if (shoppingListItemIndex !== -1) {
+				if (shoppingListItemIndex !== -1 && newShoppingList !== null) {
 					newShoppingList.items.splice(shoppingListItemIndex, 1);
 				}
 
@@ -134,7 +160,7 @@ class ShoppingListService {
 				return {
 					...newShoppingList,
 					items: [
-						...newShoppingList.items,
+						...(newShoppingList?.items ?? []),
 						{
 							id: shortid.generate(),
 							name: action?.payload?.name ?? '',
@@ -156,10 +182,17 @@ class ShoppingListService {
 		shoppingLists = null,
 		shoppingListItemId = null
 	}: {
-		shoppingList: ShoppingList;
-		shoppingLists: ShoppingLists;
-		shoppingListItemId: string;
+		shoppingList?: ShoppingList | null;
+		shoppingLists?: ShoppingLists | null;
+		shoppingListItemId?: string | null;
 	}) {
+		if (shoppingList === null || shoppingLists === null || shoppingListItemId === null) {
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		const newShoppingLists = [...shoppingLists];
 
 		const newShoppingList = this.HandleShoppingListUpdate({
@@ -172,8 +205,16 @@ class ShoppingListService {
 			}
 		});
 
+		if (newShoppingList === null)
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? null
+			};
+
 		// Find the index of the shopping list you want to update
-		const indexOfTheShoppingList = newShoppingLists.findIndex((el) => el.id === shoppingList.id);
+		const indexOfTheShoppingList = newShoppingLists.findIndex(
+			(el) => (el?.id ?? '') === shoppingList?.id ?? ''
+		);
 
 		// If the shopping index isn't -1 as in something was found update the shopping lists
 		if (indexOfTheShoppingList !== -1) {
@@ -191,10 +232,17 @@ class ShoppingListService {
 		shoppingLists = null,
 		shoppingListItemId = null
 	}: {
-		shoppingList: ShoppingList;
-		shoppingLists: ShoppingLists;
-		shoppingListItemId: string;
+		shoppingList?: ShoppingList;
+		shoppingLists?: ShoppingLists;
+		shoppingListItemId?: null | string;
 	}) {
+		if (shoppingList === null || shoppingListItemId === null || shoppingLists === null) {
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		const newShoppingLists = [...shoppingLists];
 
 		const newShoppingList = this.HandleShoppingListUpdate({
@@ -208,7 +256,8 @@ class ShoppingListService {
 		});
 
 		// Find the index of the shopping list you want to update
-		const indexOfTheShoppingList = newShoppingLists.findIndex((el) => el.id === shoppingList.id);
+		const indexOfTheShoppingList =
+			newShoppingLists?.findIndex((el) => (el?.id ?? '') === shoppingList.id) ?? -1;
 
 		// If the shopping index isn't -1 as in something was found update the shopping lists
 		if (indexOfTheShoppingList !== -1) {
@@ -228,8 +277,15 @@ class ShoppingListService {
 	}: {
 		shoppingLists: ShoppingLists;
 		shoppingList: ShoppingList;
-		name: string;
+		name: string | null;
 	}) {
+		if (shoppingLists === null || shoppingList === null || name === null) {
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		const newShoppingLists = [...shoppingLists];
 
 		const newShoppingList = this.HandleShoppingListUpdate({
@@ -242,11 +298,19 @@ class ShoppingListService {
 			}
 		});
 
+		if (newShoppingList === null) {
+			return {
+				shoppingList: null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		// Find the index of the shopping list you want to update
-		const indexOfTheShoppingList = newShoppingLists.findIndex((el) => el.id === shoppingList.id);
+		const indexOfTheShoppingList =
+			newShoppingLists?.findIndex((el) => (el?.id ?? '') === shoppingList.id) ?? -1;
 
 		// If the shopping index isn't -1 as in something was found update the shopping lists
-		if (indexOfTheShoppingList !== -1) {
+		if (indexOfTheShoppingList !== -1 && newShoppingList !== null) {
 			newShoppingLists.splice(indexOfTheShoppingList, 1, newShoppingList);
 		}
 
@@ -262,14 +326,20 @@ class ShoppingListService {
 	}: {
 		shoppingLists: ShoppingLists;
 		shoppingList: ShoppingList;
-	}): {
-		shoppingList: null;
-		shoppingLists: ShoppingLists;
-	} {
+	}) {
+		if (shoppingLists === null || shoppingList === null) {
+			return {
+				shoppingList: shoppingList ?? null,
+				shoppingLists: shoppingLists ?? []
+			};
+		}
+
 		const newShoppingLists = [...shoppingLists];
 
 		// Find the index of the shopping list you want to update
-		const indexOfTheShoppingList = shoppingLists.findIndex((el) => el.id === shoppingList.id);
+		const indexOfTheShoppingList = shoppingLists.findIndex(
+			(el) => (el?.id ?? '') === shoppingList.id
+		);
 
 		// If the shopping index isn't -1 as in something was found update the shopping lists
 		if (indexOfTheShoppingList !== -1) {

@@ -7,4 +7,4 @@ export enum ProfileTheme {
 export type Profile = {
 	theme: ProfileTheme;
 	hasCompletedSetup: boolean;
-};
+} | null;

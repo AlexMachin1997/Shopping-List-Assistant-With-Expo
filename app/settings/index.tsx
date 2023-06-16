@@ -9,7 +9,7 @@ import { Divider, Switch, Snackbar } from 'react-native-paper';
 import { useTheme } from 'styled-components';
 
 // Application components
-import { Section, Text, Button, Modal } from '../../src/components/core';
+import { Section, Text, Modal, Button } from '../../src/components/core';
 
 // Application hooks
 import { useProfile, useShoppingLists, useSnackBar } from '../../src/hooks';
@@ -40,7 +40,9 @@ const Settings = () => {
 					updateSnackBarState({
 						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
 						payload: {
-							message: `Your theme has successfully been updated to ${variables.payload.profile.theme}`
+							message: `Your theme has successfully been updated to ${
+								variables?.payload?.profile?.theme ?? ''
+							}`
 						}
 					});
 
@@ -148,41 +150,39 @@ const Settings = () => {
 				accessabilityCancelHint='Cancel the delete action, your shopping lists wil still be available'
 				accessabilityOkHint='Confirm you want to delete all available shopping lists'
 			>
-				<Text colour={lightBlue} size='20px'>
-					Are you sure you want to delete all of your shopping lists ?
-				</Text>
+				<Text
+					colour={lightBlue}
+					size={20}
+					text='Are you sure you want to delete all of your shopping lists ?'
+				/>
 			</Modal>
 
 			<Section
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
-				paddingTop='0'
-				paddingBottom='0'
-				paddingLeft='0'
-				paddingRight='0'
-				marginTop='16px'
-				marginBottom='0'
-				marginLeft='16px'
-				marginRight='0'
+				marginTop={16}
+				marginLeft={16}
 			>
 				<Section isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}>
 					<Text
 						colour={
 							(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
 						}
-					>
-						Enable dark mode theme
-					</Text>
+						type='h2'
+						text='Enable dark theme mode'
+					/>
 
 					<Switch
 						value={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 						onValueChange={() => {
-							// Trigger the theme update action
-							updateProfile({
-								type: 'THEME_CHANGE',
-								payload: {
-									profile: ProfileService.ChangeTheme({ profile })
-								}
-							});
+							if (profile !== null) {
+								// Trigger the theme update action
+								updateProfile({
+									type: 'THEME_CHANGE',
+									payload: {
+										profile: ProfileService.ChangeTheme({ profile })
+									}
+								});
+							}
 						}}
 						style={{
 							paddingTop: 5,
@@ -204,27 +204,20 @@ const Settings = () => {
 
 			<Section
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
-				paddingTop='0'
-				paddingBottom='0'
-				paddingLeft='0'
-				paddingRight='0'
-				marginTop='16px'
-				marginBottom='16px'
-				marginLeft='16px'
-				marginRight='0'
+				marginTop={16}
+				marginBottom={16}
+				marginLeft={16}
 			>
 				<Text
 					colour={
 						(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
 					}
-				>
-					Delete all shopping lists
-				</Text>
+					text='Delete all shopping lists'
+				/>
 
 				<Button
 					isCompact
 					mode='contained'
-					text='Delete'
 					colour={brightPink}
 					label='Delete shopping lists'
 					accessabilityHint='Deletes all the shopping lists you the user has created'
@@ -237,7 +230,9 @@ const Settings = () => {
 					contentStyle={{
 						borderRadius: 5
 					}}
-				/>
+				>
+					Delete
+				</Button>
 			</Section>
 
 			<Divider
@@ -261,9 +256,7 @@ const Settings = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size='16px'>
-					{snackBarState.content}
-				</Text>
+				<Text colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 		</ScrollView>
 	);

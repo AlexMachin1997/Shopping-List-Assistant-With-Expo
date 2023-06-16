@@ -1,5 +1,5 @@
+/* eslint-disable react-native-a11y/has-accessibility-hint */
 // Core react dependencies
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
 
 import { truncate } from 'lodash';
@@ -13,31 +13,48 @@ import { useTheme } from 'styled-components';
 // Application components
 import { Section, Text } from '../core';
 
+type Props = {
+	toggle: null | (() => void);
+	shoppingListTheme?: string;
+	isComplete?: boolean;
+	name?: string;
+	isDark?: boolean;
+	deleteAction?: null | (() => void);
+	disabled?: boolean;
+};
+
 const ShoppingListCard = ({
-	toggle,
-	shoppingListTheme,
-	isComplete,
-	name,
-	isDark,
-	deleteAction,
-	disabled
-}) => {
+	toggle = null,
+	shoppingListTheme = 'N/A',
+	isComplete = false,
+	name = 'N/A',
+	isDark = false,
+	deleteAction = null,
+	disabled = false
+}: Props) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue, green } = useTheme();
 
 	return (
-		<TouchableRipple onPress={toggle} rippleColor={shoppingListTheme}>
+		<TouchableRipple
+			onPress={() => {
+				if (typeof toggle === 'function') {
+					toggle();
+				}
+			}}
+			rippleColor={shoppingListTheme}
+		>
 			<Section
 				row
-				paddingTop='10px'
-				paddingBottom='10px'
-				paddingLeft='10px'
-				paddingRight='10px'
-				marginTop='10px'
-				marginBottom='10px'
-				marginLeft='10px'
-				marginRight='10px'
-				borderWidth='1px'
+				paddingTop={10}
+				paddingBottom={10}
+				paddingLeft={10}
+				paddingRight={10}
+				marginTop={10}
+				marginBottom={10}
+				marginLeft={10}
+				marginRight={10}
+				borderWidth={1}
 				borderStyle='solid'
 				borderColour={isDark ? lightBlue : 'white'}
 				alignItems='center'
@@ -54,17 +71,21 @@ const ShoppingListCard = ({
 						icon={isComplete ? 'radiobox-marked' : 'radiobox-blank'}
 						iconColor={isComplete ? green : darkBlue}
 						style={{ backgroundColor: 'transparent' }}
-						value={isComplete}
+						value={isComplete === true ? 'checked' : 'unchecked'}
 						status={isComplete ? 'checked' : 'unchecked'}
-						onPress={toggle}
+						onPress={() => {
+							if (typeof toggle === 'function') {
+								toggle();
+							}
+						}}
 						size={30}
 						accessibilityLabel='Toggle the items complete property'
-						accessibilityHint='Marks the shopping list item as complete or not complete'
+						// accessibilityHint='Marks the shopping list item as complete or not complete'
 					/>
 				</Section>
 
 				<View style={{ flex: 1 }}>
-					<Text type='h3'>{truncate(name)}</Text>
+					<Text type='h3' text={truncate(name)} />
 				</View>
 
 				<Section
@@ -91,26 +112,6 @@ const ShoppingListCard = ({
 			</Section>
 		</TouchableRipple>
 	);
-};
-
-ShoppingListCard.defaultProps = {
-	toggle: () => false,
-	shoppingListTheme: '',
-	isComplete: false,
-	name: '',
-	isDark: false,
-	deleteAction: null,
-	disabled: false
-};
-
-ShoppingListCard.propTypes = {
-	toggle: PropTypes.func,
-	shoppingListTheme: PropTypes.string,
-	isComplete: PropTypes.bool,
-	name: PropTypes.string,
-	isDark: PropTypes.bool,
-	deleteAction: PropTypes.func,
-	disabled: PropTypes.bool
 };
 
 export default ShoppingListCard;

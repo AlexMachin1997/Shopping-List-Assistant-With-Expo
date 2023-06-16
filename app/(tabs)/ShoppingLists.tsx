@@ -148,7 +148,7 @@ const ShoppingLists = () => {
 					updateShoppingLists({
 						type: 'CREATE_SHOPPING_LIST',
 						payload: {
-							shoppingLists: ShoppingList.shoppingLists
+							shoppingLists: ShoppingList?.shoppingLists ?? null
 						}
 					});
 				}}
@@ -223,9 +223,7 @@ const ShoppingLists = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size='16px'>
-					{snackBarState.content}
-				</Text>
+				<Text colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 		</Portal.Host>
 	);

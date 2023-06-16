@@ -1,6 +1,5 @@
 // Core react dependencies
 import * as React from 'react';
-import PropTypes from 'prop-types';
 
 // Routing dependencies
 import { useRouter } from 'expo-router';
@@ -11,7 +10,7 @@ import { Loading } from '../components/screen-states';
 // Application hooks
 import useProfile from '../hooks/useProfile';
 
-export const UserProfileProvider = ({ children }) => {
+const UserProfileProvider = ({ children }: { children: React.ReactNode }) => {
 	const hasPerformedInitialRedirect = React.useRef(false);
 
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
@@ -47,9 +46,7 @@ export const UserProfileProvider = ({ children }) => {
 	}
 
 	// Once the page isn't loading render the children contents (Should be the applications first routing stack)
-	return children;
+	return <>{children}</>;
 };
 
-UserProfileProvider.propTypes = {
-	children: PropTypes.oneOfType([PropTypes.node, PropTypes.object, PropTypes.func]).isRequired
-};
+export default UserProfileProvider;

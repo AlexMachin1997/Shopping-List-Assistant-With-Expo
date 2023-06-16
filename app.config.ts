@@ -9,14 +9,14 @@ export default ({ config: staticConfigFromAppJSONFile }: ConfigContext): ExpoCon
 	...staticConfigFromAppJSONFile,
 
 	// Mandatory configuration, just use the values defined in the app.json file
-	slug: staticConfigFromAppJSONFile.slug,
-	name: staticConfigFromAppJSONFile.name,
+	slug: staticConfigFromAppJSONFile?.slug ?? '',
+	name: staticConfigFromAppJSONFile?.name ?? '',
 
 	extra: {
 		// Spread the existing config defined in the app.json file
-		...staticConfigFromAppJSONFile.extra,
+		...(staticConfigFromAppJSONFile?.extra ?? {}),
 
 		// Append the apiUrl variable with a variable from the .env file
-		apiUrl: process.env.API_URL
+		apiUrl: process?.env?.API_URL ?? ''
 	}
 });

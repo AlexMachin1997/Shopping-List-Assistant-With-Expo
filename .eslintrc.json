@@ -36,6 +36,7 @@
 		"es6": true
 	},
 	"rules": {
+		"react-native/no-raw-text": "off",
 		"import/no-extraneous-dependencies": [
 			"error",
 			{

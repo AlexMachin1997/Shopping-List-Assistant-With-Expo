@@ -6,14 +6,24 @@ import { TouchableRipple } from 'react-native-paper';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-export const HeaderIcon = ({ marginRight, marginLeft, action, icon }) => {
+export const HeaderIcon = ({
+	marginRight = 0,
+	marginLeft = 0,
+	action = null,
+	icon
+}: {
+	marginRight?: number;
+	marginLeft?: number;
+	action?: null | (() => void);
+	icon: typeof MaterialIcons;
+}) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { brightPink } = useTheme();
 
 	return (
 		<TouchableRipple
 			onPress={() => {
-				if (action) {
+				if (typeof action === 'function') {
 					action();
 				}
 			}}

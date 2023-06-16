@@ -56,7 +56,7 @@ const ShoppingList = () => {
 	const { darkBlue, lightBlue, white } = useTheme();
 
 	// Access the current routes url search parameters e.g. title (Used as the page title)
-	const { title, id } = useLocalSearchParams<{ title: string; id: string }>();
+	const { title = '', id = '' } = useLocalSearchParams<{ title: string; id: string }>();
 
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
@@ -439,9 +439,10 @@ const ShoppingList = () => {
 				accessabilityCancelHint='Cancel the delete shopping list action'
 				accessabilityOkHint='Delete the current shopping list, you will be redirected back to the homepage after.'
 			>
-				<Text size='19px'>
-					Looks like you want to delete the shopping list. Would you like to proceed?
-				</Text>
+				<Text
+					size={19}
+					text='Looks like you want to delete the shopping list. Would you like to proceed?'
+				/>
 			</Modal>
 
 			<ScrollView
@@ -468,11 +469,11 @@ const ShoppingList = () => {
 						(item) =>
 							(
 								<ShoppingListCard
-									key={item.id}
-									toggle={() => toggleComplete(item?.id ?? null)}
+									key={item?.id ?? ''}
+									toggle={() => toggleComplete(item?.id)}
 									isComplete={item?.completed ?? false}
 									name={item?.name ?? 'N/A'}
-									deleteAction={() => deleteItem(item?.id ?? null)}
+									deleteAction={() => deleteItem(item?.id)}
 									isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 									shoppingListTheme={shoppingList?.shoppingListTheme ?? 'blue'}
 									disabled={shoppingListMutateStatus === 'loading'}
@@ -495,47 +496,47 @@ const ShoppingList = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size='16px'>
-					{snackBarState.content}
-				</Text>
+				<Text colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 
-			{snackBarState.visible === false && (
-				<ActionButtons
-					actions={[
-						{
-							icon: 'rename-box',
-							label: 'Rename list',
-							onPress: () => {
-								setIsRenameShoppingListModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Rename modal',
-							size: 'medium'
+			<ActionButtons
+				actions={[
+					{
+						icon: 'rename-box',
+						label: 'Rename list',
+						onPress: () => {
+							setIsRenameShoppingListModalVisible(true);
 						},
-						{
-							icon: 'delete',
-							label: 'Delete list',
-							onPress: () => {
-								setIsDeleteShoppingListModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Delete the shopping list',
-							size: 'medium'
+						color: 'grey',
+						accessibilityLabel: 'Rename modal',
+						labelTextColor: 'white',
+						size: 'medium'
+					},
+					{
+						icon: 'delete',
+						label: 'Delete list',
+						onPress: () => {
+							setIsDeleteShoppingListModalVisible(true);
 						},
-						{
-							icon: 'plus-circle',
-							label: 'Add item',
-							onPress: () => {
-								setIsAddItemsModalVisible(true);
-							},
-							color: 'grey',
-							accessibilityLabel: 'Add an item to the shopping list',
-							size: 'medium'
-						}
-					]}
-				/>
-			)}
+						color: 'grey',
+						accessibilityLabel: 'Delete the shopping list',
+						labelTextColor: 'white',
+						size: 'medium'
+					},
+					{
+						icon: 'plus-circle',
+						label: 'Add item',
+						onPress: () => {
+							setIsAddItemsModalVisible(true);
+						},
+						color: 'grey',
+						accessibilityLabel: 'Add an item to the shopping list',
+						labelTextColor: 'white',
+						size: 'medium'
+					}
+				]}
+				visible={snackBarState.visible === false}
+			/>
 		</Portal.Host>
 	);
 };

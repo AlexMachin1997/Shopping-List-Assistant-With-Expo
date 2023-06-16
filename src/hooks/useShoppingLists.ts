@@ -16,7 +16,7 @@ type ShoppingListsMutationVariables = {
 type UseShoppingListsCallbacks = {
 	data?: ShoppingLists;
 	variables: ShoppingListsMutationVariables;
-	context: { oldShoppingLists: ShoppingLists };
+	context?: { oldShoppingLists?: ShoppingLists } | null;
 	error?: unknown;
 };
 

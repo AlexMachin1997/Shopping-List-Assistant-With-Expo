@@ -14,7 +14,7 @@ import DrawerLink from './DrawerLink';
 import { useProfile } from '../../../hooks';
 import { ProfileTheme } from '../../../../types/profile';
 
-export const NavigationDrawer = () => {
+const NavigationDrawer = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
 
@@ -27,12 +27,13 @@ export const NavigationDrawer = () => {
 			contentContainerStyle={{
 				backgroundColor:
 					(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? darkBlue : lightBlue,
-				flex: 1
+				flex: 1,
+				padding: 15
 			}}
 		>
 			<Section
-				paddingTop='50px'
-				paddingBottom='50px'
+				paddingTop={100}
+				paddingBottom={50}
 				justifyContent='center'
 				alignItems='center'
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
@@ -41,7 +42,7 @@ export const NavigationDrawer = () => {
 			</Section>
 
 			<Section
-				paddingBottom='40px'
+				paddingBottom={20}
 				justifyContent='flex-start'
 				alignItems='flex-start'
 				flexWrap='wrap'
@@ -57,7 +58,7 @@ export const NavigationDrawer = () => {
 			</Section>
 
 			<Section
-				paddingBottom='40px'
+				paddingBottom={20}
 				justifyContent='flex-start'
 				alignItems='flex-start'
 				flexWrap='wrap'
@@ -71,6 +72,24 @@ export const NavigationDrawer = () => {
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				/>
 			</Section>
+
+			<Section
+				paddingBottom={20}
+				justifyContent='flex-start'
+				alignItems='flex-start'
+				flexWrap='wrap'
+				flexGrow={0}
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+			>
+				<DrawerLink
+					href='(tabs)/StoreTracker'
+					icon='gps-fixed'
+					text='Store Tracking'
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+				/>
+			</Section>
 		</ScrollView>
 	);
 };
+
+export default NavigationDrawer;

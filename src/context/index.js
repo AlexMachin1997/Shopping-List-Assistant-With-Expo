@@ -1,1 +1,0 @@
-export { UserProfileProvider } from './UserProfileContext';

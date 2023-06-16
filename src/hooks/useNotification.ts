@@ -93,7 +93,7 @@ const useNotification = () => {
 
 				// Not sure why this is needed.....
 				const requestedToken = await Notifications.getExpoPushTokenAsync({
-					projectId: Constants.manifest.projectId
+					projectId: Constants?.manifest?.projectId ?? ''
 				});
 
 				setExpoPushNotificationToken(requestedToken.data);
@@ -119,8 +119,13 @@ const useNotification = () => {
 		});
 
 		return () => {
-			Notifications.removeNotificationSubscription(notificationListener.current);
-			Notifications.removeNotificationSubscription(responseListener.current);
+			if (notificationListener.current !== null) {
+				Notifications.removeNotificationSubscription(notificationListener.current);
+			}
+
+			if (responseListener.current !== null) {
+				Notifications.removeNotificationSubscription(responseListener.current);
+			}
 		};
 	}, []);
 

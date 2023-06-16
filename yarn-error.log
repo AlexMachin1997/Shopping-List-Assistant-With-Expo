@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\alexm\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @types/styled-components/native
+  C:\Program Files\nodejs\node.exe C:\Users\alexm\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @babel/core @babel-eslint-parser @types/react eslint mage
 
 PATH: 
   C:\Python311\Scripts\;C:\Python311\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\alexm\AppData\Local\Microsoft\WindowsApps;C:\Users\alexm\AppData\Roaming\npm;C:\Users\alexm\AppData\Local\Programs\Microsoft VS Code\bin;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2fstyled-components/native: Request "https://registry.yarnpkg.com/@types%2fstyled-components/native" returned a 405
+  Error: https://registry.yarnpkg.com/@babel-eslint-parser: Request "https://registry.yarnpkg.com/@babel-eslint-parser" returned a 405
       at params.callback [as _callback] (C:\Users\alexm\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66154:18)
       at self.callback (C:\Users\alexm\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140890:22)
       at Request.emit (node:events:513:28)
@@ -36,8 +36,8 @@ npm manifest:
   		"ios": "expo start --ios",
   		"web": "expo start --web",
   		"eject": "expo eject",
-  		"lint": "eslint --fix app/**/*.{js,jsx,ts,tsx} src/**/*.{js,jsx,ts,tsx}",
-  		"format": "prettier --write ./app/**/*.{js,jsx,ts,tsx} ./src/**/*.{js,jsx,ts,tsx}",
+  		"lint": "eslint --fix app/**/*.{ts,tsx} src/**/*.{ts,tsx}",
+  		"format": "prettier --write ./app/**/*.{ts,tsx} ./src/**/*.{ts,tsx}",
   		"circular-dependency-check": "madge --circular ./app/**/**/*.{jsx,js,ts,tsx} ./src/**/**/*.{jsx,js,ts,tsx}"
   	},
   	"dependencies": {
@@ -49,6 +49,7 @@ npm manifest:
   		"@react-navigation/stack": "^6.3.16",
   		"@tanstack/react-query": "^4.29.7",
   		"@total-typescript/ts-reset": "^0.4.2",
+  		"@types/lodash": "^4.14.195",
   		"@types/react-native-onboarding-swiper": "^1.1.4",
   		"@types/shortid": "^0.0.29",
   		"@types/styled-components": "^5.1.26",
@@ -93,6 +94,7 @@ npm manifest:
   		"@babel/plugin-proposal-export-namespace-from": "^7.18.9",
   		"@tanstack/eslint-plugin-query": "^4.29.9",
   		"@types/react": "~18.0.27",
+  		"@types/styled-components-react-native": "^5.2.1",
   		"@typescript-eslint/eslint-plugin": "^5.59.9",
   		"eslint": "^8.41.0",
   		"eslint-config-airbnb": "^18.2.0",
@@ -2449,6 +2451,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
     integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
   
+  "@types/lodash@^4.14.195":
+    version "4.14.195"
+    resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.195.tgz#bafc975b252eb6cea78882ce8a7b6bf22a6de632"
+    integrity sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg==
+  
   "@types/node@*":
     version "18.14.1"
     resolved "https://registry.yarnpkg.com/@types/node/-/node-18.14.1.tgz#90dad8476f1e42797c49d6f8b69aaf9f876fc69f"
@@ -2478,6 +2485,13 @@ Lockfile:
     integrity sha512-/eEjr04Zqo7mTMszuSdrLx90+j5nWhDMMOgtnKZfAYyV3RwmlpSb7F17ilmMMxZWJY81n/JZ4e6wdhMJFpjrCg==
     dependencies:
       "@react-native/virtualized-lists" "^0.72.4"
+      "@types/react" "*"
+  
+  "@types/react-native@^0.70":
+    version "0.70.14"
+    resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.70.14.tgz#8619b8c94296f6456c5362d74a3d1b4fad3f54ab"
+    integrity sha512-Kwc+BYBrnDqvacNxKp1UtcZJnJJnTih2NYmi/ieAKlHdxEPN6sYMwmIwgHdoLHggvml6bf3DYRaH2jt+gzaLjw==
+    dependencies:
       "@types/react" "*"
   
   "@types/react@*":
@@ -2518,7 +2532,16 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.1.tgz#20f18294f797f2209b5f65c8e3b5c8e8261d127c"
     integrity sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==
   
-  "@types/styled-components@^5.1.26":
+  "@types/styled-components-react-native@^5.2.1":
+    version "5.2.1"
+    resolved "https://registry.yarnpkg.com/@types/styled-components-react-native/-/styled-components-react-native-5.2.1.tgz#08cba1f638c7a3a0b7017954d6e59baef36fb022"
+    integrity sha512-XI/SWDSLSe7IjZXA9jS0vv4WPpV2B+nQhefUqk00usNHxhErlzPtTGdhjMZgrH0uYz5R0hLLIandhmhDTLkKBg==
+    dependencies:
+      "@types/react" "*"
+      "@types/react-native" "^0.70"
+      "@types/styled-components" "*"
+  
+  "@types/styled-components@*", "@types/styled-components@^5.1.26":
     version "5.1.26"
     resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.26.tgz#5627e6812ee96d755028a98dae61d28e57c233af"
     integrity sha512-KuKJ9Z6xb93uJiIyxo/+ksS7yLjS1KzG6iv5i78dhVg/X3u5t1H7juRWqVmodIdz6wGVaIApo1u01kmFRdJHVw==

@@ -2,6 +2,7 @@ declare type ShoppingListItem = {
 	id: string;
 	completed: boolean;
 	name: string;
+	createdOn: Date;
 } | null;
 
 declare type ShoppingList = {
@@ -10,6 +11,6 @@ declare type ShoppingList = {
 	shoppingListTheme: string;
 	createdOn: Date;
 	items: ShoppingListItem[];
-};
+} | null;
 
-declare type ShoppingLists = ShoppingList[];
+declare type ShoppingLists = ShoppingList[] | null;

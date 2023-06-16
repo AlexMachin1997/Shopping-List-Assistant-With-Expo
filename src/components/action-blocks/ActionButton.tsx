@@ -1,6 +1,5 @@
 // Core react dependencies
 import { View } from 'react-native';
-import PropTypes from 'prop-types';
 
 // react-native-paper dependencies
 import { FAB } from 'react-native-paper';
@@ -8,7 +7,13 @@ import { FAB } from 'react-native-paper';
 // Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-const ActionButton = ({ icon, action, colour }) => {
+type Props = {
+	icon: string;
+	action?: null | (() => void);
+	colour: string;
+};
+
+const ActionButton = ({ icon, action = null, colour }: Props) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { brightPink } = useTheme();
 
@@ -23,10 +28,10 @@ const ActionButton = ({ icon, action, colour }) => {
 		>
 			<FAB
 				style={{ backgroundColor: brightPink }}
-				large
+				size='medium'
 				icon={icon}
 				onPress={() => {
-					if (action) {
+					if (typeof action === 'function') {
 						action();
 					}
 				}}
@@ -36,16 +41,16 @@ const ActionButton = ({ icon, action, colour }) => {
 	);
 };
 
-ActionButton.defaultProps = {
-	icon: 'add',
-	colour: 'white',
-	action: null
-};
+// ActionButton.defaultProps = {
+// 	icon: 'add',
+// 	colour: 'white',
+// 	action: null
+// };
 
-ActionButton.propTypes = {
-	icon: PropTypes.string,
-	action: PropTypes.func,
-	colour: PropTypes.string
-};
+// ActionButton.propTypes = {
+// 	icon: PropTypes.string,
+// 	action: PropTypes.func,
+// 	colour: PropTypes.string
+// };
 
 export default ActionButton;

@@ -1,7 +1,9 @@
 import { Profile, ProfileTheme } from '../../../types/profile';
 
 class ProfileService {
-	static CompleteSetup({ profile }: { profile: Profile }) {
+	static CompleteSetup({ profile = null }: { profile: Profile }) {
+		if (profile === null) throw Error('Profile is required');
+
 		return {
 			...profile,
 			hasCompletedSetup: true
@@ -9,6 +11,8 @@ class ProfileService {
 	}
 
 	static ChangeTheme({ profile = null }: { profile: Profile }) {
+		if (profile === null) throw Error('Profile is required');
+
 		return {
 			...profile,
 			theme: profile.theme === ProfileTheme.DARK ? ProfileTheme.LIGHT : ProfileTheme.DARK

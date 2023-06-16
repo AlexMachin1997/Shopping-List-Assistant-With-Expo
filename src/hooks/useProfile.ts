@@ -16,8 +16,13 @@ type ProfileMutationVariables =
 type UseProfileCallbacks = {
 	data?: Profile;
 	variables: ProfileMutationVariables;
-	context: { newProfile: Profile; oldProfile: Profile };
+	context?: { newProfile: Profile; oldProfile: Profile };
 	error?: unknown;
+};
+
+const DEFAULT_PROFILE = {
+	hasCompletedSetup: false,
+	theme: ProfileTheme.LIGHT
 };
 
 const useProfile = ({
@@ -40,10 +45,7 @@ const useProfile = ({
 		queryKey,
 		queryFn: async () => {
 			// The profile object (Contains the default values e.g. theme 'light')
-			let profileObject: Profile = {
-				theme: ProfileTheme.LIGHT,
-				hasCompletedSetup: false
-			};
+			let profileObject = DEFAULT_PROFILE;
 
 			// Attempt to decrypt the users persisted profile (Can throw an error or return the value in string format)
 			try {
@@ -78,10 +80,16 @@ const useProfile = ({
 		mutationFn: async (variables: ProfileMutationVariables) => {
 			try {
 				// Store a reference to the old set of data
-				const previousProfile = queryClient.getQueryData<Profile>(queryKey, { type: 'active' });
+				const previousProfile = queryClient.getQueryData<Profile>(queryKey, { type: 'active' }) ?? {
+					hasCompletedSetup: false,
+					theme: ProfileTheme.LIGHT
+				};
 
 				// Store a reference to the "expected" cache data (The shape must match exactly)
-				const incomingProfile = { ...previousProfile, ...(variables?.payload?.profile ?? {}) };
+				const incomingProfile = {
+					...previousProfile,
+					...variables.payload.profile
+				};
 
 				// Attempt to override the current profile data (combines the current active query and )
 				await AsyncStorage.setItemAsync(queryKey[0].key, JSON.stringify(incomingProfile));
@@ -100,7 +108,7 @@ const useProfile = ({
 			const incomingProfile = variables.payload.profile;
 
 			// Store a reference to the old set of data
-			const previousProfile = queryClient.getQueryData<Profile>(queryKey);
+			const previousProfile = queryClient?.getQueryData<Profile>(queryKey) ?? DEFAULT_PROFILE;
 
 			// Update the query key data with the new profile object (Certain properties are updated above)
 			queryClient.setQueryData(queryKey, incomingProfile);
@@ -108,7 +116,7 @@ const useProfile = ({
 			// After the mutation function has been complete pass some data to the context
 			return { newProfile: incomingProfile, oldProfile: previousProfile };
 		},
-		onSuccess: (data, variables: ProfileMutationVariables, context) => {
+		onSuccess: (data, variables, context) => {
 			// If there is an onSuccess callback provided pass back any necessary data ie everything the mutation exposes
 			if (typeof onSuccess === 'function') {
 				onSuccess({ data, variables, context });
@@ -117,16 +125,18 @@ const useProfile = ({
 		onError: async (error, variables, context) => {
 			// Update the current active queries data with the old data
 			// NOTE: A delay is added to prevent the transition being too quick
-			setTimeout(() => {
-				queryClient.setQueryData(queryKey, context.oldProfile);
-			}, 1000);
+			if (context !== undefined) {
+				setTimeout(() => {
+					queryClient.setQueryData(queryKey, context.oldProfile);
+				}, 1000);
+			}
 
 			// If there is an onError callback provided pass back any necessary data ie everything the mutation exposes
 			if (onError !== null) {
 				onError({ error, data: null, variables, context });
 			}
 		},
-		onSettled: async (data, error, variables: ProfileMutationVariables, context) => {
+		onSettled: async (data, error, variables, context) => {
 			// Invalidate the "shopping list" cache
 			await queryClient.invalidateQueries({ queryKey });
 

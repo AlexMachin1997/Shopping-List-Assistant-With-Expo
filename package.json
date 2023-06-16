@@ -7,8 +7,8 @@
 		"ios": "expo start --ios",
 		"web": "expo start --web",
 		"eject": "expo eject",
-		"lint": "eslint --fix app/**/*.{js,jsx,ts,tsx} src/**/*.{js,jsx,ts,tsx}",
-		"format": "prettier --write ./app/**/*.{js,jsx,ts,tsx} ./src/**/*.{js,jsx,ts,tsx}",
+		"lint": "eslint --fix app/**/*.{ts,tsx} src/**/*.{ts,tsx}",
+		"format": "prettier --write ./app/**/*.{ts,tsx} ./src/**/*.{ts,tsx}",
 		"circular-dependency-check": "madge --circular ./app/**/**/*.{jsx,js,ts,tsx} ./src/**/**/*.{jsx,js,ts,tsx}"
 	},
 	"dependencies": {
@@ -65,6 +65,7 @@
 		"@babel/plugin-proposal-export-namespace-from": "^7.18.9",
 		"@tanstack/eslint-plugin-query": "^4.29.9",
 		"@types/react": "~18.0.27",
+		"@types/styled-components-react-native": "^5.2.1",
 		"@typescript-eslint/eslint-plugin": "^5.59.9",
 		"eslint": "^8.41.0",
 		"eslint-config-airbnb": "^18.2.0",
