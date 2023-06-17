@@ -1,21 +1,22 @@
-import PropTypes from 'prop-types';
-
+// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
+// react-native-paper dependencies
 import { TouchableRipple } from 'react-native-paper';
 
-import { MaterialIcons } from '@expo/vector-icons';
+// Expo dependencies
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-export const HeaderIcon = ({
+const HeaderIcon = ({
 	marginRight = 0,
 	marginLeft = 0,
 	action = null,
-	icon
+	icon = 'arrow-back'
 }: {
 	marginRight?: number;
 	marginLeft?: number;
 	action?: null | (() => void);
-	icon: typeof MaterialIcons;
+	icon?: 'settings' | 'menu' | 'arrow-back';
 }) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { brightPink } = useTheme();
@@ -38,16 +39,4 @@ export const HeaderIcon = ({
 	);
 };
 
-HeaderIcon.defaultProps = {
-	marginRight: 0,
-	marginLeft: 0,
-	action: null,
-	icon: 'menu'
-};
-
-HeaderIcon.propTypes = {
-	marginLeft: PropTypes.number,
-	marginRight: PropTypes.number,
-	action: PropTypes.func,
-	icon: PropTypes.string
-};
+export default HeaderIcon;

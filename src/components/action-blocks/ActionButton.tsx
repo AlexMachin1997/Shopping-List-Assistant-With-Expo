@@ -41,16 +41,4 @@ const ActionButton = ({ icon, action = null, colour }: Props) => {
 	);
 };
 
-// ActionButton.defaultProps = {
-// 	icon: 'add',
-// 	colour: 'white',
-// 	action: null
-// };
-
-// ActionButton.propTypes = {
-// 	icon: PropTypes.string,
-// 	action: PropTypes.func,
-// 	colour: PropTypes.string
-// };
-
 export default ActionButton;

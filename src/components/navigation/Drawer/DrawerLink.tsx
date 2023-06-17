@@ -1,8 +1,7 @@
 // Core react dependencies
 import { TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 
-//
+// Expo dependencies
 import { Link } from 'expo-router';
 
 // Expo dependencies
@@ -48,19 +47,6 @@ const DrawerLink = ({
 			</Link>
 		</Section>
 	);
-};
-
-DrawerLink.defaultProps = {
-	icon: 'help-outline',
-	text: 'Awesome link',
-	isDark: false
-};
-
-DrawerLink.propTypes = {
-	href: PropTypes.string.isRequired,
-	icon: PropTypes.string,
-	text: PropTypes.string,
-	isDark: PropTypes.bool
 };
 
 export default DrawerLink;

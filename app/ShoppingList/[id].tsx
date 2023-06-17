@@ -12,7 +12,7 @@ import { useTheme } from 'styled-components';
 import { TextInput, Snackbar, Portal } from 'react-native-paper';
 
 // Application components
-import { Empty, Loading } from '../../src/components/screen-states';
+import { Loading, EmptyOrError } from '../../src/components/screen-states';
 import { ActionButtons } from '../../src/components/action-blocks';
 import { ShoppingListCard } from '../../src/components/cards';
 import { Text, Modal } from '../../src/components/core';
@@ -457,9 +457,8 @@ const ShoppingList = () => {
 				refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefetch} />}
 			>
 				{(shoppingList?.items?.length ?? 0) < 1 ? (
-					<Empty
+					<EmptyOrError
 						image={EmptyIcon}
-						label='No shopping list items exist'
 						heading='No shopping list items exist'
 						overview='Why not try adding one ?'
 						isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}

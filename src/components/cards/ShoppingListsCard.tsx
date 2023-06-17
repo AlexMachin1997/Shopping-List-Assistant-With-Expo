@@ -1,6 +1,3 @@
-// Core react dependencies
-import PropTypes from 'prop-types';
-
 import truncate from 'lodash/truncate';
 
 // react-native-paper dependencies
@@ -47,17 +44,5 @@ const ShoppingListsCard = ({ action, background, title }: Props) => (
 		</Section>
 	</TouchableRipple>
 );
-
-ShoppingListsCard.defaultProps = {
-	background: 'blue',
-	title: 'Please provide a title',
-	action: null
-};
-
-ShoppingListsCard.propTypes = {
-	action: PropTypes.func,
-	background: PropTypes.string,
-	title: PropTypes.string
-};
 
 export default ShoppingListsCard;

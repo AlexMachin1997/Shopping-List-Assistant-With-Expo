@@ -1,6 +1,6 @@
 // Core react dependencies
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 
 // Expo dependencies
 import * as Location from 'expo-location';
@@ -10,14 +10,18 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { useFocusEffect } from 'expo-router';
 
 // Map component data
+import { useTheme } from 'styled-components';
 import Locations from '../../assets/supermarkets.json';
 import NightMode from '../../assets/GoogleMapsNight.json';
 
+// Application assets
+import ItemTrackingImage from '../../assets/ItemTracking.png';
+
 // Application components
-import { Loading } from '../../src/components/screen-states';
+import { EmptyOrError, Loading } from '../../src/components/screen-states';
 
 // Application hooks
-import { useNotification, useProfile } from '../../src/hooks';
+import { useNotification, useProfile, usePullRefetch } from '../../src/hooks';
 import { ProfileTheme } from '../../types/profile';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
@@ -47,9 +51,13 @@ const StoreTracker = () => {
 	// Loading states for various UI elements
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [isMapReady, setIsMapReady] = React.useState(false);
+	const [hasLocationEnabled, setHasLocationEnabled] = React.useState(false);
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const { profile } = useProfile();
+
+	// Access the styled-components theme via their internal ThemeContext
+	const { darkBlue, lightBlue } = useTheme();
 
 	// Get's or requests the current permission/s related to the locations foreground functionality
 	const [foregroundPermissionStatus] = Location.useForegroundPermissions({
@@ -59,6 +67,27 @@ const StoreTracker = () => {
 
 	// Handles the notification related functionality e.g. requesting access, checking the current status
 	const { localNotificationsStatus, generateLocalNotification } = useNotification();
+
+	//
+	const { handleRefetch, isRefreshing } = usePullRefetch(async () => {
+		const result = await Location.hasServicesEnabledAsync();
+		setHasLocationEnabled(result);
+	});
+
+	// When the screen focusses check to see if the user locations is enabled, this is an effect as well the api is async
+	useFocusEffect(
+		React.useCallback(() => {
+			const hasLocationServicesEnabled = async () => {
+				const result = await Location.hasServicesEnabledAsync();
+				setHasLocationEnabled(result);
+			};
+
+			hasLocationServicesEnabled();
+		}, [])
+	);
+
+	// A little effect which runs when the screen un-focuses, the next time the user visits this tab without location the location won't be requested
+	useFocusEffect(React.useCallback(() => () => setHasLocationEnabled(false), []));
 
 	// Watches the users location and updates
 	// NOTE: This will perform on initial load of the screen and when it re-focuses
@@ -82,13 +111,13 @@ const StoreTracker = () => {
 			};
 
 			// Only start listening for the location when the user has granted foreground permission
-			if (foregroundPermissionStatus?.granted ?? false) {
+			if ((foregroundPermissionStatus?.granted ?? false) && hasLocationEnabled === true) {
 				watchLocation();
 			}
 
 			// Cleanup the watchPositionAsync when the screen unmounts (Stopped listening for the users location)
 			return () => watchPositionAsyncRef?.current?.remove() ?? null;
-		}, [foregroundPermissionStatus?.granted])
+		}, [foregroundPermissionStatus?.granted, hasLocationEnabled])
 	);
 
 	// Whilst the users location is being watched check if they are near a shop
@@ -106,7 +135,7 @@ const StoreTracker = () => {
 				// Check the supermarkets and users latitude and longitude
 				// FLAW: Whilst the code runs and provides the necessary outputs it won't render the map when there are more than 190 marks.
 				// SOLUTION: Add a clustering engine, allows the markers to gradually be spawned in. Unable to do it at the moment as Im short on time.
-				filteredCopyOfSuperMarkets.map((data) => {
+				filteredCopyOfSuperMarkets.forEach((data) => {
 					if (locationState.latitude === data.Lat && locationState.longitude === data.Lng) {
 						generateLocalNotification(
 							{ vibrationEnabled: true, vibrationLength: 1000 },
@@ -116,8 +145,6 @@ const StoreTracker = () => {
 							}
 						);
 					}
-
-					return data;
 				});
 			};
 
@@ -142,6 +169,29 @@ const StoreTracker = () => {
 	// While the page is loading, setting the latitude is false (0) or the longitude is false (0)
 	if (isLoading === true) {
 		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
+	}
+
+	// After the screen has loaded if the location services aren't enabled....
+	if (hasLocationEnabled === false) {
+		return (
+			<ScrollView
+				showsHorizontalScrollIndicator={false}
+				showsVerticalScrollIndicator={false}
+				contentContainerStyle={{
+					flexGrow: 1,
+					backgroundColor:
+						(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? darkBlue : lightBlue
+				}}
+				refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefetch} />}
+			>
+				<EmptyOrError
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+					image={ItemTrackingImage}
+					heading='Location tracking error'
+					overview="Location services aren't enabled, please enable them to view the map"
+				/>
+			</ScrollView>
+		);
 	}
 
 	return (

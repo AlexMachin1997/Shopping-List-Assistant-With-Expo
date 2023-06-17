@@ -15,7 +15,7 @@ import { useTheme } from 'styled-components';
 import EmptyIcon from '../../assets/Shocked.png';
 
 // Application components
-import { Empty, Loading } from '../../src/components/screen-states';
+import { EmptyOrError, Loading } from '../../src/components/screen-states';
 import { ActionButton } from '../../src/components/action-blocks';
 import { Modal, Text } from '../../src/components/core';
 import { ShoppingListsCard } from '../../src/components/cards';
@@ -178,9 +178,8 @@ const ShoppingLists = () => {
 				refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefetch} />}
 			>
 				{(shoppingLists?.length ?? 0) < 1 ? (
-					<Empty
+					<EmptyOrError
 						image={EmptyIcon}
-						label='No shopping lists exist'
 						heading='No shopping lists exist'
 						overview='Why not try adding one ?'
 						isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}

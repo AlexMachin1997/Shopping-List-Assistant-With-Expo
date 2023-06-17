@@ -14,9 +14,6 @@ export default ({ config: staticConfigFromAppJSONFile }: ConfigContext): ExpoCon
 
 	extra: {
 		// Spread the existing config defined in the app.json file
-		...(staticConfigFromAppJSONFile?.extra ?? {}),
-
-		// Append the apiUrl variable with a variable from the .env file
-		apiUrl: process?.env?.API_URL ?? ''
+		...(staticConfigFromAppJSONFile?.extra ?? {})
 	}
 });

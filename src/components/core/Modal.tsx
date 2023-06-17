@@ -1,6 +1,3 @@
-// Core react dependencies
-import PropTypes from 'prop-types';
-
 // react-native-paper dependencies
 import { Dialog, Portal } from 'react-native-paper';
 
@@ -113,29 +110,6 @@ const Modal = ({
 			</Dialog>
 		</Portal>
 	);
-};
-
-Modal.defaultProps = {
-	visible: false,
-	title: 'Insert title',
-	submitDisabled: false,
-	isDark: false,
-	onDismiss: null,
-	onCancel: null,
-	onOk: null
-};
-
-Modal.propTypes = {
-	visible: PropTypes.bool,
-	onDismiss: PropTypes.func,
-	title: PropTypes.string,
-	children: PropTypes.oneOfType([PropTypes.node, PropTypes.object, PropTypes.object]).isRequired,
-	onCancel: PropTypes.func,
-	onOk: PropTypes.func,
-	submitDisabled: PropTypes.bool,
-	isDark: PropTypes.bool,
-	accessabilityOkHint: PropTypes.string.isRequired,
-	accessabilityCancelHint: PropTypes.string.isRequired
 };
 
 export default Modal;

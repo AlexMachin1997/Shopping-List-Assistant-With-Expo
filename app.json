@@ -4,7 +4,7 @@
 		"slug": "shopping-list-app-rewrite",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"scheme": "shopping-list-app-rewrite",
+		"scheme": "shopping-list-app",
 		"jsEngine": "hermes",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -24,7 +24,9 @@
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
-			}
+			},
+			"package": "com.yourcompany.yourappname",
+			"versionCode": 1
 		},
 		"web": {
 			"favicon": "./assets/favicon.png",

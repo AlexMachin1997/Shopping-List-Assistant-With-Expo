@@ -1,5 +1,4 @@
-// Core react dependencies
-import PropTypes from 'prop-types';
+import type { ImageSourcePropType } from 'react-native';
 
 // Styled-components dependencies
 import { useTheme } from 'styled-components';
@@ -7,7 +6,17 @@ import { useTheme } from 'styled-components';
 // Application components
 import { Section, Text, Image } from '../core';
 
-const Empty = ({ isDark, image, label, heading, overview }) => {
+const EmptyOrError = ({
+	isDark,
+	image,
+	heading,
+	overview
+}: {
+	isDark: boolean;
+	image: ImageSourcePropType;
+	heading: string;
+	overview: string;
+}) => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue } = useTheme();
 
@@ -17,7 +26,6 @@ const Empty = ({ isDark, image, label, heading, overview }) => {
 				<Image
 					source={image}
 					accessible
-					accessibleLabel={label}
 					progressiveRenderingEnabled
 					width={150}
 					height={150}
@@ -36,20 +44,4 @@ const Empty = ({ isDark, image, label, heading, overview }) => {
 	);
 };
 
-Empty.defaultProps = {
-	heading: 'Please insert a heading',
-	overview: 'Please insert an overview',
-	isDark: false,
-	label: '',
-	image: {}
-};
-
-Empty.propTypes = {
-	image: PropTypes.oneOfType([PropTypes.node, PropTypes.object]),
-	label: PropTypes.string,
-	heading: PropTypes.string,
-	overview: PropTypes.string,
-	isDark: PropTypes.bool
-};
-
-export default Empty;
+export default EmptyOrError;
