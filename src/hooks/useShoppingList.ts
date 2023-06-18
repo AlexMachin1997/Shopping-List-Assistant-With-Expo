@@ -21,12 +21,6 @@ type UseShoppingListMutationVariables = {
 	};
 };
 
-// oldShoppingLists: previousShoppingLists ?? [],
-// oldShoppingList: previousShoppingList ?? null,
-
-// newShoppingLists: variables?.payload?.shoppingLists ?? [],
-// newShoppingList: variables?.payload?.shoppingList ?? []
-
 type UseShoppingListCallbacks = {
 	data?: ShoppingLists;
 	variables: UseShoppingListMutationVariables;
