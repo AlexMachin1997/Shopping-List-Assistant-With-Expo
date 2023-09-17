@@ -20,7 +20,7 @@ import { NavigationDrawer } from '../src/components/navigation/Drawer';
 import { Drawer } from '../src/layouts';
 
 // Application contexts
-import { UserProfileProvider } from '../src/context';
+import { AuthenticationProvider } from '../src/context';
 import { StyledComponentsTheme } from '../src/constants/Themes';
 
 // When the app focusses refetch all the queries
@@ -58,7 +58,7 @@ const IndexLayout = () => {
 			<QueryClientProvider client={queryClient}>
 				<ThemeProvider theme={StyledComponentsTheme}>
 					<PaperProvider theme={ReactNativePaperTheme}>
-						<UserProfileProvider>
+						<AuthenticationProvider>
 							{/* Wrap the application in a global drawer */}
 							<Drawer
 								drawerContent={() => <NavigationDrawer />}
@@ -83,7 +83,7 @@ const IndexLayout = () => {
 									})}
 								/>
 							</Drawer>
-						</UserProfileProvider>
+						</AuthenticationProvider>
 					</PaperProvider>
 				</ThemeProvider>
 			</QueryClientProvider>

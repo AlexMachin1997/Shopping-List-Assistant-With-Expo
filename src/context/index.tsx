@@ -1,1 +1,1 @@
-export { default as UserProfileProvider } from './UserProfileContext';
+export { default as AuthenticationProvider } from './AuthenticationProvider';

@@ -10,7 +10,7 @@ import { Loading } from '../components/screen-states';
 // Application hooks
 import useProfile from '../hooks/useProfile';
 
-const UserProfileProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthenticationProvider = ({ children }: { children: React.ReactNode }) => {
 	const hasPerformedInitialRedirect = React.useRef(false);
 
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
@@ -49,4 +49,4 @@ const UserProfileProvider = ({ children }: { children: React.ReactNode }) => {
 	return <>{children}</>;
 };
 
-export default UserProfileProvider;
+export default AuthenticationProvider;
