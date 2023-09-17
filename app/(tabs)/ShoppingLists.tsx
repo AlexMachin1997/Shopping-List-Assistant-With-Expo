@@ -31,7 +31,7 @@ import {
 
 // Application services
 import ShoppingListService from '../../src/components/services/ShoppingListService';
-import { ProfileTheme } from '../../types/profile';
+import { ProfileTheme } from '../../types/Profile';
 
 const ShoppingLists = () => {
 	// Controls the shopping list state

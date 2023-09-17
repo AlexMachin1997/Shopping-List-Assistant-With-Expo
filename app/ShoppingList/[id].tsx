@@ -32,7 +32,7 @@ import {
 
 // Application Services
 import ShoppingListService from '../../src/components/services/ShoppingListService';
-import { ProfileTheme } from '../../types/profile';
+import { ProfileTheme } from '../../types/Profile';
 
 const ShoppingList = () => {
 	// Controls the add item modal visibility

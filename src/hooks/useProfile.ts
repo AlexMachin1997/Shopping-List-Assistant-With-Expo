@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Expo modules
 import * as AsyncStorage from 'expo-secure-store';
-import { Profile, ProfileTheme } from '../../types/profile';
+import { Profile, ProfileTheme } from '../../types/Profile';
 
 type ProfileMutationVariables =
 	| { type: 'COMPLETE_ONBOARDING'; payload: { profile: Profile } }

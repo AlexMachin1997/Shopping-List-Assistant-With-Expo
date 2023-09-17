@@ -22,7 +22,7 @@ import { EmptyOrError, Loading } from '../../src/components/screen-states';
 
 // Application hooks
 import { useNotification, useProfile, usePullRefetch } from '../../src/hooks';
-import { ProfileTheme } from '../../types/profile';
+import { ProfileTheme } from '../../types/Profile';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({

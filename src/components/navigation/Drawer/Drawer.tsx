@@ -12,7 +12,7 @@ import DrawerLink from './DrawerLink';
 
 // Application hooks
 import { useProfile } from '../../../hooks';
-import { ProfileTheme } from '../../../../types/profile';
+import { ProfileTheme } from '../../../../types/Profile';
 
 const NavigationDrawer = () => {
 	// Access the styled-components theme via their internal ThemeContext

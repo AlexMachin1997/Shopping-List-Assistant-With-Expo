@@ -7,16 +7,17 @@ import * as AsyncStorage from 'expo-secure-store';
 
 // TanStack query dependencies
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { ShoppingList } from '../../types/ShoppingList';
 
 type ShoppingListsMutationVariables = {
 	type: 'CREATE_SHOPPING_LIST' | 'CLEAR_SHOPPING_LISTS';
-	payload: { shoppingLists: ShoppingLists };
+	payload: { shoppingLists: ShoppingList[] | null };
 };
 
 type UseShoppingListsCallbacks = {
-	data?: ShoppingLists;
+	data?: ShoppingList[];
 	variables: ShoppingListsMutationVariables;
-	context?: { oldShoppingLists?: ShoppingLists } | null;
+	context?: { oldShoppingLists?: ShoppingList[] } | null;
 	error?: unknown;
 };
 
@@ -36,7 +37,7 @@ const useShoppingLists = ({
 	const queryKey = React.useMemo(() => [{ key: 'shopping-lists', dependencies: null }], []);
 
 	// Handles fetching of the shopping lists
-	const query = useQuery<ShoppingLists>({
+	const query = useQuery<ShoppingList[]>({
 		queryKey,
 		queryFn: async () => {
 			// Attempt to decrypt the users persisted shopping lists (Can throw an error or return the value in string format)
@@ -45,11 +46,11 @@ const useShoppingLists = ({
 				const shoppingListsFromAsyncStorage = await AsyncStorage.getItemAsync(queryKey[0].key);
 
 				// Defaults to empty array (It'll be this when there is an error or if there)
-				let shoppingLists: ShoppingLists = [];
+				let shoppingLists: ShoppingList[] = [];
 
 				// If there is a shopping list in storage
 				if (shoppingListsFromAsyncStorage !== null) {
-					shoppingLists = JSON.parse(shoppingListsFromAsyncStorage) as ShoppingLists;
+					shoppingLists = JSON.parse(shoppingListsFromAsyncStorage) as ShoppingList[];
 				}
 
 				// Return the data to access it in the queries data
@@ -81,7 +82,7 @@ const useShoppingLists = ({
 			await queryClient.cancelQueries({ queryKey });
 
 			// Store a reference to the old set of "Shopping Lists" query entry
-			const previousShoppingLists = queryClient.getQueryData<ShoppingLists>(queryKey);
+			const previousShoppingLists = queryClient.getQueryData<ShoppingList[]>(queryKey);
 
 			// Update the current "Shopping Lists" query entry with the new incoming "Shopping Lists" data
 			queryClient.setQueryData(queryKey, () => variables?.payload?.shoppingLists ?? []);

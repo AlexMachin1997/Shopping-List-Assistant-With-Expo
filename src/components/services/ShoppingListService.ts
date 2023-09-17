@@ -1,15 +1,16 @@
 import shortid from 'shortid';
+import { ShoppingList, ShoppingListItem } from '../../../types/ShoppingList';
 
 class ShoppingListService {
 	static CreateShoppingList({
 		shoppingLists = null,
 		shoppingListName = null
 	}: {
-		shoppingLists: ShoppingLists | null;
+		shoppingLists: ShoppingList[] | null;
 		shoppingListName: string | null;
 	}): {
 		shoppingList?: ShoppingList;
-		shoppingLists?: ShoppingLists;
+		shoppingLists?: ShoppingList[];
 	} {
 		if (shoppingLists === null || shoppingListName === null) {
 			return {
@@ -44,7 +45,7 @@ class ShoppingListService {
 		shoppingList = null,
 		shoppingListName = null
 	}: {
-		shoppingLists?: null | ShoppingLists;
+		shoppingLists?: null | ShoppingList[];
 		shoppingList?: ShoppingList | null;
 		shoppingListName?: null | string;
 	}) {
@@ -183,7 +184,7 @@ class ShoppingListService {
 		shoppingListItemId = null
 	}: {
 		shoppingList?: ShoppingList | null;
-		shoppingLists?: ShoppingLists | null;
+		shoppingLists?: ShoppingList[] | null;
 		shoppingListItemId?: string | null;
 	}) {
 		if (shoppingList === null || shoppingLists === null || shoppingListItemId === null) {
@@ -233,7 +234,7 @@ class ShoppingListService {
 		shoppingListItemId = null
 	}: {
 		shoppingList?: ShoppingList;
-		shoppingLists?: ShoppingLists;
+		shoppingLists?: ShoppingList[] | null;
 		shoppingListItemId?: null | string;
 	}) {
 		if (shoppingList === null || shoppingListItemId === null || shoppingLists === null) {
@@ -275,7 +276,7 @@ class ShoppingListService {
 		shoppingList = null,
 		name = null
 	}: {
-		shoppingLists: ShoppingLists;
+		shoppingLists: ShoppingList[] | null;
 		shoppingList: ShoppingList;
 		name: string | null;
 	}) {
@@ -324,7 +325,7 @@ class ShoppingListService {
 		shoppingLists = null,
 		shoppingList = null
 	}: {
-		shoppingLists: ShoppingLists;
+		shoppingLists: ShoppingList[] | null;
 		shoppingList: ShoppingList;
 	}) {
 		if (shoppingLists === null || shoppingList === null) {

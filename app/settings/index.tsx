@@ -16,7 +16,7 @@ import { useProfile, useShoppingLists, useSnackBar } from '../../src/hooks';
 
 // Application services
 import ProfileService from '../../src/components/services/ProfileService';
-import { ProfileTheme } from '../../types/profile';
+import { ProfileTheme } from '../../types/Profile';
 
 const Settings = () => {
 	const [isDeleteShoppingListsModalVisible, setIsDeleteShoppingListsModalVisible] =

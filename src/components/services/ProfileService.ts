@@ -1,4 +1,4 @@
-import { Profile, ProfileTheme } from '../../../types/profile';
+import { Profile, ProfileTheme } from '../../../types/Profile';
 
 class ProfileService {
 	static CompleteSetup({ profile = null }: { profile: Profile }) {

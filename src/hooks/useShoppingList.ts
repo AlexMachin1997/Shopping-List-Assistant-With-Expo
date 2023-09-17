@@ -7,6 +7,7 @@ import * as AsyncStorage from 'expo-secure-store';
 
 // TanStack query modules
 import { QueryKey, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ShoppingList } from '../../types/ShoppingList';
 
 type UseShoppingListMutationVariables = {
 	type:
@@ -22,10 +23,10 @@ type UseShoppingListMutationVariables = {
 };
 
 type UseShoppingListCallbacks = {
-	data?: ShoppingLists;
+	data?: ShoppingList[];
 	variables: UseShoppingListMutationVariables;
 	context?: {
-		oldShoppingLists?: ShoppingLists | null;
+		oldShoppingLists?: ShoppingList[] | null;
 		oldShoppingList?: ShoppingList | null;
 	} | null;
 	error?: unknown;
@@ -75,7 +76,8 @@ const useShoppingList = ({
 				}
 
 				// Perform a fresh lookup of the "shopping lists" query data (Fetched via the client hook)
-				const shoppingLists = queryClient?.getQueryData<ShoppingLists>(shoppingListsQueryKey) ?? [];
+				const shoppingLists =
+					queryClient?.getQueryData<ShoppingList[]>(shoppingListsQueryKey) ?? [];
 
 				// Attempt to find the current shopping list from the current shopping lists query data
 				const shoppingListItem =
@@ -122,7 +124,7 @@ const useShoppingList = ({
 
 			// Store a reference to the old set of "Shopping Lists" query entry
 			const previousShoppingLists =
-				queryClient.getQueryData<ShoppingLists>(shoppingListsQueryKey) ?? null;
+				queryClient.getQueryData<ShoppingList[]>(shoppingListsQueryKey) ?? null;
 
 			// Store a reference to the old set of "Shopping List" query entry
 			const previousShoppingList = queryClient?.getQueryData<ShoppingList>(queryKey) ?? null;
