@@ -4,7 +4,7 @@ import truncate from 'lodash/truncate';
 import { useTheme } from 'styled-components';
 
 // Routing dependencies
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useRouter, useSearchParams } from 'expo-router';
 import { Stack } from '../../src/layouts';
 
 // Application components
@@ -17,7 +17,8 @@ const ShoppingListLayout = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue } = useTheme();
 
-	const { title } = useLocalSearchParams<{ title: string }>();
+	// Get the current page parameters
+	const { title } = useSearchParams<{ title: string }>();
 
 	return (
 		<Stack

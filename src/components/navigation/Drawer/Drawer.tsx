@@ -66,9 +66,9 @@ const NavigationDrawer = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
-					href='/settings'
-					icon='settings'
-					text='Settings'
+					href='(tabs)/StoreTracker'
+					icon='gps-fixed'
+					text='Store Tracking'
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				/>
 			</Section>
@@ -82,9 +82,9 @@ const NavigationDrawer = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
-					href='(tabs)/StoreTracker'
-					icon='gps-fixed'
-					text='Store Tracking'
+					href='/settings'
+					icon='settings'
+					text='Settings'
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				/>
 			</Section>

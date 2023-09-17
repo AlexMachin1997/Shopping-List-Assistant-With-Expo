@@ -5,6 +5,7 @@ import { Dialog, Portal } from 'react-native-paper';
 import { useTheme } from 'styled-components';
 
 // Application components
+import { View } from 'react-native';
 import Button from './Button';
 
 type Props = {
@@ -62,50 +63,54 @@ const Modal = ({
 				<Dialog.Content>{children}</Dialog.Content>
 
 				<Dialog.Actions>
-					<Button
-						isCompact
-						mode='text'
-						colour='#e91e63'
-						contentStyle={{
-							borderRadius: 5
-						}}
-						labelStyle={{
-							color: 'white'
-						}}
-						label='Cancel action'
-						onClick={() => {
-							if (typeof onCancel === 'function') {
-								onCancel();
-							}
-						}}
-						isDark={isDark}
-						isDisabled={false}
-						accessabilityHint={accessabilityCancelHint}
-					>
-						Cancel
-					</Button>
-					<Button
-						isCompact
-						mode='text'
-						colour='#e91e63'
-						contentStyle={{
-							borderRadius: 5
-						}}
-						labelStyle={{
-							color: 'white'
-						}}
-						label='Confirm button'
-						onClick={() => {
-							if (typeof onOk === 'function') {
-								onOk();
-							}
-						}}
-						isDark={isDark}
-						isDisabled={submitDisabled}
-						accessabilityHint={accessabilityOkHint}
-					>
-						Confirm
-					</Button>
+					<View style={{ marginRight: 5 }}>
+						<Button
+							isCompact
+							mode='text'
+							colour='#e91e63'
+							contentStyle={{
+								borderRadius: 5
+							}}
+							labelStyle={{
+								color: 'white'
+							}}
+							label='Cancel action'
+							onClick={() => {
+								if (typeof onCancel === 'function') {
+									onCancel();
+								}
+							}}
+							isDark={isDark}
+							isDisabled={false}
+							accessabilityHint={accessabilityCancelHint}
+						>
+							Cancel
+						</Button>
+					</View>
+					<View style={{ marginLeft: 5 }}>
+						<Button
+							isCompact
+							mode='text'
+							colour='#e91e63'
+							contentStyle={{
+								borderRadius: 5
+							}}
+							labelStyle={{
+								color: 'white'
+							}}
+							label='Confirm button'
+							onClick={() => {
+								if (typeof onOk === 'function') {
+									onOk();
+								}
+							}}
+							isDark={isDark}
+							isDisabled={submitDisabled}
+							accessabilityHint={accessabilityOkHint}
+						>
+							Confirm
+						</Button>
+					</View>
 				</Dialog.Actions>
 			</Dialog>
 		</Portal>
