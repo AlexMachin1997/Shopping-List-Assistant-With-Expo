@@ -1,0 +1,148 @@
+{
+	"plugins": ["prettier", "react-hooks", "react", "@tanstack/query", "react-native"],
+	"extends": [
+		"plugin:react-native/all",
+		"airbnb",
+		"prettier",
+		"prettier/react",
+		"eslint:recommended",
+		"plugin:react-hooks/recommended",
+		"plugin:react/recommended",
+		"plugin:import/react",
+		"plugin:react-native-a11y/android",
+		"plugin:react-native-a11y/ios",
+		"plugin:@tanstack/eslint-plugin-query/recommended",
+		"plugin:import/react",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"globals": {
+		"Atomics": "readonly",
+		"SharedArrayBuffer": "readonly"
+	},
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": 2020,
+		"sourceType": "module"
+	},
+	"env": {
+		"browser": true,
+		"node": true,
+		"jest": true,
+		"es6": true
+	},
+	"rules": {
+		"react-native/no-raw-text": "off",
+		"import/no-extraneous-dependencies": [
+			"error",
+			{
+				"devDependencies": [".storybook/**", "./src/components/**/*.stories.js", "**/*.test.js"]
+			}
+		],
+		"react/function-component-definition": [
+			2,
+			{
+				"namedComponents": "arrow-function",
+				"unnamedComponents": "arrow-function"
+			}
+		],
+		"no-misleading-character-class": "off",
+		"no-irregular-whitespace": "off",
+		"no-plusplus": "off",
+		"no-debugger": 0,
+		"no-alert": 0,
+		"no-await-in-loop": 0,
+		"no-return-assign": ["error", "except-parens"],
+		"no-restricted-syntax": [2, "ForInStatement", "LabeledStatement", "WithStatement"],
+		"prefer-const": [
+			"error",
+			{
+				"destructuring": "all"
+			}
+		],
+		"arrow-body-style": [2, "as-needed"],
+		"no-unused-expressions": [
+			2,
+			{
+				"allowTaggedTemplates": true
+			}
+		],
+		"no-param-reassign": [
+			2,
+			{
+				"props": false
+			}
+		],
+		"no-console": 0,
+		"import/prefer-default-export": 0,
+		"func-names": 0,
+		"space-before-function-parent": 0,
+		"comma-dangle": 0,
+		"max-len": 0,
+		"import/extensions": 0,
+		"no-underscore-dangle": 0,
+		"consistent-return": 0,
+		"no-shadow": [
+			2,
+			{
+				"hoist": "all",
+				"allow": ["resolve", "reject", "done", "next", "err", "error"]
+			}
+		],
+		"quotes": [
+			2,
+			"single",
+			{
+				"avoidEscape": true,
+				"allowTemplateLiterals": true
+			}
+		],
+		"prettier/prettier": [
+			"error",
+			{
+				"singleQuote": true,
+				"endOfLine": "auto"
+			}
+		],
+		// "react/destructuring-assignment": 0,
+		/*
+		  ************************************************************************************************
+		  Description of why these are turned off for the project:
+		  ************************************************************************************************
+		  - In React 17 a new runtime JSX transform was created, this will allow us to safely ignore the React import when it's not required.
+		  - When not using useEffect, useCallback, useState etc we no longer need "React" to be scope if React is required then the runtime transform
+		    will automatically add it (Smart right!)
+		  - For more information visit https://reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html#removing-unused-react-imports
+		  */
+		"react/jsx-uses-react": "off",
+		"react/react-in-jsx-scope": "off",
+		"@typescript-eslint/no-var-requires": 0,
+		"react/jsx-props-no-spreading": 0,
+		"react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
+		"react/forbid-prop-types": 0,
+		"react/display-name": "off",
+		"react-hooks/rules-of-hooks": "error",
+		"react-hooks/exhaustive-deps": "error",
+		"jsx-quotes": ["error", "prefer-single"],
+		"@tanstack/query/exhaustive-deps": "error",
+		"@tanstack/query/prefer-query-object-syntax": "error",
+		"react/prop-types": "off",
+		"react/require-default-props": "off",
+		"react-native/no-inline-styles": "off",
+		"react-native/no-color-literals": "off",
+		"no-unused-vars": ["error", { "argsIgnorePattern": "params" }],
+		"no-mixed-spaces-and-tabs": 0 // disable rule
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [".js", ".ts", ".jsx", ".tsx"]
+			},
+			"typescript": {}
+		}
+	}
+}

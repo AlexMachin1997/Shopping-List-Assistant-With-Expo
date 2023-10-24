@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"skipLibCheck": true,
+		"paths": {
+			"react": ["./node_modules/@types/react"]
+		}
+	},
+	"extends": "expo/tsconfig.base"
+}
