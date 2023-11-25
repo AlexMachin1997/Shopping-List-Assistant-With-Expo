@@ -1,5 +1,5 @@
 import shortid from 'shortid';
-import { ShoppingList, ShoppingListItem } from '../../../types/ShoppingList';
+import { ShoppingList, ShoppingListItem } from '../types/ShoppingList';
 
 class ShoppingListService {
 	static CreateShoppingList({

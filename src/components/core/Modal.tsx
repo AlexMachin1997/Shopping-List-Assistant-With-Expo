@@ -34,7 +34,7 @@ const Modal = ({
 	accessabilityCancelHint
 }: Props) => {
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue } = useTheme();
+	const { darkBlue, green } = useTheme();
 
 	return (
 		<Portal>
@@ -91,7 +91,7 @@ const Modal = ({
 						<Button
 							isCompact
 							mode='text'
-							colour='#e91e63'
+							colour={green}
 							contentStyle={{
 								borderRadius: 5
 							}}

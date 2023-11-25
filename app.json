@@ -28,14 +28,14 @@
 			"package": "com.yourcompany.yourappname",
 			"versionCode": 1
 		},
-		"web": {
-			"favicon": "./assets/favicon.png",
-			"bundler": "metro"
-		},
 		"extra": {
 			"eas": {
 				"projectId": "cd27e5e3-6074-4fc9-ad78-01dbea978c0a"
 			}
+		},
+		"experiments": {
+			"typedRoutes": true,
+			"tsconfigPaths": true
 		}
 	}
 }

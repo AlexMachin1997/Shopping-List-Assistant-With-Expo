@@ -29,7 +29,9 @@ const ActionButtons = ({
 				style={{
 					position: 'absolute',
 					bottom: 0,
-					right: 0
+					right: 0,
+					marginVertical: 0,
+					marginHorizontal: 0
 				}}
 				icon={isOpen ? 'close' : 'plus'}
 				actions={actions}

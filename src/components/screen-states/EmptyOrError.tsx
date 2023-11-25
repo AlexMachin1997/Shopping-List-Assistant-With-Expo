@@ -38,7 +38,13 @@ const EmptyOrError = ({
 			</Section>
 
 			<Section marginTop={5} isDark={isDark}>
-				<Text align='center' colour={isDark ? lightBlue : darkBlue} text={overview} />
+				<Text
+					type='custom'
+					size={20}
+					align='center'
+					colour={isDark ? lightBlue : darkBlue}
+					text={overview}
+				/>
 			</Section>
 		</Section>
 	);

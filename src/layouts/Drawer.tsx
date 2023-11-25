@@ -1,9 +1,4 @@
-import {
-	// Import the creation function
-	createDrawerNavigator
-	// // Import the types
-	// DrawerNavigationOptions
-} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { withLayoutContext } from 'expo-router';
 

@@ -1,37 +1,25 @@
-// Core react dependencies
 import * as React from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
-
-// Routing dependencies
 import { useRouter } from 'expo-router';
-
-// react-native-paper dependencies
 import { TextInput, Snackbar, Portal } from 'react-native-paper';
-
-// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// Application assets
-import EmptyIcon from '../../assets/Shocked.png';
-
-// Application components
-import { EmptyOrError, Loading } from '../../src/components/screen-states';
-import { ActionButton } from '../../src/components/action-blocks';
-import { Modal, Text } from '../../src/components/core';
-import { ShoppingListsCard } from '../../src/components/cards';
-
-// Application hooks
+import { EmptyOrError, Loading } from '@/components/screen-states';
+import { ActionButton } from '@/components/action-blocks';
+import { Modal, Text } from '@/components/core';
+import { ShoppingListsCard } from '@/components/cards';
 import {
 	useShoppingLists,
 	useSnackBar,
 	useProfile,
 	useFocusRefetch,
 	usePullRefetch
-} from '../../src/hooks';
+} from '@/hooks';
+import ShoppingListService from '@/services/ShoppingListService';
+import { ProfileTheme } from '@/types/Profile';
 
-// Application services
-import ShoppingListService from '../../src/components/services/ShoppingListService';
-import { ProfileTheme } from '../../types/Profile';
+// Application assets
+import EmptyIcon from '../../../assets/Shocked.png';
 
 const ShoppingLists = () => {
 	// Controls the shopping list state
@@ -122,7 +110,7 @@ const ShoppingLists = () => {
 	useFocusRefetch(refetchShoppingLists);
 
 	// Whilst the shopping list is being restored show the loader state
-	if (shoppingListsFetchStatus === 'loading') {
+	if (shoppingListsFetchStatus === 'pending') {
 		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
 	}
 
@@ -132,7 +120,10 @@ const ShoppingLists = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				visible={isCreateShoppingModalVisible}
 				title='Create a shopping list'
-				onDismiss={() => setIsCreateShoppingModalVisible(false)}
+				onDismiss={() => {
+					setIsCreateShoppingModalVisible(false);
+					setShoppingListName('');
+				}}
 				onCancel={() => {
 					setIsCreateShoppingModalVisible(false);
 					setShoppingListName('');
@@ -192,10 +183,7 @@ const ShoppingLists = () => {
 							background={shoppingList?.shoppingListTheme ?? ''}
 							action={() => {
 								router.push({
-									pathname: `/ShoppingList/${shoppingList?.id ?? ''}`,
-									params: {
-										title: shoppingList?.name ?? ''
-									}
+									pathname: `/ShoppingList/${shoppingList?.id ?? ''}`
 								});
 							}}
 						/>
@@ -204,7 +192,7 @@ const ShoppingLists = () => {
 			</ScrollView>
 
 			<ActionButton
-				colour='white'
+				colour={white}
 				icon={isCreateShoppingModalVisible ? 'close' : 'plus'}
 				action={() => setIsCreateShoppingModalVisible(true)}
 			/>

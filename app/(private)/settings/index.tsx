@@ -1,32 +1,25 @@
-// Core react dependencies
 import * as React from 'react';
 import { ScrollView } from 'react-native';
-
-// react-native-paper dependencies
 import { Divider, Switch, Snackbar } from 'react-native-paper';
-
-// Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-// Application components
-import { Section, Text, Modal, Button } from '../../src/components/core';
-
-// Application hooks
-import { useProfile, useShoppingLists, useSnackBar } from '../../src/hooks';
-
-// Application services
-import ProfileService from '../../src/components/services/ProfileService';
-import { ProfileTheme } from '../../types/Profile';
+import { Section, Text, Modal, Button } from '@/components/core';
+import { useProfile, useShoppingLists, useSnackBar } from '@/hooks';
+import ProfileService from '@/services/ProfileService';
+import { ProfileTheme } from '@/types/Profile';
 
 const Settings = () => {
 	const [isDeleteShoppingListsModalVisible, setIsDeleteShoppingListsModalVisible] =
+		React.useState(false);
+
+	const [isRetakeOnBoardingProcessModalVisible, setIsRetakeOnBoardingProcessModalVisible] =
 		React.useState(false);
 
 	// Use to control the snack component state
 	const { state: snackBarState, dispatch: updateSnackBarState } = useSnackBar();
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue, brightPink, white } = useTheme();
+	const { darkBlue, lightBlue, brightPink, white, green } = useTheme();
 
 	// Access any application wide settings (Only supports dark.light mode at the minute)
 	const {
@@ -60,6 +53,17 @@ const Settings = () => {
 						type: 'ERROR_TOAST_NOTIFICATION',
 						payload: {
 							message: 'Your theme was not successfully updated, please try again.'
+						}
+					});
+
+					break;
+				}
+
+				case 'RETAKE_ONBOARDING': {
+					updateSnackBarState({
+						type: 'ERROR_TOAST_NOTIFICATION',
+						payload: {
+							message: 'Currently unable to retake the onboarding process, please try again.'
 						}
 					});
 
@@ -157,6 +161,36 @@ const Settings = () => {
 				/>
 			</Modal>
 
+			<Modal
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+				visible={isRetakeOnBoardingProcessModalVisible}
+				title='Re-setup your profile confirmation'
+				onDismiss={() => setIsRetakeOnBoardingProcessModalVisible(false)}
+				onCancel={() => setIsRetakeOnBoardingProcessModalVisible(false)}
+				onOk={() => {
+					const Profile = ProfileService.ReCompleteSetup({ profile });
+
+					updateProfile({
+						type: 'RETAKE_ONBOARDING',
+						payload: {
+							profile: Profile
+						}
+					});
+
+					// Close down the shopping lists deletion confirmation modal
+					setIsRetakeOnBoardingProcessModalVisible(false);
+				}}
+				submitDisabled={false}
+				accessabilityCancelHint='Cancel the retake onboarding process'
+				accessabilityOkHint='Confirm you want to re-complete the onboarding process'
+			>
+				<Text
+					colour={lightBlue}
+					size={20}
+					text='Are you sure you want to re-complete the onboarding process ?'
+				/>
+			</Modal>
+
 			<Section
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				marginTop={16}
@@ -172,7 +206,7 @@ const Settings = () => {
 					/>
 
 					<Switch
-						value={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+						value={profile.theme === ProfileTheme.DARK}
 						onValueChange={() => {
 							if (profile !== null) {
 								// Trigger the theme update action
@@ -188,7 +222,7 @@ const Settings = () => {
 							paddingTop: 5,
 							paddingBottom: 5
 						}}
-						disabled={updateProfileStatus === 'loading'}
+						disabled={updateProfileStatus === 'pending'}
 						color='white'
 					/>
 				</Section>
@@ -208,12 +242,17 @@ const Settings = () => {
 				marginBottom={16}
 				marginLeft={16}
 			>
-				<Text
-					colour={
-						(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
-					}
-					text='Delete all shopping lists'
-				/>
+				<Section
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+					marginBottom={10}
+				>
+					<Text
+						colour={
+							(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
+						}
+						text='Delete all shopping lists'
+					/>
+				</Section>
 
 				<Button
 					isCompact
@@ -223,7 +262,7 @@ const Settings = () => {
 					accessabilityHint='Deletes all the shopping lists you the user has created'
 					onClick={() => setIsDeleteShoppingListsModalVisible(true)}
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
-					isDisabled={shoppingListsMutationStatus === 'loading'}
+					isDisabled={shoppingListsMutationStatus === 'pending'}
 					labelStyle={{
 						color: 'white'
 					}}
@@ -242,6 +281,44 @@ const Settings = () => {
 					height: 1
 				}}
 			/>
+
+			<Section
+				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+				marginTop={16}
+				marginBottom={16}
+				marginLeft={16}
+			>
+				<Section
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+					marginBottom={10}
+				>
+					<Text
+						colour={
+							(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
+						}
+						text='Re-complete the profile'
+					/>
+				</Section>
+
+				<Button
+					isCompact
+					mode='contained'
+					colour={green}
+					label='Delete shopping lists'
+					accessabilityHint='Deletes all the shopping lists you the user has created'
+					onClick={() => setIsRetakeOnBoardingProcessModalVisible(true)}
+					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
+					isDisabled={shoppingListsMutationStatus === 'pending'}
+					labelStyle={{
+						color: 'white'
+					}}
+					contentStyle={{
+						borderRadius: 5
+					}}
+				>
+					Proceed
+				</Button>
+			</Section>
 
 			<Snackbar
 				visible={snackBarState.visible}

@@ -5,6 +5,7 @@ import { Platform, Vibration } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import getErrorMessage from '@/utils/getErrorMessage';
 
 // More information about setNotificationHandle here https://docs.expo.dev/push-notifications/overview/#usage
 Notifications.setNotificationHandler({
@@ -97,9 +98,9 @@ const useNotification = () => {
 				});
 
 				setExpoPushNotificationToken(requestedToken.data);
-			} catch (err) {
+			} catch (error: unknown) {
 				// Log the error to the console for better debugging
-				console.error('useNotification error', err?.message ?? '');
+				console.error('useNotification error', getErrorMessage(error));
 
 				// Whenever we fail to get the users permission just set it to denied internally to stop any loaders or trigger any events
 				setLocalNotificationsStatus('denied');
