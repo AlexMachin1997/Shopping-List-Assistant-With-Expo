@@ -12,7 +12,7 @@ import DrawerLink from './DrawerLink';
 
 // Application hooks
 import { useProfile } from '../../../hooks';
-import { ProfileTheme } from '../../../../types/Profile';
+import { ProfileTheme } from '../../../types/Profile';
 
 const NavigationDrawer = () => {
 	// Access the styled-components theme via their internal ThemeContext
@@ -50,7 +50,7 @@ const NavigationDrawer = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
-					href='(tabs)/ShoppingLists'
+					href='/(private)/(tabs)/ShoppingLists'
 					icon='format-list-bulleted'
 					text='Shopping lists'
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
@@ -66,7 +66,7 @@ const NavigationDrawer = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
-					href='(tabs)/StoreTracker'
+					href='/(private)/(tabs)/StoreTracker'
 					icon='gps-fixed'
 					text='Store Tracking'
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
@@ -82,7 +82,7 @@ const NavigationDrawer = () => {
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
 				<DrawerLink
-					href='/settings'
+					href='/(private)/settings'
 					icon='settings'
 					text='Settings'
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}

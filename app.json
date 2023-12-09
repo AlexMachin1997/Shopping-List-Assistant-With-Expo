@@ -17,25 +17,63 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true,
-			"jsEngine": "jsc"
+			"supportsTablet": false,
+			"bundleIdentifier": "com.alexmachin.shoppinglist",
+			"requireFullScreen": true,
+			"jsEngine": "jsc",
+			"config": {
+				"useNonExemptEncryption": false
+			}
 		},
 		"android": {
 			"adaptiveIcon": {
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
 			},
-			"package": "com.yourcompany.yourappname",
-			"versionCode": 1
-		},
-		"web": {
-			"favicon": "./assets/favicon.png",
-			"bundler": "metro"
+			"package": "com.alexmachin.shoppinglist",
+			"versionCode": 1,
+			"softwareKeyboardLayoutMode": "pan"
 		},
 		"extra": {
 			"eas": {
 				"projectId": "cd27e5e3-6074-4fc9-ad78-01dbea978c0a"
 			}
-		}
+		},
+		"experiments": {
+			"typedRoutes": true,
+			"tsconfigPaths": true
+		},
+		"runtimeVersion": "1.0.0",
+		"owner": "alexmachin",
+		"plugins": [
+			[
+				"expo-location",
+				{
+					"locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+				}
+			],
+			[
+				"expo-build-properties",
+				{
+					"android": {
+						"compileSdkVersion": 33,
+						"targetSdkVersion": 33,
+						"buildToolsVersion": "33.0.0"
+					},
+					"ios": {
+						"deploymentTarget": "13.0",
+						"useFrameworks": "static"
+					}
+				}
+			],
+			[
+				"expo-notifications",
+				{
+					"icon": "./assets/notification-icon.png",
+					"color": "#ffffff",
+					"sounds": ["./assets/notification-sound.wav", "./assets/notification-sound-other.wav"]
+				}
+			]
+		]
 	}
 }

@@ -7,7 +7,8 @@ import * as AsyncStorage from 'expo-secure-store';
 
 // TanStack query dependencies
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ShoppingList } from '../../types/ShoppingList';
+import getErrorMessage from '@/utils/getErrorMessage';
+import { ShoppingList } from '../types/ShoppingList';
 
 type ShoppingListsMutationVariables = {
 	type: 'CREATE_SHOPPING_LIST' | 'CLEAR_SHOPPING_LISTS';
@@ -55,8 +56,15 @@ const useShoppingLists = ({
 
 				// Return the data to access it in the queries data
 				return Promise.resolve(shoppingLists);
-			} catch (error) {
-				return Promise.reject(new Error(error.message));
+			} catch (error: unknown) {
+				// Log the error to the console for better debugging
+				console.error(
+					'Something went wrong fetching the users shopping lists',
+					getErrorMessage(error)
+				);
+
+				// Reject the current promise to put the query into "error" status
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
 		}
 	});
@@ -74,7 +82,14 @@ const useShoppingLists = ({
 				// Return the data so certain callbacks can access it e.g. onSuccess
 				return Promise.resolve(variables?.payload?.shoppingLists ?? []);
 			} catch (error) {
-				return Promise.reject(new Error(error.message));
+				// Log the error to the console for better debugging
+				console.error(
+					'Something went wrong updating the users shopping lists',
+					getErrorMessage(error)
+				);
+
+				// Reject the current promise to put the query into "error" status
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
 		},
 		onMutate: async (variables) => {

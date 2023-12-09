@@ -7,11 +7,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Expo modules
 import * as AsyncStorage from 'expo-secure-store';
-import { Profile, ProfileTheme } from '../../types/Profile';
+import getErrorMessage from '@/utils/getErrorMessage';
+import { Profile, ProfileTheme } from '../types/Profile';
 
 type ProfileMutationVariables =
 	| { type: 'COMPLETE_ONBOARDING'; payload: { profile: Profile } }
-	| { type: 'THEME_CHANGE'; payload: { profile: Profile } };
+	| { type: 'THEME_CHANGE'; payload: { profile: Profile } }
+	| { type: 'RETAKE_ONBOARDING'; payload: { profile: Profile } };
 
 type UseProfileCallbacks = {
 	data?: Profile;
@@ -61,18 +63,20 @@ const useProfile = ({
 					profileObject = {
 						...profileObject,
 						theme: parsedProfileFromAsyncStorage?.theme ?? profileObject.theme,
-						hasCompletedSetup: true
+						hasCompletedSetup: parsedProfileFromAsyncStorage?.hasCompletedSetup ?? false
 					};
 				}
 
 				// Return the data to access it in the queries data
 				return Promise.resolve(profileObject);
-			} catch (error) {
-				return Promise.reject(new Error(error.message));
+			} catch (error: unknown) {
+				// Log the error to the console for better debugging
+				console.error('Something went wrong fetching the users profile', getErrorMessage(error));
+
+				// Log the error to the console for better debugging
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
-		},
-		keepPreviousData: true,
-		retry: 2
+		}
 	});
 
 	// Handles the update of the user profile
@@ -80,15 +84,12 @@ const useProfile = ({
 		mutationFn: async (variables: ProfileMutationVariables) => {
 			try {
 				// Store a reference to the old set of data
-				const previousProfile = queryClient.getQueryData<Profile>(queryKey, { type: 'active' }) ?? {
-					hasCompletedSetup: false,
-					theme: ProfileTheme.LIGHT
-				};
+				const previousProfile = queryClient.getQueryData<Profile>(queryKey) ?? DEFAULT_PROFILE;
 
 				// Store a reference to the "expected" cache data (The shape must match exactly)
 				const incomingProfile = {
 					...previousProfile,
-					...variables.payload.profile
+					...(variables?.payload?.profile ?? '')
 				};
 
 				// Attempt to override the current profile data (combines the current active query and )
@@ -97,7 +98,11 @@ const useProfile = ({
 				// Return the new profile so it can be accessed in some of the callbacks e.g. onSuccess
 				return incomingProfile;
 			} catch (error) {
-				return Promise.reject(new Error(error.message));
+				// Log the error to the console for better debugging
+				console.error('Something went wrong updating the users profile', getErrorMessage(error));
+
+				// Log the error to the console for better debugging
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
 		},
 		onMutate: async (variables: ProfileMutationVariables) => {
@@ -149,7 +154,7 @@ const useProfile = ({
 
 	return {
 		// Query related state and actions
-		profile: query?.data ?? null,
+		profile: query?.data ?? DEFAULT_PROFILE,
 		fetchProfileStatus: query.status,
 		refetch: query.refetch,
 

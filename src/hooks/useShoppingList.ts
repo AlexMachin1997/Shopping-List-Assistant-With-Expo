@@ -7,7 +7,8 @@ import * as AsyncStorage from 'expo-secure-store';
 
 // TanStack query modules
 import { QueryKey, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ShoppingList } from '../../types/ShoppingList';
+import getErrorMessage from '@/utils/getErrorMessage';
+import { ShoppingList } from '../types/ShoppingList';
 
 type UseShoppingListMutationVariables = {
 	type:
@@ -67,21 +68,25 @@ const useShoppingList = ({
 		queryKey,
 		queryFn: async () => {
 			try {
+				// Check that a shopping list had been provided
 				if (shoppingListId === null) {
 					throw Error('The shopping list id is missing from the useShoppingList hook options');
 				}
 
+				// Check that there is a shopping list query key, used to update or rollback the shopping lists network cache
 				if (shoppingListsQueryKey.length === 0) {
 					throw Error('The shopping lists query key is missing from the hook');
 				}
 
 				// Perform a fresh lookup of the "shopping lists" query data (Fetched via the client hook)
+				// Note to self: this is safe to do as we call the useShoppingLists hook within the same page
 				const shoppingLists =
 					queryClient?.getQueryData<ShoppingList[]>(shoppingListsQueryKey) ?? [];
 
 				// Attempt to find the current shopping list from the current shopping lists query data
-				const shoppingListItem =
-					shoppingLists?.find((el) => (el?.id ?? '') === shoppingListId) ?? null;
+				const shoppingListItem = shoppingLists?.find(
+					(shoppingList) => (shoppingList?.id ?? '') === shoppingListId
+				);
 
 				// If the item can't be found then throw an error
 				if (shoppingListItem === undefined) {
@@ -90,12 +95,17 @@ const useShoppingList = ({
 
 				// If the item is found add it to the cache
 				return shoppingListItem;
-			} catch (error) {
-				return Promise.reject(new Error(error.message));
+			} catch (error: unknown) {
+				// Log the error to the console for better debugging
+				console.error(
+					'Something went wrong fetching the requested shopping list',
+					getErrorMessage(error)
+				);
+
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
 		},
-		enabled: isQueryEnabled,
-		keepPreviousData: true
+		enabled: isQueryEnabled
 	});
 
 	const mutation = useMutation({
@@ -110,7 +120,11 @@ const useShoppingList = ({
 				// Return the data so certain callbacks can access it e.g. onSuccess
 				return Promise.resolve(variables?.payload?.shoppingLists ?? []);
 			} catch (error) {
-				return Promise.reject(new Error(error.message));
+				// Log the error to the console for better debugging
+				console.error('Something went wrong updating the users profile', getErrorMessage(error));
+
+				// Reject the current promise to put the query into "error" status
+				return Promise.reject(new Error(getErrorMessage(error)));
 			}
 		},
 		onMutate: async (variables: UseShoppingListMutationVariables) => {

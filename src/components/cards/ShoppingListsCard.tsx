@@ -6,13 +6,13 @@ import { TouchableRipple } from 'react-native-paper';
 // Application components
 import { Section, Text } from '../core';
 
-type Props = {
+type ShoppingListsCardProps = {
 	action: null | (() => void);
 	background: string;
 	title: string;
 };
 
-const ShoppingListsCard = ({ action, background, title }: Props) => (
+const ShoppingListsCard = ({ action, background, title }: ShoppingListsCardProps) => (
 	<TouchableRipple
 		onPress={() => {
 			if (typeof action === 'function') {
@@ -39,7 +39,7 @@ const ShoppingListsCard = ({ action, background, title }: Props) => (
 			flexGrow={1}
 		>
 			<Section alignItems='center' backgroundColour={background} flexWrap='nowrap'>
-				<Text size={20} colour='white' text={truncate(title)} />
+				<Text type='custom' size={20} colour='white' text={truncate(title)} />
 			</Section>
 		</Section>
 	</TouchableRipple>

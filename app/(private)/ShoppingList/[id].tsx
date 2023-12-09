@@ -1,26 +1,13 @@
-// Core react dependencies
 import * as React from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
-
-// Routing dependencies
+import { RefreshControl, ScrollView, StyleProp, TextStyle } from 'react-native';
 import { useLocalSearchParams, useFocusEffect, useRouter } from 'expo-router';
-
-// Styled-components dependencies
 import { useTheme } from 'styled-components';
-
-// react-native-paper dependencies
 import { TextInput, Snackbar, Portal } from 'react-native-paper';
 
-// Application components
-import { Loading, EmptyOrError } from '../../src/components/screen-states';
-import { ActionButtons } from '../../src/components/action-blocks';
-import { ShoppingListCard } from '../../src/components/cards';
-import { Text, Modal } from '../../src/components/core';
-
-// Screen assets
-import EmptyIcon from '../../assets/Shopping-Basket.png';
-
-// Application hooks
+import { Loading, EmptyOrError } from '@/components/screen-states';
+import { ActionButtons } from '@/components/action-blocks';
+import { ShoppingListCard } from '@/components/cards';
+import { Text, Modal } from '@/components/core';
 import {
 	useSnackBar,
 	useProfile,
@@ -28,11 +15,13 @@ import {
 	useShoppingLists,
 	usePullRefetch,
 	useFocusRefetch
-} from '../../src/hooks';
+} from '@/hooks';
+import ShoppingListService from '@/services/ShoppingListService';
+import { ProfileTheme } from '@/types/Profile';
 
-// Application Services
-import ShoppingListService from '../../src/components/services/ShoppingListService';
-import { ProfileTheme } from '../../types/Profile';
+// Application assets
+import addOpacityToColour from '@/utils/addOpacityToColour';
+import EmptyIcon from '../../../assets/Shopping-Basket.png';
 
 const ShoppingList = () => {
 	// Controls the add item modal visibility
@@ -55,8 +44,8 @@ const ShoppingList = () => {
 	// Access the styled-components theme via their internal ThemeContext
 	const { darkBlue, lightBlue, white } = useTheme();
 
-	// Access the current routes url search parameters e.g. title (Used as the page title)
-	const { title = '', id = '' } = useLocalSearchParams<{ title: string; id: string }>();
+	// Access the current routes url search parameters
+	const { id = '' } = useLocalSearchParams<{ id: string }>();
 
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
 	const router = useRouter();
@@ -121,9 +110,6 @@ const ShoppingList = () => {
 					// Hide the isRenameShoppingListModalVisible
 					setIsRenameShoppingListModalVisible(false);
 
-					// Update the Expo Router title param
-					router.setParams({ title: newShoppingListName });
-
 					// Dispatch an action to set the snackbar state
 					updateSnackBarState({
 						type: 'SUCCESSFUL_TOAST_NOTIFICATION',
@@ -149,7 +135,7 @@ const ShoppingList = () => {
 
 					// Navigate back to the Shopping Lists tab screen after 1 second
 					setTimeout(() => {
-						router.push('(tabs)/ShoppingLists');
+						router.push('/(private)/(tabs)/ShoppingLists');
 					}, 1000);
 
 					break;
@@ -231,16 +217,31 @@ const ShoppingList = () => {
 			}
 		},
 		shoppingListId: typeof id === 'string' ? id : null,
-		isQueryEnabled: shoppingListsFetchStatus !== 'loading',
+		isQueryEnabled: shoppingListsFetchStatus !== 'pending',
 		shoppingListsQueryKey
 	});
+
+	const DEFAULT_ACTION: {
+		color: string;
+		labelTextColor: string;
+		size?: 'medium' | 'small';
+		labelStyle: StyleProp<TextStyle>;
+	} = {
+		color: 'grey',
+		labelTextColor: profile.theme === ProfileTheme.DARK ? 'white' : darkBlue,
+		size: 'medium',
+		labelStyle: {
+			fontWeight: '300',
+			fontSize: 25
+		}
+	};
 
 	// On load or when the screen is focussed set the shopping list name and the single shopping list
 	// NOTE: Once this page is created the useEffects don't run again as they are still mounted in the background so the useFocusEffect is used to ensure the newShoppingListName is the title of the page
 	useFocusEffect(
 		React.useCallback(() => {
-			setNewShoppingListName(title);
-		}, [title])
+			setNewShoppingListName(shoppingList?.name ?? '');
+		}, [shoppingList?.name])
 	);
 
 	// Handles pull refresh functionality for the shopping lists query, when you pull down in the scroll view it wil refetch the data from the expo-secure-store
@@ -344,7 +345,7 @@ const ShoppingList = () => {
 	};
 
 	// Render the loading screen whilst the shopping lists are being fetched
-	if (shoppingListFetchStatus === 'loading') {
+	if (shoppingListFetchStatus === 'pending') {
 		return <Loading isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK} />;
 	}
 
@@ -392,19 +393,19 @@ const ShoppingList = () => {
 					setIsRenameShoppingListModalVisible(false);
 
 					// Reset the shopping list name to the previously set shopping list name
-					setNewShoppingListName(title);
+					setNewShoppingListName(shoppingList?.name ?? '');
 				}}
 				onCancel={() => {
 					// Close the modal down
 					setIsRenameShoppingListModalVisible(false);
 
 					// Reset the shopping list name to the previously set shopping list name
-					setNewShoppingListName(title);
+					setNewShoppingListName(shoppingList?.name ?? '');
 				}}
 				onOk={updateShoppingListName}
 				submitDisabled={
 					newShoppingListName.length === 0 ||
-					newShoppingListName === title ||
+					newShoppingListName === (shoppingList?.name ?? '') ||
 					snackBarState.visible === true
 				}
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
@@ -440,7 +441,9 @@ const ShoppingList = () => {
 				accessabilityOkHint='Delete the current shopping list, you will be redirected back to the homepage after.'
 			>
 				<Text
+					type='custom'
 					size={19}
+					colour={profile.theme === ProfileTheme.DARK ? 'white' : 'white'}
 					text='Looks like you want to delete the shopping list. Would you like to proceed?'
 				/>
 			</Modal>
@@ -475,7 +478,7 @@ const ShoppingList = () => {
 									deleteAction={() => deleteItem(item?.id)}
 									isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 									shoppingListTheme={shoppingList?.shoppingListTheme ?? 'blue'}
-									disabled={shoppingListMutateStatus === 'loading'}
+									disabled={shoppingListMutateStatus === 'pending'}
 								/>
 							) ?? null
 					)
@@ -495,46 +498,45 @@ const ShoppingList = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size={16} text={snackBarState.content} />
+				<Text type='custom' colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 
 			<ActionButtons
 				actions={[
 					{
+						...DEFAULT_ACTION,
 						icon: 'rename-box',
 						label: 'Rename list',
 						onPress: () => {
 							setIsRenameShoppingListModalVisible(true);
 						},
-						color: 'grey',
-						accessibilityLabel: 'Rename modal',
-						labelTextColor: 'white',
-						size: 'medium'
+						accessibilityLabel: 'Rename modal'
 					},
 					{
+						...DEFAULT_ACTION,
 						icon: 'delete',
 						label: 'Delete list',
 						onPress: () => {
 							setIsDeleteShoppingListModalVisible(true);
 						},
-						color: 'grey',
-						accessibilityLabel: 'Delete the shopping list',
-						labelTextColor: 'white',
-						size: 'medium'
+						accessibilityLabel: 'Delete the shopping list'
 					},
 					{
+						...DEFAULT_ACTION,
 						icon: 'plus-circle',
 						label: 'Add item',
 						onPress: () => {
 							setIsAddItemsModalVisible(true);
 						},
-						color: 'grey',
-						accessibilityLabel: 'Add an item to the shopping list',
-						labelTextColor: 'white',
-						size: 'medium'
+						accessibilityLabel: 'Add an item to the shopping list'
 					}
 				]}
 				visible={snackBarState.visible === false}
+				backdropColor={
+					profile?.theme === ProfileTheme.DARK
+						? addOpacityToColour(darkBlue, 0.5)
+						: addOpacityToColour(lightBlue, 0.8)
+				}
 			/>
 		</Portal.Host>
 	);

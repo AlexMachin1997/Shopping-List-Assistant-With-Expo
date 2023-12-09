@@ -1,12 +1,8 @@
-// Styled-components dependencies
 import { useTheme } from 'styled-components';
-
-// Routing dependencies
 import { useRouter } from 'expo-router';
-import { Stack } from '../../src/layouts';
 
-// Application components
-import { HeaderIcon } from '../../src/components/navigation/Header';
+import { Stack } from '@/layouts';
+import { HeaderIcon } from '@/components/navigation/Header';
 
 const SettingsLayout = () => {
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc

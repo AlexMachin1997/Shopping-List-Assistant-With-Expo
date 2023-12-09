@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-shadow
 export enum ProfileTheme {
 	LIGHT = 'light',
@@ -5,6 +6,6 @@ export enum ProfileTheme {
 }
 
 export type Profile = {
-	theme: ProfileTheme;
-	hasCompletedSetup: boolean;
+	theme?: ProfileTheme;
+	hasCompletedSetup?: boolean;
 } | null;

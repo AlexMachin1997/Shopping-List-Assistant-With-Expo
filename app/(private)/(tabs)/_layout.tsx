@@ -1,15 +1,9 @@
-// Styled-components dependencies
 import { useTheme } from 'styled-components';
-
-// Expo dependencies
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-// Routing dependencies
 import { useRouter } from 'expo-router';
-import { Tabs } from '../../src/layouts';
 
-// Application components
-import { HeaderIcon } from '../../src/components/navigation/Header';
+import { Tabs } from '@/layouts';
+import { HeaderIcon } from '@/components/navigation/Header';
 
 const TabsLayout = () => {
 	// Access the expo-router internals e.g navigating imperatively via .push(), .replace() etc
@@ -36,7 +30,10 @@ const TabsLayout = () => {
 				tabBarStyle: {
 					backgroundColor: darkBlue,
 					paddingBottom: 3,
-					paddingTop: 3
+					paddingTop: 3,
+					borderWidth: 1,
+					borderStyle: 'solid',
+					borderTopColor: 'white'
 				},
 				tabBarInactiveTintColor: 'white',
 				tabBarActiveTintColor: 'white',
@@ -45,7 +42,7 @@ const TabsLayout = () => {
 						icon='settings'
 						marginRight={10}
 						action={() => {
-							router.push('/settings');
+							router.push('/settings/');
 						}}
 					/>
 				),
@@ -64,6 +61,7 @@ const TabsLayout = () => {
 				name='ShoppingLists'
 				options={{
 					title: 'Shopping lists',
+					tabBarLabel: 'Shopping Lists',
 					tabBarIcon: () => (
 						<MaterialCommunityIcons name='clipboard-text-outline' size={25} color={lightBlue} />
 					)

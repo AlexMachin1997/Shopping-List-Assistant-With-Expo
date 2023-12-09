@@ -1,28 +1,18 @@
-// Core react dependencies
 import * as React from 'react';
 import { View, StyleSheet, ScrollView, RefreshControl } from 'react-native';
-
-// Expo dependencies
+import { useTheme } from 'styled-components';
 import * as Location from 'expo-location';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-
-// Routing dependencies
 import { useFocusEffect } from 'expo-router';
 
-// Map component data
-import { useTheme } from 'styled-components';
-import Locations from '../../assets/supermarkets.json';
-import NightMode from '../../assets/GoogleMapsNight.json';
+import { EmptyOrError, Loading } from '@/components/screen-states';
+import { useNotification, useProfile, usePullRefetch } from '@/hooks';
+import { ProfileTheme } from '@/types/Profile';
 
 // Application assets
-import ItemTrackingImage from '../../assets/ItemTracking.png';
-
-// Application components
-import { EmptyOrError, Loading } from '../../src/components/screen-states';
-
-// Application hooks
-import { useNotification, useProfile, usePullRefetch } from '../../src/hooks';
-import { ProfileTheme } from '../../types/Profile';
+import Locations from '../../../assets/supermarkets.json';
+import NightMode from '../../../assets/GoogleMapsNight.json';
+import ItemTrackingImage from '../../../assets/ItemTracking.png';
 
 // Styled-Components can't provide this so a custom react-native view needed to be provided.
 const styles = StyleSheet.create({
@@ -188,7 +178,7 @@ const StoreTracker = () => {
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 					image={ItemTrackingImage}
 					heading='Location tracking error'
-					overview="Location services aren't enabled, please enable them to view the map"
+					overview="Look's like your location is disabled, to enable the map functionality enable it and refresh the page"
 				/>
 			</ScrollView>
 		);

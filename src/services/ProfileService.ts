@@ -1,7 +1,7 @@
-import { Profile, ProfileTheme } from '../../../types/Profile';
+import { Profile, ProfileTheme } from '../types/Profile';
 
 class ProfileService {
-	static CompleteSetup({ profile = null }: { profile: Profile }) {
+	static CompleteSetup({ profile = null }: { profile?: Profile }) {
 		if (profile === null) throw Error('Profile is required');
 
 		return {
@@ -19,10 +19,10 @@ class ProfileService {
 		};
 	}
 
-	static Reset() {
+	static ReCompleteSetup({ profile = null }: { profile: Profile }) {
 		return {
-			hasCompletedSetup: false,
-			theme: 'light'
+			...profile,
+			hasCompletedSetup: false
 		};
 	}
 }

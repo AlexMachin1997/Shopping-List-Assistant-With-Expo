@@ -128,14 +128,14 @@
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "error",
 		"jsx-quotes": ["error", "prefer-single"],
-		"@tanstack/query/exhaustive-deps": "error",
-		"@tanstack/query/prefer-query-object-syntax": "error",
 		"react/prop-types": "off",
 		"react/require-default-props": "off",
 		"react-native/no-inline-styles": "off",
 		"react-native/no-color-literals": "off",
 		"no-unused-vars": ["error", { "argsIgnorePattern": "params" }],
-		"no-mixed-spaces-and-tabs": 0 // disable rule
+		"no-mixed-spaces-and-tabs": 0, // disable rule
+		"@tanstack/query/exhaustive-deps": "error",
+		"@tanstack/query/stable-query-client": "error"
 	},
 	"settings": {
 		"import/resolver": {
