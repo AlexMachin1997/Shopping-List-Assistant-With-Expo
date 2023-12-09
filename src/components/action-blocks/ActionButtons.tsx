@@ -9,10 +9,12 @@ import { useTheme } from 'styled-components';
 
 const ActionButtons = ({
 	actions,
-	visible = true
+	visible = true,
+	backdropColor = 'transparent'
 }: {
 	actions: FABGroupProps['actions'];
 	visible?: boolean;
+	backdropColor?: string;
 }) => {
 	const [isOpen, setIsOpen] = React.useState(false);
 
@@ -25,7 +27,7 @@ const ActionButtons = ({
 				visible={visible}
 				open={isOpen}
 				fabStyle={{ backgroundColor: brightPink }}
-				backdropColor='transparent'
+				backdropColor={backdropColor}
 				style={{
 					position: 'absolute',
 					bottom: 0,

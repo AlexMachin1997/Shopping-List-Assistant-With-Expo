@@ -94,7 +94,7 @@ const useNotification = () => {
 
 				// Not sure why this is needed.....
 				const requestedToken = await Notifications.getExpoPushTokenAsync({
-					projectId: Constants?.manifest?.projectId ?? ''
+					projectId: Constants?.expoConfig?.extra?.eas?.projectId ?? ''
 				});
 
 				setExpoPushNotificationToken(requestedToken.data);

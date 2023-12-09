@@ -41,7 +41,7 @@ const DrawerLink = ({
 			<Link asChild href={href}>
 				<TouchableOpacity accessibilityRole='menuitem'>
 					<Section marginRight={10} backgroundColour={isDark ? darkBlue : lightBlue}>
-						<Text colour={isDark ? lightBlue : darkBlue} text={text} size={25} />
+						<Text type='custom' colour={isDark ? lightBlue : darkBlue} text={text} size={25} />
 					</Section>
 				</TouchableOpacity>
 			</Link>

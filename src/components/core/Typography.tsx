@@ -1,24 +1,25 @@
+/* eslint-disable react/destructuring-assignment */
 // Styled-components dependencies
 import styled from 'styled-components/native';
 
 import type { TextStyle } from 'react-native';
-import { useMemo } from 'react';
 
-type Props =
-	| {
-			type?: 'custom';
-			size: number;
-			colour?: string;
-			align?: TextStyle['textAlign'];
-			textDecoration?: TextStyle['textDecorationStyle'];
-	  }
-	| {
-			type?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-			size?: undefined;
-			colour?: string;
-			align?: TextStyle['textAlign'];
-			textDecoration?: TextStyle['textDecorationStyle'];
-	  };
+type CommonProps = {
+	colour?: string;
+	align?: TextStyle['textAlign'];
+	fontWeight?: TextStyle['fontWeight'];
+};
+
+interface Custom extends CommonProps {
+	type: 'custom';
+	size: number;
+}
+
+interface NoneCustom extends CommonProps {
+	type: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+}
+
+type Props = Custom | NoneCustom;
 
 const TextElement = styled.Text`
 	font-size: ${(props: Props) => {
@@ -59,36 +60,34 @@ const TextElement = styled.Text`
 	}};
 	color: ${(props: Props) => props?.colour ?? 'black'};
 	text-align: ${(props: Props) => props?.align ?? 'align'};
-	text-decoration: ${(props: Props) => props?.textDecoration ?? undefined};
+	font-weight: ${(props: Props) => props?.fontWeight ?? 'normal'};
 `;
 
-const Text = ({
-	text,
-	type = 'custom',
-	size = 16,
-	colour = 'black',
-	align = 'auto',
-	textDecoration = 'solid'
-}: Props & { text: string }) => {
-	const a = useMemo(() => {
-		if (type === 'custom') {
-			return {
-				type,
-				size,
-				colour,
-				align,
-				textDecoration
-			};
-		}
+const Text = (props: Props & { text: string }) => {
+	if (props?.type === 'custom') {
+		return (
+			<TextElement
+				type='custom'
+				size={props?.size ?? 50}
+				colour={props?.colour ?? ''}
+				align={props?.align ?? 'auto'}
+				fontWeight={props?.fontWeight ?? 'normal'}
+			>
+				{props?.text ?? ''}
+			</TextElement>
+		);
+	}
 
-		return {
-			type,
-			colour,
-			align,
-			textDecoration
-		};
-	}, [align, colour, size, textDecoration, type]);
-
-	return <TextElement {...a}>{text}</TextElement>;
+	return (
+		<TextElement
+			type={props.type}
+			colour={props?.colour ?? ''}
+			align={props?.align ?? 'auto'}
+			fontWeight={props?.fontWeight ?? 'normal'}
+		>
+			{props?.text ?? ''}
+		</TextElement>
+	);
+	// return <TextElement {...a}>{text}</TextElement>;
 };
 export default Text;

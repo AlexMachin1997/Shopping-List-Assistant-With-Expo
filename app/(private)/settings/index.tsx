@@ -155,6 +155,7 @@ const Settings = () => {
 				accessabilityOkHint='Confirm you want to delete all available shopping lists'
 			>
 				<Text
+					type='custom'
 					colour={lightBlue}
 					size={20}
 					text='Are you sure you want to delete all of your shopping lists ?'
@@ -185,6 +186,7 @@ const Settings = () => {
 				accessabilityOkHint='Confirm you want to re-complete the onboarding process'
 			>
 				<Text
+					type='custom'
 					colour={lightBlue}
 					size={20}
 					text='Are you sure you want to re-complete the onboarding process ?'
@@ -247,10 +249,12 @@ const Settings = () => {
 					marginBottom={10}
 				>
 					<Text
+						type='custom'
 						colour={
 							(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
 						}
 						text='Delete all shopping lists'
+						size={20}
 					/>
 				</Section>
 
@@ -293,6 +297,8 @@ const Settings = () => {
 					marginBottom={10}
 				>
 					<Text
+						type='custom'
+						size={20}
 						colour={
 							(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK ? lightBlue : darkBlue
 						}
@@ -333,7 +339,7 @@ const Settings = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size={16} text={snackBarState.content} />
+				<Text type='custom' colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 		</ScrollView>
 	);

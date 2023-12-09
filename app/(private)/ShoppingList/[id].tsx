@@ -20,6 +20,7 @@ import ShoppingListService from '@/services/ShoppingListService';
 import { ProfileTheme } from '@/types/Profile';
 
 // Application assets
+import addOpacityToColour from '@/utils/addOpacityToColour';
 import EmptyIcon from '../../../assets/Shopping-Basket.png';
 
 const ShoppingList = () => {
@@ -41,7 +42,7 @@ const ShoppingList = () => {
 	const [newShoppingListName, setNewShoppingListName] = React.useState('');
 
 	// Access the styled-components theme via their internal ThemeContext
-	const { darkBlue, lightBlue, white, brightPink } = useTheme();
+	const { darkBlue, lightBlue, white } = useTheme();
 
 	// Access the current routes url search parameters
 	const { id = '' } = useLocalSearchParams<{ id: string }>();
@@ -227,10 +228,10 @@ const ShoppingList = () => {
 		labelStyle: StyleProp<TextStyle>;
 	} = {
 		color: 'grey',
-		labelTextColor: brightPink,
+		labelTextColor: profile.theme === ProfileTheme.DARK ? 'white' : darkBlue,
 		size: 'medium',
 		labelStyle: {
-			fontWeight: '700',
+			fontWeight: '300',
 			fontSize: 25
 		}
 	};
@@ -440,7 +441,9 @@ const ShoppingList = () => {
 				accessabilityOkHint='Delete the current shopping list, you will be redirected back to the homepage after.'
 			>
 				<Text
+					type='custom'
 					size={19}
+					colour={profile.theme === ProfileTheme.DARK ? 'white' : 'white'}
 					text='Looks like you want to delete the shopping list. Would you like to proceed?'
 				/>
 			</Modal>
@@ -495,7 +498,7 @@ const ShoppingList = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size={16} text={snackBarState.content} />
+				<Text type='custom' colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 
 			<ActionButtons
@@ -529,6 +532,11 @@ const ShoppingList = () => {
 					}
 				]}
 				visible={snackBarState.visible === false}
+				backdropColor={
+					profile?.theme === ProfileTheme.DARK
+						? addOpacityToColour(darkBlue, 0.5)
+						: addOpacityToColour(lightBlue, 0.8)
+				}
 			/>
 		</Portal.Host>
 	);

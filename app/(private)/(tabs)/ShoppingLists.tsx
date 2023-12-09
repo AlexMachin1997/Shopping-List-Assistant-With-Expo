@@ -210,7 +210,7 @@ const ShoppingLists = () => {
 					backgroundColor: snackBarState.backgroundColour
 				}}
 			>
-				<Text colour={white} size={16} text={snackBarState.content} />
+				<Text type='custom' colour={white} size={16} text={snackBarState.content} />
 			</Snackbar>
 		</Portal.Host>
 	);
