@@ -165,7 +165,7 @@ const Settings = () => {
 			<Modal
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 				visible={isRetakeOnBoardingProcessModalVisible}
-				title='Re-setup your profile confirmation'
+				title='Re-complete onboarding confirmation'
 				onDismiss={() => setIsRetakeOnBoardingProcessModalVisible(false)}
 				onCancel={() => setIsRetakeOnBoardingProcessModalVisible(false)}
 				onOk={() => {
