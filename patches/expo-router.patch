@@ -1,0 +1,16 @@
+diff --git a/node_modules/expo-router/src/ExpoRoot.tsx b/node_modules/expo-router/src/ExpoRoot.tsx
+index 3e9bcbe..7a8387b 100644
+--- a/node_modules/expo-router/src/ExpoRoot.tsx
++++ b/node_modules/expo-router/src/ExpoRoot.tsx
+@@ -69,10 +69,7 @@ export function ExpoRoot({
+           >
+             {children}
+
+-            {/* Users can override this by adding another StatusBar element anywhere higher in the component tree. */}
+-            {!hasViewControllerBasedStatusBarAppearance && (
+-              <StatusBar style="auto" />
+-            )}
++
+           </SafeAreaProvider>
+         </GestureHandlerRootView>
+       </ParentWrapper>

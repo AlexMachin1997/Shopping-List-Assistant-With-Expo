@@ -11,7 +11,7 @@
 	"editor.acceptSuggestionOnCommitCharacter": false,
 	"editor.renderWhitespace": "boundary",
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": "explicit"
 	},
 	"editor.cursorSmoothCaretAnimation": "on",
 	"editor.fontSize": 20,

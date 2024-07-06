@@ -21,7 +21,14 @@ const EmptyOrError = ({
 	const { darkBlue, lightBlue } = useTheme();
 
 	return (
-		<Section justifyContent='center' alignItems='center' flexGrow={1} isDark={isDark}>
+		<Section
+			justifyContent='center'
+			alignItems='center'
+			flexGrow={1}
+			isDark={isDark}
+			paddingLeft={5}
+			paddingRight={5}
+		>
 			<Section isDark={isDark}>
 				<Image
 					source={image}
@@ -43,10 +50,10 @@ const EmptyOrError = ({
 				/>
 			</Section>
 
-			<Section marginTop={5} isDark={isDark}>
+			<Section marginTop={5} isDark={isDark} marginLeft={20} marginRight={20}>
 				<Text
 					type='custom'
-					size={25}
+					size={20}
 					align='center'
 					colour={isDark ? lightBlue : darkBlue}
 					text={overview}

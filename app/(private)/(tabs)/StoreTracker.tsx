@@ -177,8 +177,8 @@ const StoreTracker = () => {
 				<EmptyOrError
 					isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 					image={ItemTrackingImage}
-					heading='Location tracking error'
-					overview="Look's like your location is disabled, to enable the map functionality enable it and refresh the page"
+					heading='No shopping lists exist'
+					overview="To use the store tracker you need 'Location' enabled, enabled it and pull to refresh."
 				/>
 			</ScrollView>
 		);
