@@ -122,6 +122,8 @@ const Settings = () => {
 		}
 	});
 
+	const isDarkModeOn = React.useMemo(() => profile.theme === ProfileTheme.DARK, [profile.theme]);
+
 	return (
 		<ScrollView
 			showsHorizontalScrollIndicator={false}
@@ -208,7 +210,7 @@ const Settings = () => {
 					/>
 
 					<Switch
-						value={profile.theme === ProfileTheme.DARK}
+						value={isDarkModeOn}
 						onValueChange={() => {
 							if (profile !== null) {
 								// Trigger the theme update action

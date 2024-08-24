@@ -1,11 +1,16 @@
+/* eslint-disable react/style-prop-object */
 import { Stack } from '@/layouts';
+import { StatusBar } from 'expo-status-bar';
 
 const PublicStackLayout = () => (
-	<Stack
-		initialRouteName='onboarding'
-		screenOptions={{
-			headerShown: false
-		}}
-	/>
+	<>
+		<StatusBar style='light' />
+		<Stack
+			initialRouteName='onboarding'
+			screenOptions={{
+				headerShown: false
+			}}
+		/>
+	</>
 );
 export default PublicStackLayout;

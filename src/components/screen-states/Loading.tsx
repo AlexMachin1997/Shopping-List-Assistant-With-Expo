@@ -12,7 +12,7 @@ const Loading = ({ isDark = false }: { isDark?: boolean }) => {
 	const { darkBlue, lightBlue } = useTheme();
 
 	return (
-		<Section justifyContent='center' flexGrow={1} alignItems='center'>
+		<Section justifyContent='center' flexGrow={1} alignItems='center' isDark={isDark}>
 			<ActivityIndicator size='large' color={isDark ? lightBlue : darkBlue} />
 		</Section>
 	);

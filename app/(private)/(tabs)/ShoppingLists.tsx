@@ -182,9 +182,14 @@ const ShoppingLists = () => {
 							title={shoppingList?.name ?? ''}
 							background={shoppingList?.shoppingListTheme ?? ''}
 							action={() => {
-								router.push({
-									pathname: `/ShoppingList/${shoppingList?.id ?? ''}`
-								});
+								if (typeof shoppingList?.id !== 'undefined') {
+									router.push({
+										pathname: '/(private)/ShoppingList/[id]',
+										params: {
+											id: shoppingList.id
+										}
+									});
+								}
 							}}
 						/>
 					)) ?? null

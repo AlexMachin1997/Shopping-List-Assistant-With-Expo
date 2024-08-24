@@ -58,8 +58,6 @@ const IndexLayout = () => {
 					<PaperProvider theme={ReactNativePaperTheme}>
 						<Stack initialRouteName='(private)'>
 							<Stack.Screen name='(private)' options={{ headerShown: false }} />
-
-							{/* Register the onboarding screen at the root level as it's a public screen */}
 							<Stack.Screen name='(public)' options={{ headerShown: false }} />
 						</Stack>
 					</PaperProvider>

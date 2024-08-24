@@ -4,7 +4,7 @@ export default ({ config: staticConfigFromAppJSONFile }: ConfigContext): ExpoCon
 	// Spread the entire app.json configuration
 	...staticConfigFromAppJSONFile,
 
-	plugins: ['expo-router'],
+	plugins: ['expo-router', 'expo-build-properties'],
 
 	// Mandatory configuration, just use the values defined in the app.json file
 	slug: staticConfigFromAppJSONFile?.slug ?? '',
