@@ -2,7 +2,7 @@
 import { TouchableOpacity } from 'react-native';
 
 // Expo dependencies
-import { Link } from 'expo-router';
+import { Href, Link } from 'expo-router';
 
 // Expo dependencies
 import { MaterialIcons } from '@expo/vector-icons';
@@ -19,7 +19,7 @@ const DrawerLink = ({
 	text,
 	isDark
 }: {
-	href: string;
+	href: Href<string>;
 	icon: 'format-list-bulleted' | 'settings' | 'gps-fixed';
 	text: string;
 	isDark: boolean;
