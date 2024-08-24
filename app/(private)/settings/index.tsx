@@ -122,10 +122,6 @@ const Settings = () => {
 		}
 	});
 
-	React.useEffect(() => {
-		console.log('My current theme is', profile?.theme);
-	}, [profile?.theme]);
-
 	const isDarkModeOn = React.useMemo(() => profile.theme === ProfileTheme.DARK, [profile.theme]);
 
 	return (

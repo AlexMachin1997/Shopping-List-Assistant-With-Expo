@@ -38,6 +38,9 @@ const ShoppingListLayout = () => {
 				},
 				headerTitleStyle: {
 					color: 'white'
+				},
+				contentStyle: {
+					backgroundColor: 'red'
 				}
 			}}
 		>

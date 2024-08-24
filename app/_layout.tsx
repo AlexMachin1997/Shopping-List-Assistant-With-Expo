@@ -52,20 +52,18 @@ const IndexLayout = () => {
 	);
 
 	return (
-		<>
-			<GestureHandlerRootView style={{ flex: 1 }}>
-				<QueryClientProvider client={queryClient}>
-					<ThemeProvider theme={StyledComponentsTheme}>
-						<PaperProvider theme={ReactNativePaperTheme}>
-							<Stack initialRouteName='(private)'>
-								<Stack.Screen name='(private)' options={{ headerShown: false }} />
-								<Stack.Screen name='(public)' options={{ headerShown: false }} />
-							</Stack>
-						</PaperProvider>
-					</ThemeProvider>
-				</QueryClientProvider>
-			</GestureHandlerRootView>
-		</>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider theme={StyledComponentsTheme}>
+					<PaperProvider theme={ReactNativePaperTheme}>
+						<Stack initialRouteName='(private)'>
+							<Stack.Screen name='(private)' options={{ headerShown: false }} />
+							<Stack.Screen name='(public)' options={{ headerShown: false }} />
+						</Stack>
+					</PaperProvider>
+				</ThemeProvider>
+			</QueryClientProvider>
+		</GestureHandlerRootView>
 	);
 };
 
