@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native';
 // Styled-components dependencies
 import { useTheme } from 'styled-components';
 
-import ApplicationIcon from '../../../../assets/App-Icon.png';
+import ApplicationIcon from '../../../../assets/adaptive-icon.png';
 
 // Application Components
 import { Image, Section } from '../../core';

@@ -10,7 +10,7 @@
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
+			"backgroundColor": "#003249"
 		},
 		"updates": {
 			"fallbackToCacheTimeout": 0
@@ -19,11 +19,7 @@
 		"ios": {
 			"supportsTablet": false,
 			"bundleIdentifier": "com.alexmachin.shoppinglist",
-			"requireFullScreen": true,
-			"jsEngine": "jsc",
-			"config": {
-				"useNonExemptEncryption": false
-			}
+			"requireFullScreen": true
 		},
 		"android": {
 			"adaptiveIcon": {
