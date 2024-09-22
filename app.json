@@ -1,7 +1,7 @@
 {
 	"expo": {
-		"name": "shopping-list-app-rewrite",
-		"slug": "shopping-list-app-rewrite",
+		"name": "shopping-list-app",
+		"slug": "shopping-list-app",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"scheme": "shopping-list-app",
@@ -13,6 +13,7 @@
 			"backgroundColor": "#003249"
 		},
 		"updates": {
+			"url": "https://u.expo.dev/4758d09c-82c9-499f-b1dc-b6a245b241e2",
 			"fallbackToCacheTimeout": 0
 		},
 		"assetBundlePatterns": ["**/*"],
@@ -26,21 +27,20 @@
 				"foregroundImage": "./assets/adaptive-icon.png",
 				"backgroundColor": "#FFFFFF"
 			},
+			"config": {
+				"googleMaps": {
+					"apiKey": "AIzaSyAx2hTkj5_hheI1oLMPrWfCNnv_kDEBpso"
+				}
+			},
 			"package": "com.alexmachin.shoppinglist",
 			"versionCode": 1,
 			"softwareKeyboardLayoutMode": "pan"
-		},
-		"extra": {
-			"eas": {
-				"projectId": "cd27e5e3-6074-4fc9-ad78-01dbea978c0a"
-			}
 		},
 		"experiments": {
 			"typedRoutes": true,
 			"tsconfigPaths": true
 		},
 		"runtimeVersion": "1.0.0",
-		"owner": "alexmachin",
 		"plugins": [
 			[
 				"expo-location",
@@ -70,6 +70,11 @@
 					"sounds": ["./assets/notification-sound.wav", "./assets/notification-sound-other.wav"]
 				}
 			]
-		]
+		],
+		"extra": {
+			"eas": {
+				"projectId": "4758d09c-82c9-499f-b1dc-b6a245b241e2"
+			}
+		}
 	}
 }

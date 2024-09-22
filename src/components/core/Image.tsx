@@ -10,7 +10,7 @@ type Props = {
 const Image = styled.Image`
 	width: ${(props: Props) => `${props?.width ?? 100}px`};
 	height: ${(props: Props) => `${props?.height ?? 100}px`};
-	border-radius: ${(props: Props) => props?.radius ?? 0};
+	border-radius: ${(props: Props) => `${props?.radius ?? 0}px`};
 `;
 
 export default Image;

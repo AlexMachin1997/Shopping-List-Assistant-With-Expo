@@ -38,7 +38,13 @@ const NavigationDrawer = () => {
 				alignItems='center'
 				isDark={(profile?.theme ?? ProfileTheme.LIGHT) === ProfileTheme.DARK}
 			>
-				<Image source={ApplicationIcon} height={120} width={120} accessibilityIgnoresInvertColors />
+				<Image
+					source={ApplicationIcon}
+					height={120}
+					width={120}
+					accessibilityIgnoresInvertColors
+					radius={100}
+				/>
 			</Section>
 
 			<Section

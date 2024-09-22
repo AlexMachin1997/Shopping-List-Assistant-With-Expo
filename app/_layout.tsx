@@ -1,3 +1,5 @@
+import 'expo-dev-client';
+
 import * as React from 'react';
 import { AppState, AppStateStatus, Platform } from 'react-native';
 import {
