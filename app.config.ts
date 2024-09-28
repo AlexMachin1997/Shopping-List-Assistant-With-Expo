@@ -4,14 +4,30 @@ export default ({ config: staticConfigFromAppJSONFile }: ConfigContext): ExpoCon
 	// Spread the entire app.json configuration
 	...staticConfigFromAppJSONFile,
 
-	plugins: ['expo-router', 'expo-build-properties'],
-
 	// Mandatory configuration, just use the values defined in the app.json file
 	slug: staticConfigFromAppJSONFile?.slug ?? '',
-	name: staticConfigFromAppJSONFile?.name ?? '',
+	name:
+		process.env.APP_ENV === 'production'
+			? `${staticConfigFromAppJSONFile.name}`
+			: `${staticConfigFromAppJSONFile.name} (Development)`,
 
 	extra: {
 		// Spread the existing config defined in the app.json file
 		...(staticConfigFromAppJSONFile?.extra ?? {})
+	},
+
+	ios: {
+		...staticConfigFromAppJSONFile.ios,
+		bundleIdentifier:
+			process.env.APP_ENV === 'production'
+				? `${staticConfigFromAppJSONFile.ios?.bundleIdentifier}`
+				: `${staticConfigFromAppJSONFile.ios?.bundleIdentifier}.dev`
+	},
+
+	android: {
+		package:
+			process.env.APP_ENV === 'production'
+				? `${staticConfigFromAppJSONFile.ios?.bundleIdentifier}`
+				: `${staticConfigFromAppJSONFile.ios?.bundleIdentifier}.dev`
 	}
 });

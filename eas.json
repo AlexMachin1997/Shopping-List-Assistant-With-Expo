@@ -1,29 +1,34 @@
 {
-	"cli": {
-		"version": ">= 4.1.1"
-	},
-	"build": {
-		"development": {
-			"developmentClient": true,
-			"distribution": "internal",
-			"env": {},
-			"android": {
-				"buildType": "apk"
-			}
-		},
-		"preview": {
-			"distribution": "internal",
-			"env": {},
-			"android": {
-				"buildType": "apk"
-			}
-		},
-		"production": {
-			"env": {},
-			"channel": "production"
-		}
-	},
-	"submit": {
-		"production": {}
-	}
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "env": {
+        "APP_ENV": "development"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {},
+      "android": {
+        "buildType": "apk"
+      },
+      "channel": "staging"
+    },
+    "production": {
+      "env": {
+        "APP_ENV": "production"
+      },
+      "channel": "production"
+    }
+  },
+  "submit": {
+    "production": {}
+  },
+  "cli": {
+    "appVersionSource": "remote"
+  }
 }

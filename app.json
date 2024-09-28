@@ -1,12 +1,13 @@
 {
 	"expo": {
-		"name": "shopping-list-app",
+		"name": "Shopping List",
 		"slug": "shopping-list-app",
-		"version": "1.0.0",
+		"version": "1.0.1",
 		"orientation": "portrait",
 		"scheme": "shopping-list-app",
 		"jsEngine": "hermes",
 		"icon": "./assets/icon.png",
+		"platforms": ["ios", "android"],
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
@@ -40,7 +41,7 @@
 			"typedRoutes": true,
 			"tsconfigPaths": true
 		},
-		"runtimeVersion": "1.0.0",
+		"runtimeVersion": "1.0.1",
 		"plugins": [
 			[
 				"expo-location",
@@ -49,25 +50,11 @@
 				}
 			],
 			[
-				"expo-build-properties",
-				{
-					"android": {
-						"compileSdkVersion": 33,
-						"targetSdkVersion": 33,
-						"buildToolsVersion": "33.0.0"
-					},
-					"ios": {
-						"deploymentTarget": "13.0",
-						"useFrameworks": "static"
-					}
-				}
-			],
-			[
 				"expo-notifications",
 				{
 					"icon": "./assets/notification-icon.png",
-					"color": "#ffffff",
-					"sounds": ["./assets/notification-sound.wav", "./assets/notification-sound-other.wav"]
+					"color": "#003249",
+					"sounds": ["./assets/notification-sound.wav"]
 				}
 			]
 		],
